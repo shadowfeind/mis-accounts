@@ -9,14 +9,12 @@ import {
   Checkbox,
   Button,
   TextField,
-  Grid,
 } from "@material-ui/core";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
-import { useDispatch } from "react-redux";
-import InputControl from "../../components/controls/InputControl";
 import { useForm, Form } from "../../customHooks/useForm";
+import { useDispatch } from "react-redux";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import { postAdmissionFacultyFeeStructureAction } from "./AdmissionFacultyFeeActions";
+import { postMonthlyFeeLinkAction } from "./MonthlyFeeLinkActions";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -53,17 +51,17 @@ const initialFormValues = {
   Level: 0,
   IDAccountType: 0,
   IsActive: true,
-  Created_On: "2022-06-02T04:58:02.890Z",
-  Updated_On: "2022-06-02T04:58:02.890Z",
+  Created_On: "2022-06-03T04:41:16.636Z",
+  Updated_On: "2022-06-03T04:41:16.636Z",
 };
 
-const AdmissionFacultyFeeForm = ({
+const MonthlyFeeLinkForm = ({
+  setOpenCreatePopup,
   feeStructure,
   accountName,
-  setOpenCreatePopup,
 }) => {
   const [checked, setChecked] = useState(false);
-  const [selectedStructure, setSelectedStructure] = useState([]);
+  const [month, setMonths] = useState([]);
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -73,8 +71,7 @@ const AdmissionFacultyFeeForm = ({
   const validate = () => {
     let temp = { ...errors };
 
-    temp.selectedStructure =
-      selectedStructure?.length === 0 ? "Please Select Atleast One Option" : "";
+    temp.month = month?.length === 0 ? "Please Select Atleast One Option" : "";
 
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x === "");
@@ -83,35 +80,29 @@ const AdmissionFacultyFeeForm = ({
   const handleAllChecked = (checked) => {
     setChecked(checked);
     if (checked) {
-      setSelectedStructure([...feeStructure]);
+      setMonths([...feeStructure]);
     } else {
-      setSelectedStructure([]);
+      setMonths([]);
     }
   };
 
   const handleChecked = (checked, obj) => {
     if (!checked) {
-      setSelectedStructure((prev) => {
+      setMonths((prev) => {
         let newCheckList = prev.filter(
           (x) => x.IDAccountType !== obj.IDAccountType
         );
         return [...newCheckList];
       });
     } else {
-      setSelectedStructure((prev) => [...prev, obj]);
+      setMonths((prev) => [...prev, obj]);
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      dispatch(
-        postAdmissionFacultyFeeStructureAction(
-          values,
-          selectedStructure,
-          feeStructure
-        )
-      );
+      dispatch(postMonthlyFeeLinkAction(values, month));
     }
   };
 
@@ -122,8 +113,8 @@ const AdmissionFacultyFeeForm = ({
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="customized table">
           <TableHead>
-            {errors.selectedStructure && (
-              <span style={{ color: "red" }}>{errors.selectedStructure}</span>
+            {errors.month && (
+              <span style={{ color: "red" }}>{errors.month}</span>
             )}
             <TableRow>
               <StyledTableCell>Header </StyledTableCell>
@@ -175,7 +166,7 @@ const AdmissionFacultyFeeForm = ({
                     >
                       <Checkbox
                         checked={
-                          selectedStructure.filter(
+                          month.filter(
                             (x) => x.IDAccountType === s.IDAccountType
                           ).length > 0
                             ? true
@@ -190,6 +181,23 @@ const AdmissionFacultyFeeForm = ({
           </TableBody>
         </Table>
       </TableContainer>
+      {accountName?.length <= 0 && (
+        <div>
+          <h3 style={{ color: "red", textAlign: "center" }}>No Data</h3>
+        </div>
+      )}
+      {errors.submit && (
+        <div
+          style={{
+            textAlign: "center",
+            color: "red",
+            fontSize: "12px",
+            paddingTop: "8px",
+          }}
+        >
+          {errors.submit}
+        </div>
+      )}
       <div
         style={{
           display: "flex",
@@ -221,4 +229,4 @@ const AdmissionFacultyFeeForm = ({
   );
 };
 
-export default AdmissionFacultyFeeForm;
+export default MonthlyFeeLinkForm;

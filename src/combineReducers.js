@@ -198,7 +198,6 @@ export const reducers = combineReducers({
   //PID uploadPhoto
   uploadPhoto: uploadPhotoReducer,
   getAllUploadPhoto: getAllUploadPhotoReducer,
-
   postHrValue: postHrValueReducer,
   putHrValue: putHrValueReducer,
 });

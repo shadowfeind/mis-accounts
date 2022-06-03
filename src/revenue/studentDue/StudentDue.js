@@ -131,7 +131,7 @@ const StudentDue = () => {
       setDate(studentDue?.searchFilterModel?.StartDate?.slice(0, 10));
       setEndDate(studentDue?.searchFilterModel?.EndDate?.slice(0, 10));
     }
-  });
+  }, [studentDue]);
   useEffect(() => {
     dispatch(getAllSchoolDueAction());
   }, []);
@@ -224,7 +224,7 @@ const StudentDue = () => {
                   value={endDate}
                   onChange={(e) => {
                     const newDate = new Date(e);
-                    setDate(newDate.toLocaleDateString().slice(0, 10));
+                    setEndDate(newDate.toLocaleDateString().slice(0, 10));
                   }}
                 />
               </MuiPickersUtilsProvider>

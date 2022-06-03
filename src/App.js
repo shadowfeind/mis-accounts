@@ -54,6 +54,10 @@ const ExtraFee = lazy(() =>
 
 //Student Due:
 const StudentDue = lazy(() => import("./revenue/studentDue/StudentDue"));
+// Monthly Fee:
+const MonthlyFee = lazy(() =>
+  import("./revenue/monthlyFeeLink/MonthlyFeeLink")
+);
 
 const theme = createTheme({
   palette: {
@@ -109,6 +113,7 @@ const App = () => {
               />
               <Route path={"/extra-fee-structure"} component={ExtraFee} />
               <Route path={"/student-due"} component={StudentDue} />
+              <Route path={"/monthly-fee"} component={MonthlyFee} />
               {/* Revenue Routes Ends */}
 
               <Route exact path={"/"} component={Dashboard} />

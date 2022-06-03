@@ -237,7 +237,7 @@ const AdmissionFacultyFee = () => {
         admissionFacultyFeeStructure?.searchFilterModel.ddlClass[0]?.Key
       );
     }
-  });
+  }, [admissionFacultyFeeStructure]);
 
   useEffect(() => {
     if (listAdmissionFacultyFeeStructure) {
