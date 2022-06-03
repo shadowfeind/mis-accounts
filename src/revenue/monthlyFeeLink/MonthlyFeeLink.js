@@ -387,10 +387,6 @@ const MonthlyFeeLink = () => {
             <MonthlyFeeLinkEditForm
               editForm={singleEditMonthlyFeeLink && singleEditMonthlyFeeLink}
               setOpenPopup={setOpenPopup}
-              searchFilterModel={
-                singleEditMonthlyFeeLink &&
-                singleEditMonthlyFeeLink?.searchFilterModel
-              }
             />
           </>
         )}

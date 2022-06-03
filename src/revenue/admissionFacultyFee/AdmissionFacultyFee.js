@@ -182,7 +182,7 @@ const AdmissionFacultyFee = () => {
       message: "Admission Faculty Free Structure Created Succesfully",
       type: "success",
     });
-    setOpenPopup(false);
+    setOpenCreatePopup(false);
     dispatch({ type: POST_ADMISSION_FACULTY_FEE_STRUCTURE_RESET });
   }
 
@@ -386,9 +386,9 @@ const AdmissionFacultyFee = () => {
                 singleCreateAdmissionFacultyFeeStructure?.ddlFeeStructure
               }
               setOpenCreatePopup={setOpenCreatePopup}
-              accountName={
+              searchFilterModel={
                 singleCreateAdmissionFacultyFeeStructure &&
-                singleCreateAdmissionFacultyFeeStructure?.ddlFeeStructure
+                singleCreateAdmissionFacultyFeeStructure?.searchFilterModel
               }
             />
           </>

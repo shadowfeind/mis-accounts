@@ -42,28 +42,34 @@ const useStyles = makeStyles({
 });
 
 const initialFormValues = {
-  IDAdmissionFacultyFeeStructure: 0,
-  IDAdmissionFeeStructure: 0,
-  IDYearFacultyLink: 0,
-  FeeAmount: 0,
-  IDHRCompany: 0,
+  IDAccountType: 0,
   IdAccountGroup: 0,
   AccountName: "",
-  IDAcademicYear: 0,
-  Level: 0,
-  IDAccountType: 0,
+  AccountNameDesc: "",
+  Address: "",
+  TelNo: "",
+  MobileNo: "",
+  Email: "",
+  ContactPerson: "",
+  PAN: "",
+  Created_On: "2022-06-03T10:58:36.379Z",
+  Updated_On: "2022-06-03T10:58:36.379Z",
   IsActive: true,
-  Created_On: "2022-06-02T04:58:02.890Z",
-  Updated_On: "2022-06-02T04:58:02.890Z",
+  IDHRCompany: 0,
+  IsCostCenter: true,
+  FeeAmount: 0,
+  IsExtraFee: true,
+  IsMonthlyFee: true,
+  IsAdmissionFee: true,
 };
 
 const AdmissionFacultyFeeForm = ({
   feeStructure,
-  accountName,
+  searchFilterModel,
   setOpenCreatePopup,
 }) => {
-  const [checked, setChecked] = useState(false);
-  const [selectedStructure, setSelectedStructure] = useState([]);
+  const [formCheck, setFormCheck] = useState([]);
+  // const [selectedStructure, setFormCheck] = useState([]);
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -73,58 +79,74 @@ const AdmissionFacultyFeeForm = ({
   const validate = () => {
     let temp = { ...errors };
 
-    temp.selectedStructure =
-      selectedStructure?.length === 0 ? "Please Select Atleast One Option" : "";
+    temp.submit =
+      formCheck?.length === 0 ? "Please Select Atleast One Option" : "";
 
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x === "");
   };
 
   const handleAllChecked = (checked) => {
-    setChecked(checked);
     if (checked) {
-      setSelectedStructure([...feeStructure]);
+      setFormCheck([...feeStructure]);
     } else {
-      setSelectedStructure([]);
+      setFormCheck([]);
     }
   };
 
-  const handleChecked = (checked, obj) => {
-    if (!checked) {
-      setSelectedStructure((prev) => {
-        let newCheckList = prev.filter(
-          (x) => x.IDAccountType !== obj.IDAccountType
+  const inputHandler = (subject, value) => {
+    setFormCheck((prev) => {
+      const exists = prev.find(
+        (u) => u.IDAccountType === subject.IDAccountType
+      );
+      if (exists) {
+        const newSubject = { ...subject, FeeAmount: Number(value) };
+        // console.log(newSubject);
+        let newArr = [...prev];
+        prev.map((data, index) => {
+          newArr[index].FeeAmount = Number(value);
+        });
+        return [...newArr];
+      }
+      return [...prev];
+    });
+  };
+
+  const handleChecked = (subject) => {
+    setFormCheck((prev) => {
+      const exists = prev.find(
+        (u) => u.IDAccountType === subject.IDAccountType
+      );
+      if (exists) {
+        let newArr = prev.filter(
+          (u) => u.IDAccountType !== subject.IDAccountType
         );
-        return [...newCheckList];
-      });
-    } else {
-      setSelectedStructure((prev) => [...prev, obj]);
-    }
+        return [...newArr];
+      }
+      let newFeeAmount = Number(
+        document?.getElementById(`subject_${subject?.IDAccountType}`)?.value
+      );
+      const newSubject = { ...subject, FeeAmount: newFeeAmount };
+      return [...prev, newSubject];
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
       dispatch(
-        postAdmissionFacultyFeeStructureAction(
-          values,
-          selectedStructure,
-          feeStructure
-        )
+        postAdmissionFacultyFeeStructureAction(formCheck, searchFilterModel)
       );
     }
   };
 
-  const symbolsArr = ["e", "E", "+", "-", ".", "ArrowUp", "ArrowDown"];
+  const symbolsArr = ["e", "E", "+", "-", "ArrowUp", "ArrowDown"];
 
   return (
     <>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="customized table">
           <TableHead>
-            {errors.selectedStructure && (
-              <span style={{ color: "red" }}>{errors.selectedStructure}</span>
-            )}
             <TableRow>
               <StyledTableCell>Header </StyledTableCell>
 
@@ -132,7 +154,7 @@ const AdmissionFacultyFeeForm = ({
               <StyledTableCell style={{ textAlign: "right" }}>
                 <label>All</label>
                 <Checkbox
-                  checked={checked}
+                  name="checkedB"
                   onChange={(e) => handleAllChecked(e.target.checked)}
                   color="primary"
                 />
@@ -140,8 +162,8 @@ const AdmissionFacultyFeeForm = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {accountName &&
-              accountName
+            {feeStructure &&
+              feeStructure
                 ?.sort((a, b) => a.RollNo - b.RollNo)
                 ?.map((s) => (
                   <StyledTableRow key={s.AccountName}>
@@ -175,14 +197,15 @@ const AdmissionFacultyFeeForm = ({
                     >
                       <Checkbox
                         checked={
-                          selectedStructure.filter(
+                          formCheck?.filter(
                             (x) => x.IDAccountType === s.IDAccountType
                           ).length > 0
                             ? true
                             : false
                         }
+                        name="checkedB"
                         color="primary"
-                        onChange={(e) => handleChecked(e.target.checked, s)}
+                        onChange={(e) => handleChecked(s)}
                       />
                     </StyledTableCell>
                   </StyledTableRow>
@@ -190,6 +213,23 @@ const AdmissionFacultyFeeForm = ({
           </TableBody>
         </Table>
       </TableContainer>
+      {feeStructure?.length <= 0 && (
+        <div>
+          <h3 style={{ color: "red", textAlign: "center" }}>No Data Found</h3>
+        </div>
+      )}
+      {errors.submit && (
+        <div
+          style={{
+            textAlign: "center",
+            color: "red",
+            fontSize: "12px",
+            paddingTop: "8px",
+          }}
+        >
+          {errors.submit}
+        </div>
+      )}
       <div
         style={{
           display: "flex",

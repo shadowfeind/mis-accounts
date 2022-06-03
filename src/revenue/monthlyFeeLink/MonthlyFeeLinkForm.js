@@ -149,9 +149,6 @@ const MonthlyFeeLinkForm = ({
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="customized table">
           <TableHead>
-            {errors.month && (
-              <span style={{ color: "red" }}>{errors.month}</span>
-            )}
             <TableRow>
               <StyledTableCell>Header </StyledTableCell>
 
@@ -220,7 +217,7 @@ const MonthlyFeeLinkForm = ({
       </TableContainer>
       {feeStructure?.length <= 0 && (
         <div>
-          <h3 style={{ color: "red", textAlign: "center" }}>No Data</h3>
+          <h3 style={{ color: "red", textAlign: "center" }}>No Data Found</h3>
         </div>
       )}
       {errors.submit && (
