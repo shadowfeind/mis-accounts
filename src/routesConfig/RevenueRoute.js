@@ -28,9 +28,9 @@ export const RevenueRoute = [
     exact: false,
   },
   {
-    name: "Student Due",
-    route: "/student-due",
-    icon: LibraryBooksIcon,
+    name: "Monthly Fee Link",
+    route: "/monthly-fee",
+    icon: SettingsRemoteIcon,
     exact: false,
   },
   {
@@ -39,18 +39,19 @@ export const RevenueRoute = [
     icon: PermContactCalendarIcon,
     exact: false,
   },
-  // {
-  //   name: "Access Control",
-  //   route: "/access-control",
-  //   icon: SettingsRemoteIcon,
-  //   exact: false,
-  // },
-  // {
-  //   name: "Class Routine",
-  //   route: "/class-schedule",
-  //   icon: EventNoteIcon,
-  //   exact: false,
-  // },
+  {
+    name: "Student Due",
+    route: "/student-due",
+    icon: LibraryBooksIcon,
+    exact: false,
+  },
+
+  {
+    name: "Fee Collection",
+    route: "/fee-collection",
+    icon: EventNoteIcon,
+    exact: false,
+  },
   // { name: "Notice", route: "/notice", icon: PostAdd, exact: false },
 
   // {

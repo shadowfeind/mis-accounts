@@ -1,6 +1,5 @@
 import React from "react";
 import { TableRow, TableCell } from "@material-ui/core";
-import "./studentDueTable.css";
 
 const StudentDueTableCollapse = ({ item }) => {
   return (

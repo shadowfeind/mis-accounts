@@ -9,14 +9,12 @@ import {
   Checkbox,
   Button,
   TextField,
-  Grid,
 } from "@material-ui/core";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
-import { useDispatch } from "react-redux";
-import InputControl from "../../components/controls/InputControl";
 import { useForm, Form } from "../../customHooks/useForm";
+import { useDispatch } from "react-redux";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import { postAdmissionFacultyFeeStructureAction } from "./AdmissionFacultyFeeActions";
+import { postMonthlyFeeLinkAction } from "./MonthlyFeeLinkActions";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -52,8 +50,8 @@ const initialFormValues = {
   Email: "",
   ContactPerson: "",
   PAN: "",
-  Created_On: "2022-06-03T10:58:36.379Z",
-  Updated_On: "2022-06-03T10:58:36.379Z",
+  Created_On: "2022-06-03T10:05:21.481Z",
+  Updated_On: "2022-06-03T10:05:21.481Z",
   IsActive: true,
   IDHRCompany: 0,
   IsCostCenter: true,
@@ -63,13 +61,13 @@ const initialFormValues = {
   IsAdmissionFee: true,
 };
 
-const AdmissionFacultyFeeForm = ({
+const MonthlyFeeLinkForm = ({
+  setOpenCreatePopup,
   feeStructure,
   searchFilterModel,
-  setOpenCreatePopup,
 }) => {
   const [formCheck, setFormCheck] = useState([]);
-  // const [selectedStructure, setFormCheck] = useState([]);
+  // const [month, setMonths] = useState([]);
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -93,6 +91,12 @@ const AdmissionFacultyFeeForm = ({
       setFormCheck([]);
     }
   };
+
+  // useEffect(() => {
+  //   if (feeStructure) {
+  //     setFormCheck([...feeStructure]);
+  //   }
+  // }, [feeStructure]);
 
   const inputHandler = (subject, value) => {
     setFormCheck((prev) => {
@@ -134,13 +138,11 @@ const AdmissionFacultyFeeForm = ({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      dispatch(
-        postAdmissionFacultyFeeStructureAction(formCheck, searchFilterModel)
-      );
+      dispatch(postMonthlyFeeLinkAction(formCheck, searchFilterModel));
     }
   };
 
-  const symbolsArr = ["e", "E", "+", "-", "ArrowUp", "ArrowDown"];
+  const symbolsArr = ["e", "E", "+", "-", ".", "ArrowUp", "ArrowDown"];
 
   return (
     <>
@@ -261,4 +263,4 @@ const AdmissionFacultyFeeForm = ({
   );
 };
 
-export default AdmissionFacultyFeeForm;
+export default MonthlyFeeLinkForm;

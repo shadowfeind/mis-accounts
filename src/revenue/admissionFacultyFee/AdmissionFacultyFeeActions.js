@@ -121,13 +121,13 @@ export const getSingleEditAdmissionFacultyFeeStructureAction =
   };
 
 export const postAdmissionFacultyFeeStructureAction =
-  (admissionFacultyFeeStructure, checked) => async (dispatch) => {
+  (ddlFeeStructure, searchFilterModel) => async (dispatch) => {
     try {
       dispatch({ type: POST_ADMISSION_FACULTY_FEE_STRUCTURE_REQUEST });
 
       const jsonData = JSON.stringify({
-        dbModel: admissionFacultyFeeStructure,
-        checked,
+        ddlFeeStructure,
+        searchFilterModel,
       });
       console.log(jsonData);
       const { data } = await axiosInstance.post(

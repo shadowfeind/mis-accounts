@@ -19,23 +19,21 @@ import Popup from "../../components/Popup";
 import DateFnsUtils from "@date-io/date-fns";
 import CustomContainer from "../../components/CustomContainer";
 import { useDispatch, useSelector } from "react-redux";
-import Notification from "../../components/Notification";
-import ConfirmDialog from "../../components/ConfirmDialog";
 import LoadingComp from "../../components/LoadingComp";
-import {
-  GET_ALL_STUDENT_DUE_RESET,
-  GET_LIST_STUDENT_DUE_RESET,
-  GET_PRINT_STUDENT_DUE_RESET,
-} from "./StudentDueConstants";
-import {
-  getAllSchoolDueAction,
-  getListSchoolDueAction,
-} from "./StudentDueActions";
-import StudentDueTableCollapse from "./StudentDueTableCollapse";
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
+import {
+  GET_ALL_FEE_COLLECTION_RESET,
+  GET_LIST_FEE_COLLECTION_RESET,
+  GET_PRINT_FEE_COLLECTION_RESET,
+} from "./FeeCollectionConstants";
+import {
+  getAllFeeCollectionAction,
+  getListFeeCollectionAction,
+} from "./FeeCollectionActions";
+import FeeCollectionTableCollapse from "./FeeCollectionTableCollapse";
 
 const useStyles = makeStyles((theme) => ({
   searchInput: {
@@ -49,12 +47,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const tableHeader = [
-  { id: "RegistrationKey", label: "Registration Key" },
+  { id: "RollNo", label: "RollNo." },
   { id: "Name", label: "Name" },
-  { id: "RemainingDues", label: "Remaining Dues" },
+  { id: "Class", label: "Class" },
+  { id: "RegistrationKey", label: "Registration Key" },
+  { id: "AcademicYear", label: "Academic Year" },
+  { id: "TransactionDate", label: "Transaction Date" },
+  { id: "Collection", label: "Collection" },
 ];
 
-const StudentDue = () => {
+const FeeCollection = () => {
   const [fiscalYearDdl, setFiscalYearDdl] = useState([]);
   const [fiscalYear, setFiscalYear] = useState("");
   const [date, setDate] = useState();
@@ -72,26 +74,22 @@ const StudentDue = () => {
     message: "",
     type: "",
   });
-  const [confirmDialog, setConfirmDialog] = useState({
-    isOpen: false,
-    title: "",
-    subTitle: "",
-  });
 
   const classes = useStyles();
 
   const dispatch = useDispatch();
-
-  const { studentDue, error } = useSelector((state) => state.getAllStudentDue);
+  const { feeCollection, error } = useSelector(
+    (state) => state.getAllFeeCollection
+  );
 
   const {
-    listStudentDue,
-    error: listStudentDueError,
+    listFeeCollection,
+    error: listFeeCollectionError,
     loading,
-  } = useSelector((state) => state.getListStudentDue);
+  } = useSelector((state) => state.getListFeeCollection);
 
-  const { printStudentDue, error: printStudentDueError } = useSelector(
-    (state) => state.getPrintStudentDue
+  const { printFeeCollection, error: printFeeCollectionError } = useSelector(
+    (state) => state.getPrintFeeCollection
   );
 
   if (error) {
@@ -100,47 +98,47 @@ const StudentDue = () => {
       message: error,
       type: "error",
     });
-    dispatch({ type: GET_ALL_STUDENT_DUE_RESET });
+    dispatch({ type: GET_ALL_FEE_COLLECTION_RESET });
   }
 
-  if (listStudentDueError) {
+  if (listFeeCollectionError) {
     setNotify({
       isOpen: true,
-      message: listStudentDueError,
+      message: listFeeCollectionError,
       type: "error",
     });
-    dispatch({ type: GET_LIST_STUDENT_DUE_RESET });
+    dispatch({ type: GET_LIST_FEE_COLLECTION_RESET });
   }
 
-  if (printStudentDueError) {
+  if (printFeeCollectionError) {
     setNotify({
       isOpen: true,
-      message: printStudentDueError,
+      message: printFeeCollectionError,
       type: "error",
     });
-    dispatch({ type: GET_PRINT_STUDENT_DUE_RESET });
+    dispatch({ type: GET_PRINT_FEE_COLLECTION_RESET });
   }
 
   useEffect(() => {
-    if (studentDue) {
-      setFiscalYearDdl(studentDue?.searchFilterModel?.ddlAccountFiscalYear);
+    if (feeCollection) {
+      setFiscalYearDdl(feeCollection?.searchFilterModel?.ddlAccountFiscalYear);
       setFiscalYear(
-        studentDue?.searchFilterModel?.ddlAccountFiscalYear[0]?.Key
+        feeCollection?.searchFilterModel?.ddlAccountFiscalYear[0]?.Key
       );
-      setDate(studentDue?.searchFilterModel?.StartDate?.slice(0, 10));
-      setEndDate(studentDue?.searchFilterModel?.EndDate?.slice(0, 10));
+      setDate(feeCollection?.searchFilterModel?.StartDate?.slice(0, 10));
+      setEndDate(feeCollection?.searchFilterModel?.EndDate?.slice(0, 10));
     }
-  }, [studentDue]);
+  }, [feeCollection]);
   useEffect(() => {
-    dispatch({ type: GET_LIST_STUDENT_DUE_RESET });
-    dispatch(getAllSchoolDueAction());
+    dispatch({ type: GET_LIST_FEE_COLLECTION_RESET });
+    dispatch(getAllFeeCollectionAction());
   }, []);
 
   useEffect(() => {
-    if (listStudentDue) {
-      setTableData(listStudentDue?.studentDueModelLsts);
+    if (listFeeCollection) {
+      setTableData(listFeeCollection?.feeCollectionLst);
     }
-  }, [listStudentDue]);
+  }, [listFeeCollection]);
 
   useEffect(() => {
     dispatch({ type: "GET_LINK", payload: "/revenue" });
@@ -176,7 +174,7 @@ const StudentDue = () => {
   };
   const handleListSearch = () => {
     if (validate()) {
-      dispatch(getListSchoolDueAction(fiscalYear, date, endDate));
+      dispatch(getListFeeCollectionAction(fiscalYear, date, endDate));
     }
   };
 
@@ -247,7 +245,7 @@ const StudentDue = () => {
         <Toolbar>
           <InputControl
             className={classes.searchInput}
-            label="Search Student Due by Name"
+            label="Search Fee Collection by Name"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -262,33 +260,37 @@ const StudentDue = () => {
           <LoadingComp />
         ) : (
           <>
-            {listStudentDue && (
+            {listFeeCollection && (
               <TableContainer className={classes.table}>
                 <TblHead />
 
                 <TableBody>
                   {tableDataAfterPagingAndSorting()?.map((item) => (
-                    <StudentDueTableCollapse item={item} key={item.$id} />
+                    <FeeCollectionTableCollapse item={item} key={item.$id} />
                   ))}
                   <TableRow>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
                     <TableCell></TableCell>
                     <TableCell>
                       <strong>Total</strong>
                     </TableCell>
                     <TableCell>
+                      {" "}
                       {tableDataAfterPagingAndSorting()
                         ?.reduce((acc, curr) => {
-                          return acc + curr.RemainingDue;
+                          return acc + curr.Dr;
                         }, 0)
                         ?.toFixed(2)}
                     </TableCell>
-                    <TableCell></TableCell>
                   </TableRow>
                 </TableBody>
               </TableContainer>
             )}
 
-            {listStudentDue && <TblPagination />}
+            {listFeeCollection && <TblPagination />}
           </>
         )}
       </CustomContainer>
@@ -296,4 +298,4 @@ const StudentDue = () => {
   );
 };
 
-export default StudentDue;
+export default FeeCollection;

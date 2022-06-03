@@ -33,13 +33,15 @@ const MonthlyFeeLinkTableCollapse = ({ item, updateCollegeHandler }) => {
     <>
       <TableRow key={item.$id}>
         <TableCell>{item.AccountName}</TableCell>
-        <TableCell>{item.FeeAmount}</TableCell>
+        <TableCell>{item.FeeAmount?.toFixed(2)}</TableCell>
         <TableCell>
           <Button
             variant="contained"
             color="primary"
             className={classes.button}
-            // onClick={() => updateCollegeHandler(item.IDAccountType)}
+            onClick={() =>
+              updateCollegeHandler(item.IDAdmissionFacultyFeeStructure)
+            }
           >
             <EditIcon style={{ fontSize: 12 }} />
           </Button>
