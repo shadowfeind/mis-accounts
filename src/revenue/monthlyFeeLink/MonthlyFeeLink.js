@@ -366,11 +366,11 @@ const MonthlyFeeLink = () => {
                 singleCreateMonthlyFeeLink &&
                 singleCreateMonthlyFeeLink?.ddlFeeStructure
               }
-              setOpenCreatePopup={setOpenCreatePopup}
-              accountName={
+              searchFilterModel={
                 singleCreateMonthlyFeeLink &&
-                singleCreateMonthlyFeeLink?.ddlFeeStructure
+                singleCreateMonthlyFeeLink?.searchFilterModel
               }
+              setOpenCreatePopup={setOpenCreatePopup}
             />
           </>
         )}
@@ -387,6 +387,10 @@ const MonthlyFeeLink = () => {
             <MonthlyFeeLinkEditForm
               editForm={singleEditMonthlyFeeLink && singleEditMonthlyFeeLink}
               setOpenPopup={setOpenPopup}
+              searchFilterModel={
+                singleEditMonthlyFeeLink &&
+                singleEditMonthlyFeeLink?.searchFilterModel
+              }
             />
           </>
         )}

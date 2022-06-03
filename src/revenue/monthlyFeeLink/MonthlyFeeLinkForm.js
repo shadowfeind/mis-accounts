@@ -40,28 +40,34 @@ const useStyles = makeStyles({
 });
 
 const initialFormValues = {
-  IDAdmissionFacultyFeeStructure: 0,
-  IDAdmissionFeeStructure: 0,
-  IDYearFacultyLink: 0,
-  FeeAmount: 0,
-  IDHRCompany: 0,
+  IDAccountType: 0,
   IdAccountGroup: 0,
   AccountName: "",
-  IDAcademicYear: 0,
-  Level: 0,
-  IDAccountType: 0,
+  AccountNameDesc: "",
+  Address: "",
+  TelNo: "",
+  MobileNo: "",
+  Email: "",
+  ContactPerson: "",
+  PAN: "",
+  Created_On: "2022-06-03T10:05:21.481Z",
+  Updated_On: "2022-06-03T10:05:21.481Z",
   IsActive: true,
-  Created_On: "2022-06-03T04:41:16.636Z",
-  Updated_On: "2022-06-03T04:41:16.636Z",
+  IDHRCompany: 0,
+  IsCostCenter: true,
+  FeeAmount: 0,
+  IsExtraFee: true,
+  IsMonthlyFee: true,
+  IsAdmissionFee: true,
 };
 
 const MonthlyFeeLinkForm = ({
   setOpenCreatePopup,
   feeStructure,
-  accountName,
+  searchFilterModel,
 }) => {
-  const [checked, setChecked] = useState(false);
-  const [month, setMonths] = useState([]);
+  const [formCheck, setFormCheck] = useState([]);
+  // const [month, setMonths] = useState([]);
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -71,38 +77,68 @@ const MonthlyFeeLinkForm = ({
   const validate = () => {
     let temp = { ...errors };
 
-    temp.month = month?.length === 0 ? "Please Select Atleast One Option" : "";
+    temp.submit =
+      formCheck?.length === 0 ? "Please Select Atleast One Option" : "";
 
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x === "");
   };
 
   const handleAllChecked = (checked) => {
-    setChecked(checked);
     if (checked) {
-      setMonths([...feeStructure]);
+      setFormCheck([...feeStructure]);
     } else {
-      setMonths([]);
+      setFormCheck([]);
     }
   };
 
-  const handleChecked = (checked, obj) => {
-    if (!checked) {
-      setMonths((prev) => {
-        let newCheckList = prev.filter(
-          (x) => x.IDAccountType !== obj.IDAccountType
+  // useEffect(() => {
+  //   if (feeStructure) {
+  //     setFormCheck([...feeStructure]);
+  //   }
+  // }, [feeStructure]);
+
+  const inputHandler = (subject, value) => {
+    setFormCheck((prev) => {
+      const exists = prev.find(
+        (u) => u.IDAccountType === subject.IDAccountType
+      );
+      if (exists) {
+        const newSubject = { ...subject, FeeAmount: Number(value) };
+        // console.log(newSubject);
+        let newArr = [...prev];
+        prev.map((data, index) => {
+          newArr[index].FeeAmount = Number(value);
+        });
+        return [...newArr];
+      }
+      return [...prev];
+    });
+  };
+
+  const handleChecked = (subject) => {
+    setFormCheck((prev) => {
+      const exists = prev.find(
+        (u) => u.IDAccountType === subject.IDAccountType
+      );
+      if (exists) {
+        let newArr = prev.filter(
+          (u) => u.IDAccountType !== subject.IDAccountType
         );
-        return [...newCheckList];
-      });
-    } else {
-      setMonths((prev) => [...prev, obj]);
-    }
+        return [...newArr];
+      }
+      let newFeeAmount = Number(
+        document?.getElementById(`subject_${subject?.IDAccountType}`)?.value
+      );
+      const newSubject = { ...subject, FeeAmount: newFeeAmount };
+      return [...prev, newSubject];
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
-      dispatch(postMonthlyFeeLinkAction(values, month));
+      dispatch(postMonthlyFeeLinkAction(formCheck, searchFilterModel));
     }
   };
 
@@ -123,7 +159,7 @@ const MonthlyFeeLinkForm = ({
               <StyledTableCell style={{ textAlign: "right" }}>
                 <label>All</label>
                 <Checkbox
-                  checked={checked}
+                  name="checkedB"
                   onChange={(e) => handleAllChecked(e.target.checked)}
                   color="primary"
                 />
@@ -131,8 +167,8 @@ const MonthlyFeeLinkForm = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {accountName &&
-              accountName
+            {feeStructure &&
+              feeStructure
                 ?.sort((a, b) => a.RollNo - b.RollNo)
                 ?.map((s) => (
                   <StyledTableRow key={s.AccountName}>
@@ -166,14 +202,15 @@ const MonthlyFeeLinkForm = ({
                     >
                       <Checkbox
                         checked={
-                          month.filter(
+                          formCheck?.filter(
                             (x) => x.IDAccountType === s.IDAccountType
                           ).length > 0
                             ? true
                             : false
                         }
+                        name="checkedB"
                         color="primary"
-                        onChange={(e) => handleChecked(e.target.checked, s)}
+                        onChange={(e) => handleChecked(s)}
                       />
                     </StyledTableCell>
                   </StyledTableRow>
@@ -181,7 +218,7 @@ const MonthlyFeeLinkForm = ({
           </TableBody>
         </Table>
       </TableContainer>
-      {accountName?.length <= 0 && (
+      {feeStructure?.length <= 0 && (
         <div>
           <h3 style={{ color: "red", textAlign: "center" }}>No Data</h3>
         </div>

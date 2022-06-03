@@ -110,13 +110,13 @@ export const getSingleEditMonthlyFeeLinkAction =
   };
 
 export const postMonthlyFeeLinkAction =
-  (ddlFeeStructure, checked) => async (dispatch) => {
+  (ddlFeeStructure, searchFilterModel) => async (dispatch) => {
     try {
       dispatch({ type: POST_MONTHLY_FEE_LINK_REQUEST });
 
       const jsonData = JSON.stringify({
-        dbModel: ddlFeeStructure,
-        checked,
+        ddlFeeStructure,
+        searchFilterModel,
       });
 
       console.log(jsonData);

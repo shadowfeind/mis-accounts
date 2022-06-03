@@ -102,6 +102,11 @@ import {
   getAllAdmitStudentReducer,
   getBulkEditAdmitStudentReducer,
 } from "./revenue/admitStudent/AdmitStudentReducers";
+import {
+  getAllFeeCollectionReducer,
+  getListFeeCollectionReducer,
+  getPrintFeeCollectionReducer,
+} from "./revenue/feeCollection/FeeCollectionReducers";
 
 //examination reducers link end
 export const reducers = combineReducers({
@@ -199,6 +204,11 @@ export const reducers = combineReducers({
   getSingleEditMonthlyFeeLink: getSingleEditMonthlyFeeLinkReducer,
   postMonthlyFeeLink: postMonthlyFeeLinkReducer,
   putMonthlyFeeLink: putMonthlyFeeLinkReducer,
+
+  //FEE COLLECTION REDUCERS:
+  getAllFeeCollection: getAllFeeCollectionReducer,
+  getListFeeCollection: getListFeeCollectionReducer,
+  getPrintFeeCollection: getPrintFeeCollectionReducer,
 
   holiday: getAllHoliday,
   createHoliday: createHolidayReducer,

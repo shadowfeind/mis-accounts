@@ -132,6 +132,7 @@ const StudentDue = () => {
     }
   }, [studentDue]);
   useEffect(() => {
+    dispatch({ type: GET_LIST_STUDENT_DUE_RESET });
     dispatch(getAllSchoolDueAction());
   }, []);
 
@@ -270,10 +271,10 @@ const StudentDue = () => {
                     <StudentDueTableCollapse item={item} key={item.$id} />
                   ))}
                   <TableRow>
+                    <TableCell></TableCell>
                     <TableCell>
                       <strong>Total</strong>
                     </TableCell>
-                    <TableCell></TableCell>
                     <TableCell>
                       {tableDataAfterPagingAndSorting()
                         ?.reduce((acc, curr) => {
