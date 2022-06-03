@@ -52,7 +52,6 @@ const tableHeader = [
   { id: "RegistrationKey", label: "Registration Key" },
   { id: "Name", label: "Name" },
   { id: "RemainingDues", label: "Remaining Dues" },
-  { id: "Total", label: "Total" },
 ];
 
 const StudentDue = () => {
@@ -207,6 +206,7 @@ const StudentDue = () => {
                   value={date}
                   onChange={(e) => {
                     const newDate = new Date(e);
+                    console.log(newDate.toLocaleDateString().slice(0, 10));
                     setDate(newDate.toLocaleDateString().slice(0, 10));
                   }}
                 />
@@ -266,15 +266,21 @@ const StudentDue = () => {
                 <TblHead />
 
                 <TableBody>
-                  {tableDataAfterPagingAndSorting().map((item) => (
+                  {tableDataAfterPagingAndSorting()?.map((item) => (
                     <StudentDueTableCollapse item={item} key={item.$id} />
                   ))}
                   <TableRow>
+                    <TableCell>
+                      <strong>Total</strong>
+                    </TableCell>
                     <TableCell></TableCell>
                     <TableCell>
-                      <b>Total:</b>
+                      {tableDataAfterPagingAndSorting()
+                        ?.reduce((acc, curr) => {
+                          return acc + curr.RemainingDue;
+                        }, 0)
+                        ?.toFixed(2)}
                     </TableCell>
-                    <TableCell>102</TableCell>
                     <TableCell></TableCell>
                   </TableRow>
                 </TableBody>

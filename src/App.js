@@ -11,6 +11,8 @@ import {
 
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 
+const AdmitStudent = lazy(() => import("./revenue/admitStudent/AdmitStudent"));
+
 const AutoSearch = lazy(() => import("./userProfile/autoSearch/AutoSearch"));
 const PageNotFound = lazy(() => import("./pageNotFound/PageNotFound"));
 
@@ -107,6 +109,7 @@ const App = () => {
 
               {/* Revenue Routes */}
               <Route path={"/revenue"} component={Revenue} />
+              <Route path={"/admit-student"} component={AdmitStudent} />
               <Route
                 path={"/admission-faculty-fee"}
                 component={AdmissionFacultyFee}

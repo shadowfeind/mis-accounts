@@ -97,6 +97,11 @@ import {
   postMonthlyFeeLinkReducer,
   putMonthlyFeeLinkReducer,
 } from "./revenue/monthlyFeeLink/MonthlyFeeLinkReducers";
+import {
+  getAllActiveStudentForLedgeronlyReducer,
+  getAllAdmitStudentReducer,
+  getBulkEditAdmitStudentReducer,
+} from "./revenue/admitStudent/AdmitStudentReducers";
 
 //examination reducers link end
 export const reducers = combineReducers({
@@ -157,6 +162,11 @@ export const reducers = combineReducers({
   getSingleEditAdmissionFeeStructure: getSingleEditAdmissionFeeStructureReducer,
   postAdmissionFeeStructure: postAdmissionFeeStructureReducer,
   putAdmissionFeeStructure: putAdmissionFeeStructureReducer,
+
+  //REVENUE ADMIT STUDENT REDUCERS:
+  getAllAdmitStudent: getAllAdmitStudentReducer,
+  getAllActiveStudentForLedgeronly: getAllActiveStudentForLedgeronlyReducer,
+  getBulkEditAdmitStudent: getBulkEditAdmitStudentReducer,
 
   //ADMISSION FACULTY FEE STRUCTURE REDUCERS:
   getAllAdmissionFacultyFeeStructure: getAllAdmissionFacultyFeeStructureReducer,
