@@ -111,6 +111,11 @@ import {
   getAllOneTimeBillPrintReducer,
   getPrintOneTimeBillPrintReducer,
 } from "./revenue/oneTimeBillPrint/OneTimeBillPrintReducers";
+import {
+  getAllStudentLedgerReducer,
+  getListStudentLedgerReducer,
+  postStudentLedgerReducer,
+} from "./revenue/studentLedger/StudentLedgerReducers";
 
 //examination reducers link end
 export const reducers = combineReducers({
@@ -217,6 +222,11 @@ export const reducers = combineReducers({
   //ONE TIME BILL PRINT:
   getAllOneTimeBillPrint: getAllOneTimeBillPrintReducer,
   getPrintOneTimeBillPrint: getPrintOneTimeBillPrintReducer,
+
+  //STUDENT LEDGER:
+  getAllStudentLedger: getAllStudentLedgerReducer,
+  getListStudentLedger: getListStudentLedgerReducer,
+  postStudentLedger: postStudentLedgerReducer,
 
   holiday: getAllHoliday,
   createHoliday: createHolidayReducer,
