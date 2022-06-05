@@ -66,6 +66,11 @@ const FeeCollection = lazy(() =>
   import("./revenue/feeCollection/FeeCollection")
 );
 
+// One Time Bill Print:
+const OneTimeBillPrint = lazy(() =>
+  import("./revenue/oneTimeBillPrint/OneTimeBillPrint")
+);
+
 const theme = createTheme({
   palette: {
     background: {
@@ -123,6 +128,10 @@ const App = () => {
               <Route path={"/student-due"} component={StudentDue} />
               <Route path={"/monthly-fee"} component={MonthlyFee} />
               <Route path={"/fee-collection"} component={FeeCollection} />
+              <Route
+                path={"/one-time-bill-print"}
+                component={OneTimeBillPrint}
+              />
               {/* Revenue Routes Ends */}
 
               <Route exact path={"/"} component={Dashboard} />

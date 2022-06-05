@@ -68,6 +68,7 @@ const MonthlyFeeLinkForm = ({
 }) => {
   const [formCheck, setFormCheck] = useState([]);
   // const [month, setMonths] = useState([]);
+  const [activeButton, setActiveButton] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -138,6 +139,7 @@ const MonthlyFeeLinkForm = ({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
+      setActiveButton(true);
       dispatch(postMonthlyFeeLinkAction(formCheck, searchFilterModel));
     }
   };
@@ -253,10 +255,11 @@ const MonthlyFeeLinkForm = ({
           variant="contained"
           color="primary"
           type="submit"
-          style={{ margin: "10px 0 0 10px" }}
+          disabled={activeButton}
           onClick={handleSubmit}
+          style={{ margin: "10px 0 0 10px" }}
         >
-          SUBMIT
+          {activeButton ? "...PROCESSING" : "SUBMIT"}
         </Button>
       </div>
     </>

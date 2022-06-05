@@ -69,7 +69,7 @@ const AdmissionFacultyFeeForm = ({
   setOpenCreatePopup,
 }) => {
   const [formCheck, setFormCheck] = useState([]);
-  // const [selectedStructure, setFormCheck] = useState([]);
+  const [activeButton, setActiveButton] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -134,6 +134,7 @@ const AdmissionFacultyFeeForm = ({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
+      setActiveButton(true);
       dispatch(
         postAdmissionFacultyFeeStructureAction(formCheck, searchFilterModel)
       );
@@ -144,119 +145,121 @@ const AdmissionFacultyFeeForm = ({
 
   return (
     <>
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Header </StyledTableCell>
+      <Form onSubmit={handleSubmit}>
+        <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Header </StyledTableCell>
 
-              <StyledTableCell>Amount</StyledTableCell>
-              <StyledTableCell style={{ textAlign: "right" }}>
-                <label>All</label>
-                <Checkbox
-                  name="checkedB"
-                  onChange={(e) => handleAllChecked(e.target.checked)}
-                  color="primary"
-                />
-              </StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {feeStructure &&
-              feeStructure
-                ?.sort((a, b) => a.RollNo - b.RollNo)
-                ?.map((s) => (
-                  <StyledTableRow key={s.AccountName}>
-                    <StyledTableCell component="th" scope="row">
-                      {s.AccountName}
-                    </StyledTableCell>
-                    <StyledTableCell component="th" scope="row">
-                      <TextField
-                        defaultValue={s.FeeAmount}
-                        type="number"
-                        onWheelCapture={(e) => {
-                          e.target.blur();
-                        }}
-                        onKeyDown={(e) =>
-                          symbolsArr.includes(e.key) && e.preventDefault()
-                        }
-                        InputProps={{
-                          inputProps: {
-                            style: { textAlign: "center" },
-                          },
-                        }}
-                        variant="outlined"
-                        onChange={(e) => inputHandler(s, e.target.value)}
-                        inputProps={{ tabIndex: "1" }}
-                      />
-                    </StyledTableCell>
-                    <StyledTableCell
-                      component="th"
-                      scope="row"
-                      style={{ textAlign: "right" }}
-                    >
-                      <Checkbox
-                        checked={
-                          formCheck?.filter(
-                            (x) => x.IDAccountType === s.IDAccountType
-                          ).length > 0
-                            ? true
-                            : false
-                        }
-                        name="checkedB"
-                        color="primary"
-                        onChange={(e) => handleChecked(s)}
-                      />
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {feeStructure?.length <= 0 && (
-        <div>
-          <h3 style={{ color: "red", textAlign: "center" }}>No Data Found</h3>
-        </div>
-      )}
-      {errors.submit && (
+                <StyledTableCell>Amount</StyledTableCell>
+                <StyledTableCell style={{ textAlign: "right" }}>
+                  <label>All</label>
+                  <Checkbox
+                    name="checkedB"
+                    onChange={(e) => handleAllChecked(e.target.checked)}
+                    color="primary"
+                  />
+                </StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {feeStructure &&
+                feeStructure
+                  ?.sort((a, b) => a.RollNo - b.RollNo)
+                  ?.map((s) => (
+                    <StyledTableRow key={s.AccountName}>
+                      <StyledTableCell component="th" scope="row">
+                        {s.AccountName}
+                      </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                        <TextField
+                          defaultValue={s.FeeAmount}
+                          type="number"
+                          onWheelCapture={(e) => {
+                            e.target.blur();
+                          }}
+                          onKeyDown={(e) =>
+                            symbolsArr.includes(e.key) && e.preventDefault()
+                          }
+                          InputProps={{
+                            inputProps: {
+                              style: { textAlign: "center" },
+                            },
+                          }}
+                          variant="outlined"
+                          onChange={(e) => inputHandler(s, e.target.value)}
+                          inputProps={{ tabIndex: "1" }}
+                        />
+                      </StyledTableCell>
+                      <StyledTableCell
+                        component="th"
+                        scope="row"
+                        style={{ textAlign: "right" }}
+                      >
+                        <Checkbox
+                          checked={
+                            formCheck?.filter(
+                              (x) => x.IDAccountType === s.IDAccountType
+                            ).length > 0
+                              ? true
+                              : false
+                          }
+                          name="checkedB"
+                          color="primary"
+                          onChange={(e) => handleChecked(s)}
+                        />
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {feeStructure?.length <= 0 && (
+          <div>
+            <h3 style={{ color: "red", textAlign: "center" }}>No Data Found</h3>
+          </div>
+        )}
+        {errors.submit && (
+          <div
+            style={{
+              textAlign: "center",
+              color: "red",
+              fontSize: "12px",
+              paddingTop: "8px",
+            }}
+          >
+            {errors.submit}
+          </div>
+        )}
         <div
           style={{
-            textAlign: "center",
-            color: "red",
-            fontSize: "12px",
-            paddingTop: "8px",
+            display: "flex",
+            justifyContent: "end",
+            paddingTop: "10px",
+            marginTop: "10px",
+            borderTop: "1px solid #f3f3f3",
           }}
         >
-          {errors.submit}
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => setOpenCreatePopup(false)}
+            style={{ margin: "10px 0 0 10px" }}
+          >
+            CANCEL
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={activeButton}
+            style={{ margin: "10px 0 0 10px" }}
+          >
+            {activeButton ? "...PROCESSING" : "SUBMIT"}
+          </Button>
         </div>
-      )}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "end",
-          paddingTop: "10px",
-          marginTop: "10px",
-          borderTop: "1px solid #f3f3f3",
-        }}
-      >
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => setOpenCreatePopup(false)}
-          style={{ margin: "10px 0 0 10px" }}
-        >
-          CANCEL
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-          style={{ margin: "10px 0 0 10px" }}
-          onClick={handleSubmit}
-        >
-          SUBMIT
-        </Button>
-      </div>
+      </Form>
     </>
   );
 };

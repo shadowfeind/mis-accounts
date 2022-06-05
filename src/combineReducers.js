@@ -107,6 +107,10 @@ import {
   getListFeeCollectionReducer,
   getPrintFeeCollectionReducer,
 } from "./revenue/feeCollection/FeeCollectionReducers";
+import {
+  getAllOneTimeBillPrintReducer,
+  getPrintOneTimeBillPrintReducer,
+} from "./revenue/oneTimeBillPrint/OneTimeBillPrintReducers";
 
 //examination reducers link end
 export const reducers = combineReducers({
@@ -209,6 +213,10 @@ export const reducers = combineReducers({
   getAllFeeCollection: getAllFeeCollectionReducer,
   getListFeeCollection: getListFeeCollectionReducer,
   getPrintFeeCollection: getPrintFeeCollectionReducer,
+
+  //ONE TIME BILL PRINT:
+  getAllOneTimeBillPrint: getAllOneTimeBillPrintReducer,
+  getPrintOneTimeBillPrint: getPrintOneTimeBillPrintReducer,
 
   holiday: getAllHoliday,
   createHoliday: createHolidayReducer,
