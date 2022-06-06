@@ -96,19 +96,17 @@ const AdmissionFacultyFeeForm = ({
 
   const inputHandler = (subject, value) => {
     setFormCheck((prev) => {
-      const exists = prev.find((u) => u.FeeAmount === subject.FeeAmount);
-      if (exists) {
-        let newArr = [...prev];
-        prev.map((data, index) => {
-          newArr[index].FeeAmount = Number(value);
-        });
-        return [...newArr];
-      }
-      let newFeeAmount = Number(
-        document?.getElementById(`subject_${subject?.IDAccountType}`)?.value
+      const exists = prev.find(
+        (u) => u.IDAccountType === subject.IDAccountType
       );
-      const newSubject = { ...subject, FeeAmount: newFeeAmount };
-      return [...prev, newSubject];
+      if (exists) {
+        let newObject = { ...subject, FeeAmount: Number(value) };
+        let newArr = [...prev];
+
+        newArr[index] = newObject;
+        return newArr;
+      }
+      return [...prev];
     });
   };
 
@@ -187,6 +185,7 @@ const AdmissionFacultyFeeForm = ({
                               style: { textAlign: "center" },
                             },
                           }}
+                          id={`subject_${s?.IDAccountType}`}
                           variant="outlined"
                           onChange={(e) => inputHandler(s, e.target.value)}
                           inputProps={{ tabIndex: "1" }}

@@ -59,12 +59,12 @@ export const RevenueRoute = [
     exact: false,
   },
 
-  // {
-  //   name: "Old Questions",
-  //   route: "/old-questions",
-  //   icon: MenuBookIcon,
-  //   exact: false,
-  // },
+  {
+    name: "Student Ledger",
+    route: "/student-ledger",
+    icon: MenuBookIcon,
+    exact: false,
+  },
   // {
   //   name: "Syllabus",
   //   route: "/syllabus",

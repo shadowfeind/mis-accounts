@@ -99,25 +99,23 @@ const MonthlyFeeLinkForm = ({
   //   }
   // }, [feeStructure]);
 
-  const inputHandler = (subject, value) => {
+  const inputHandler = (subject, value, index) => {
     setFormCheck((prev) => {
       const exists = prev.find(
         (u) => u.IDAccountType === subject.IDAccountType
       );
       if (exists) {
-        const newSubject = { ...subject, FeeAmount: Number(value) };
-        // console.log(newSubject);
+        let newObject = { ...subject, FeeAmount: Number(value) };
         let newArr = [...prev];
-        prev.map((data, index) => {
-          newArr[index].FeeAmount = Number(value);
-        });
-        return [...newArr];
+
+        newArr[index] = newObject;
+        return newArr;
       }
       return [...prev];
     });
   };
 
-  const handleChecked = (subject) => {
+  const handleChecked = (subject, value) => {
     setFormCheck((prev) => {
       const exists = prev.find(
         (u) => u.IDAccountType === subject.IDAccountType
@@ -141,6 +139,7 @@ const MonthlyFeeLinkForm = ({
     if (validate()) {
       setActiveButton(true);
       dispatch(postMonthlyFeeLinkAction(formCheck, searchFilterModel));
+      // console.log(formCheck);
     }
   };
 
@@ -169,7 +168,7 @@ const MonthlyFeeLinkForm = ({
             {feeStructure &&
               feeStructure
                 ?.sort((a, b) => a.RollNo - b.RollNo)
-                ?.map((s) => (
+                ?.map((s, i) => (
                   <StyledTableRow key={s.AccountName}>
                     <StyledTableCell component="th" scope="row">
                       {s.AccountName}
@@ -189,8 +188,9 @@ const MonthlyFeeLinkForm = ({
                             style: { textAlign: "center" },
                           },
                         }}
+                        id={`subject_${s?.IDAccountType}`}
                         variant="outlined"
-                        onChange={(e) => inputHandler(s, e.target.value)}
+                        onChange={(e) => inputHandler(s, e.target.value, i)}
                         inputProps={{ tabIndex: "1" }}
                       />
                     </StyledTableCell>
