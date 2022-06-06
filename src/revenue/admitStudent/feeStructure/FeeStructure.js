@@ -39,8 +39,8 @@ const useStyles = makeStyles({
   },
 });
 
-const FeeStructure = ({ admissionFee }) => {
-  const [currentFee, setCurrentFee] = useState([]);
+const FeeStructure = ({ admissionFee, currentFee, setCurrentFee }) => {
+  // const [currentFee, setCurrentFee] = useState([]);
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -104,6 +104,7 @@ const FeeStructure = ({ admissionFee }) => {
         });
       });
       setCurrentFee([...feeContainer]);
+      // console.log(feeContainer);
     }
   }, [admissionFee]);
 
@@ -129,7 +130,7 @@ const FeeStructure = ({ admissionFee }) => {
             <TableBody>
               {currentFee?.map((s, i) => {
                 return (
-                  <StyledTableRow>
+                  <StyledTableRow key={i}>
                     <StyledTableCell>{i + 1}</StyledTableCell>
                     <StyledTableCell>{s.AccountName}</StyledTableCell>
                     <StyledTableCell>{s.FeeAmount}</StyledTableCell>
@@ -182,6 +183,35 @@ const FeeStructure = ({ admissionFee }) => {
                   </StyledTableRow>
                 );
               })}
+              <StyledTableRow>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell>
+                  <strong>Total</strong>
+                </StyledTableCell>
+                <StyledTableCell>
+                  {currentFee?.reduce((acc, item) => {
+                    return acc + Number(item.FeeAmount);
+                  }, 0)}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {currentFee?.reduce((acc, item) => {
+                    return acc + Number(item.Discount);
+                  }, 0)}
+                </StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell>
+                  {currentFee?.reduce((acc, item) => {
+                    return acc + Number(item.DiscountAmount);
+                  }, 0)}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {currentFee?.reduce((acc, item) => {
+                    return acc + Number(item.Cr);
+                  }, 0)}
+                </StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+              </StyledTableRow>
             </TableBody>
           </Table>
         </TableContainer>

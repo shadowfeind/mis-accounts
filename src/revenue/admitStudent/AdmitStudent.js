@@ -32,6 +32,7 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import FeeStructure from "./feeStructure/FeeStructure";
 import MonthlyFeeStructure from "./monthlyFeeStructure/MonthlyFeeStructure";
+import ExtraFeeStructure from "./extraFeeStructure/ExtraFeeStructure";
 
 const AdmitStudent = () => {
   const [ddlAcaYear, setDdlAcaYear] = useState([]);
@@ -49,6 +50,9 @@ const AdmitStudent = () => {
   const [errors, setErrors] = useState({});
   const [transactionDate, setTransactionDate] = useState();
   const [voucher, setVoucher] = useState("");
+  const [feeStructure, setFeeStructure] = useState([]);
+  const [monthlyFee, setMonthlyFee] = useState([]);
+  const [extraFee, setExtraFee] = useState([]);
   const [notify, setNotify] = useState({
     isOpen: false,
     message: "",
@@ -62,8 +66,11 @@ const AdmitStudent = () => {
   const { activeStudentForLedgeronly, error: activeStudentForLedgeronlyError } =
     useSelector((state) => state.getAllActiveStudentForLedgeronly);
 
-  const { blukEditAdmitStudent, error: blukEditAdmitStudentError } =
-    useSelector((state) => state.getBulkEditAdmitStudent);
+  const {
+    blukEditAdmitStudent,
+    error: blukEditAdmitStudentError,
+    loading: blukEditAdmitStudentLoading,
+  } = useSelector((state) => state.getBulkEditAdmitStudent);
 
   if (admitStudentError) {
     setNotify({
@@ -246,55 +253,68 @@ const AdmitStudent = () => {
             </Grid>
           </Grid>
         </Toolbar>
-        {blukEditAdmitStudent && (
-          <div
-            style={{
-              marginTop: "20px",
-              paddingTop: "20px",
-              borderTop: "2px solid #f3f3f3",
-            }}
-          >
-            <Toolbar>
-              <Grid container>
-                <Grid item xs={3}>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardDatePicker
-                      disableToolbar
-                      variant="inline"
-                      inputVariant="outlined"
-                      format="dd-MM-yyyy"
-                      name="transaction date"
-                      label="Transaction Date"
-                      value={transactionDate}
-                      onChange={(e) => {
-                        const newDate = new Date(e);
-                        setTransactionDate(
-                          newDate.toLocaleDateString().slice(0, 10)
-                        );
-                      }}
+        {blukEditAdmitStudentLoading ? (
+          <LoadingComp />
+        ) : (
+          blukEditAdmitStudent && (
+            <div
+              style={{
+                marginTop: "20px",
+                paddingTop: "20px",
+                borderTop: "2px solid #f3f3f3",
+              }}
+            >
+              <Toolbar>
+                <Grid container>
+                  <Grid item xs={3}>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <KeyboardDatePicker
+                        disableToolbar
+                        variant="inline"
+                        inputVariant="outlined"
+                        format="dd-MM-yyyy"
+                        name="transaction date"
+                        label="Transaction Date"
+                        value={transactionDate}
+                        onChange={(e) => {
+                          const newDate = new Date(e);
+                          setTransactionDate(
+                            newDate.toLocaleDateString().slice(0, 10)
+                          );
+                        }}
+                      />
+                    </MuiPickersUtilsProvider>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <InputControl
+                      name="voucher"
+                      label="Voucher/Bill No"
+                      value={voucher}
+                      disabled
                     />
-                  </MuiPickersUtilsProvider>
+                  </Grid>
                 </Grid>
-                <Grid item xs={3}>
-                  <InputControl
-                    name="voucher"
-                    label="Voucher/Bill No"
-                    value={voucher}
-                    disabled
-                  />
-                </Grid>
-              </Grid>
-            </Toolbar>
-            <div style={{ height: "15px" }}></div>
-            <h3>Admission Fee</h3>
-            <FeeStructure
-              admissionFee={blukEditAdmitStudent?.admissionFeeStructureLst}
-            />
-            <h3>Monthly Fee</h3>
-            <MonthlyFeeStructure
-              admissionFee={blukEditAdmitStudent?.monthlyFeeStructureLst}
-            />
-          </div>
+              </Toolbar>
+              <div style={{ height: "15px" }}></div>
+              <h3>Admission Fee</h3>
+              <FeeStructure
+                admissionFee={blukEditAdmitStudent?.admissionFeeStructureLst}
+                currentFee={feeStructure}
+                setCurrentFee={setFeeStructure}
+              />
+              <h3>Monthly Fee</h3>
+              <MonthlyFeeStructure
+                admissionFee={blukEditAdmitStudent?.monthlyFeeStructureLst}
+                currentFee={monthlyFee}
+                setCurrentFee={setMonthlyFee}
+              />
+              <h3>Extra Activities Fee</h3>
+              <ExtraFeeStructure
+                currentFee={extraFee}
+                setCurrentFee={setExtraFee}
+              />
+            </div>
+          )
         )}
       </CustomContainer>
       <Notification notify={notify} setNotify={setNotify} />

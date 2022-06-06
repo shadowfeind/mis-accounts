@@ -10,6 +10,9 @@ import {
   GET_BULK_EDIT_ADMIT_STUDENT_REQUEST,
   GET_BULK_EDIT_ADMIT_STUDENT_RESET,
   GET_BULK_EDIT_ADMIT_STUDENT_SUCCESS,
+  GET_EXTRA_FEE_ADMIT_STUDENT_REQUEST,
+  GET_EXTRA_FEE_ADMIT_STUDENT_RESET,
+  GET_EXTRA_FEE_ADMIT_STUDENT_SUCCESS,
 } from "./AdmitStudentConstants";
 
 export const getAllAdmitStudentAction = () => async (dispatch) => {
@@ -73,6 +76,31 @@ export const getBulkEditAdmitStudentAction =
     } catch (error) {
       dispatch({
         type: GET_BULK_EDIT_ADMIT_STUDENT_FAIL,
+        payload: error?.response?.data?.Message
+          ? error?.response?.data?.Message
+          : error?.message,
+      });
+    }
+  };
+
+export const getExtraFeeAdmitStudentAction =
+  (query, index) => async (dispatch) => {
+    try {
+      dispatch({ type: GET_EXTRA_FEE_ADMIT_STUDENT_REQUEST });
+
+      const { data } = await axiosInstance.get(
+        `/api/AdmitStudent/GetExtraFeeJsonList?searchkey=${query}`,
+        tokenConfig()
+      );
+
+      dispatch({
+        type: GET_EXTRA_FEE_ADMIT_STUDENT_SUCCESS,
+        payload: data,
+        index,
+      });
+    } catch (error) {
+      dispatch({
+        type: GET_EXTRA_FEE_ADMIT_STUDENT_RESET,
         payload: error?.response?.data?.Message
           ? error?.response?.data?.Message
           : error?.message,
