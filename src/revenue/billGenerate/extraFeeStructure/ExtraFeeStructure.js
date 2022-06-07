@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -11,7 +11,10 @@ import {
 } from "@material-ui/core";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { dummyData } from "./Dummy";
+import { Autocomplete } from "@material-ui/lab";
+import { getExtraFeeBillGenerateAction } from "../BillgenerateActions";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -36,8 +39,7 @@ const useStyles = makeStyles({
   },
 });
 
-const MonthlyFeeStructure = ({
-  admissionFee,
+const ExtraFeeStructure = ({
   regKey,
   idFacLink,
   voucherBill,
@@ -49,9 +51,13 @@ const MonthlyFeeStructure = ({
   currentFee,
   setCurrentFee,
 }) => {
-  // const [currentFee, setCurrentFee] = useState([]);
+  // const [currentFee, setCurrentFee] = useState(dummyData);
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const { extraFeeBillGenerate, index } = useSelector(
+    (state) => state.getExtraFeeBillGenerate
+  );
 
   const handleChange = (index, fee, value, name, amount) => {
     if (name === "Discount") {
@@ -99,7 +105,6 @@ const MonthlyFeeStructure = ({
         ...fee,
         Cr: fee.FeeAmount - fee.Discount,
         DiscountAmount: "",
-        DiscountAmount: "",
         PercentageDiscount: "",
         checked: false,
       };
@@ -111,67 +116,89 @@ const MonthlyFeeStructure = ({
     });
   };
 
-  const handleActive = (index, fee, e) => {
-    let newObject;
-    if (e.target.checked) {
-      newObject = {
-        ...fee,
-        Cr: fee.FeeAmount,
-        active: true,
-      };
-    } else {
-      newObject = {
-        ...fee,
-        Cr: "",
+  const symbolsArr = ["e", "E", "+", "-", "ArrowUp", "ArrowDown"];
+  const test = [];
+  const handleExtraChange = (e, i) => {
+    if (e.length > 2) {
+      dispatch(getExtraFeeBillGenerateAction(e, i));
+    }
+  };
+  const handleOptionChange = (inputObj, index, event, reason) => {
+    // console.log("reason", reason);
+
+    if (reason == "clear") {
+      let newObject = {
+        AccountName: "",
+        FeeAmount: 0,
+        IDAccountType: 0,
         Discount: "",
+        PercentageDiscount: "",
         DiscountAmount: "",
+        Narration: "",
+        fee: "",
+        Dr: "",
+        Cr: "",
+        RegistrationKey: "",
+        IDYearFacultyLink: "",
+        VoucherBillNo: "",
+        IDAcademicYear: "",
+        Level: "",
+        IDFiscalYear: "",
+        IDMonth: "",
+        TransactionDate: "",
+        IsAccountReceivable: false,
+        IsActive: true,
+        Created_On: "",
+        Updated_On: "",
+        MatCenter: 1,
         checked: false,
         active: false,
       };
-    }
 
-    setCurrentFee((prev) => {
-      const newArr = [...prev];
-      newArr[index] = newObject;
-      return newArr;
-    });
+      setCurrentFee((prev) => {
+        const newArr = [...prev];
+        newArr[index] = newObject;
+        return newArr;
+      });
+    } else {
+      let newObject = {
+        AccountName: inputObj.label,
+        FeeAmount: inputObj.amount,
+        IDAccountType: inputObj.val,
+        Discount: null,
+        PercentageDiscount: null,
+        DiscountAmount: null,
+        Narration: null,
+        fee: inputObj.amount,
+        Dr: inputObj.amount,
+        Cr: inputObj.amount,
+        RegistrationKey: regKey,
+        IDYearFacultyLink: idFacLink,
+        VoucherBillNo: voucherBill,
+        IDAcademicYear: idAcaYear,
+        Level: level,
+        IDFiscalYear: fiscalYear,
+        IDMonth: month,
+        TransactionDate: date,
+        IsAccountReceivable: false,
+        IsActive: true,
+        Created_On: date,
+        Updated_On: date,
+        MatCenter: 1,
+        checked: false,
+        active: true,
+      };
+      setCurrentFee((prev) => {
+        const newArr = [...prev];
+        newArr[index] = newObject;
+        return newArr;
+      });
+    }
   };
 
   useEffect(() => {
-    if (admissionFee) {
-      let feeContainer = [];
-      admissionFee.forEach((fee) => {
-        feeContainer.push({
-          ...fee,
-          Discount: null,
-          PercentageDiscount: null,
-          DiscountAmount: null,
-          Narration: null,
-          fee: fee.FeeAmount,
-          Dr: fee.FeeAmount,
-          Cr: "",
-          RegistrationKey: regKey,
-          IDYearFacultyLink: idFacLink,
-          VoucherBillNo: voucherBill,
-          IDAcademicYear: idAcaYear,
-          Level: level,
-          IDFiscalYear: fiscalYear,
-          IDMonth: month,
-          TransactionDate: date,
-          IsAccountReceivable: false,
-          IsActive: true,
-          Created_On: date,
-          Updated_On: date,
-          MatCenter: 1,
-          checked: false,
-          active: false,
-        });
-      });
-      setCurrentFee([...feeContainer]);
-    }
-  }, [admissionFee, date]);
-
-  const symbolsArr = ["e", "E", "+", "-", "ArrowUp", "ArrowDown"];
+    setCurrentFee(dummyData);
+  }, [dummyData]);
 
   return (
     <>
@@ -196,16 +223,37 @@ const MonthlyFeeStructure = ({
                 return (
                   <StyledTableRow key={i}>
                     <StyledTableCell>{i + 1}</StyledTableCell>
-                    <StyledTableCell>{s.AccountName}</StyledTableCell>
+                    <StyledTableCell>
+                      <Autocomplete
+                        options={
+                          extraFeeBillGenerate ? extraFeeBillGenerate : test
+                        }
+                        getOptionLabel={(option) => option.label}
+                        style={{ width: 400 }}
+                        onChange={(event, newInputValue, reason) =>
+                          handleOptionChange(newInputValue, i, event, reason)
+                        }
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Eg: extra fee"
+                            onChange={(e) =>
+                              handleExtraChange(e.target.value, i)
+                            }
+                            variant="outlined"
+                          />
+                        )}
+                      />
+                    </StyledTableCell>
                     <StyledTableCell>{s.FeeAmount}</StyledTableCell>
                     <StyledTableCell>
                       {" "}
                       <TextField
                         value={s.Discount}
-                        disabled={s.active ? false : true}
                         variant="outlined"
                         name="Discount"
                         type="number"
+                        disabled={s.active ? false : true}
                         onWheelCapture={(e) => {
                           e.target.blur();
                         }}
@@ -243,20 +291,12 @@ const MonthlyFeeStructure = ({
                     <StyledTableCell>
                       {" "}
                       <TextField
-                        disabled={s.active ? false : true}
                         value={s.Narration}
                         variant="outlined"
                         name="Narration"
                         onChange={(e) =>
                           handleChange(i, s, e.target.value, e.target.name)
                         }
-                      />
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <Checkbox
-                        checked={s.active}
-                        color="primary"
-                        onChange={(e) => handleActive(i, s, e)}
                       />
                     </StyledTableCell>
                   </StyledTableRow>
@@ -302,4 +342,4 @@ const MonthlyFeeStructure = ({
   );
 };
 
-export default MonthlyFeeStructure;
+export default ExtraFeeStructure;

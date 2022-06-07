@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -59,18 +59,30 @@ const ExtraFeeStructure = ({
     (state) => state.getExtraFeeAdmitStudent
   );
 
-  const handleChange = (index, fee, value, name) => {
-    let newObject;
+  const handleChange = (index, fee, value, name, amount) => {
     if (name === "Discount") {
-      newObject = { ...fee, [name]: value, Cr: fee.FeeAmount - value };
+      if (value <= amount) {
+        let newObject;
+
+        newObject = { ...fee, [name]: value, Cr: fee.FeeAmount - value };
+
+        setCurrentFee((prev) => {
+          const newArr = [...prev];
+          newArr[index] = newObject;
+          return newArr;
+        });
+      } else {
+        alert(`discount must be equal to or less than ${amount}`);
+      }
     } else {
+      let newObject;
       newObject = { ...fee, [name]: value };
+      setCurrentFee((prev) => {
+        const newArr = [...prev];
+        newArr[index] = newObject;
+        return newArr;
+      });
     }
-    setCurrentFee((prev) => {
-      const newArr = [...prev];
-      newArr[index] = newObject;
-      return newArr;
-    });
   };
 
   const handleCheck = (index, fee, e) => {
@@ -111,41 +123,77 @@ const ExtraFeeStructure = ({
       dispatch(getExtraFeeAdmitStudentAction(e, i));
     }
   };
-  const handleOptionChange = (inputObj, index, event) => {
-    console.log(event);
-    let newObject = {
-      AccountName: inputObj.label,
-      FeeAmount: inputObj.amount,
-      IDAccountType: inputObj.val,
-      Discount: null,
-      PercentageDiscount: null,
-      DiscountAmount: null,
-      Narration: null,
-      fee: inputObj.amount,
-      Dr: inputObj.amount,
-      Cr: inputObj.amount,
-      RegistrationKey: regKey,
-      IDYearFacultyLink: idFacLink,
-      VoucherBillNo: voucherBill,
-      IDAcademicYear: idAcaYear,
-      Level: level,
-      IDFiscalYear: fiscalYear,
-      IDMonth: month,
-      TransactionDate: date,
-      IsAccountReceivable: false,
-      IsActive: true,
-      Created_On: date,
-      Updated_On: date,
-      MatCenter: 1,
-      checked: false,
-      active: true,
-    };
+  const handleOptionChange = (inputObj, index, event, reason) => {
+    // console.log("reason", reason);
 
-    setCurrentFee((prev) => {
-      const newArr = [...prev];
-      newArr[index] = newObject;
-      return newArr;
-    });
+    if (reason == "clear") {
+      let newObject = {
+        AccountName: "",
+        FeeAmount: 0,
+        IDAccountType: 0,
+        Discount: "",
+        PercentageDiscount: "",
+        DiscountAmount: "",
+        Narration: "",
+        fee: "",
+        Dr: "",
+        Cr: "",
+        RegistrationKey: "",
+        IDYearFacultyLink: "",
+        VoucherBillNo: "",
+        IDAcademicYear: "",
+        Level: "",
+        IDFiscalYear: "",
+        IDMonth: "",
+        TransactionDate: "",
+        IsAccountReceivable: false,
+        IsActive: true,
+        Created_On: "",
+        Updated_On: "",
+        MatCenter: 1,
+        checked: false,
+        active: false,
+      };
+
+      setCurrentFee((prev) => {
+        const newArr = [...prev];
+        newArr[index] = newObject;
+        return newArr;
+      });
+    } else {
+      let newObject = {
+        AccountName: inputObj.label,
+        FeeAmount: inputObj.amount,
+        IDAccountType: inputObj.val,
+        Discount: null,
+        PercentageDiscount: null,
+        DiscountAmount: null,
+        Narration: null,
+        fee: inputObj.amount,
+        Dr: inputObj.amount,
+        Cr: inputObj.amount,
+        RegistrationKey: regKey,
+        IDYearFacultyLink: idFacLink,
+        VoucherBillNo: voucherBill,
+        IDAcademicYear: idAcaYear,
+        Level: level,
+        IDFiscalYear: fiscalYear,
+        IDMonth: month,
+        TransactionDate: date,
+        IsAccountReceivable: false,
+        IsActive: true,
+        Created_On: date,
+        Updated_On: date,
+        MatCenter: 1,
+        checked: false,
+        active: true,
+      };
+      setCurrentFee((prev) => {
+        const newArr = [...prev];
+        newArr[index] = newObject;
+        return newArr;
+      });
+    }
   };
 
   useEffect(() => {
@@ -182,8 +230,8 @@ const ExtraFeeStructure = ({
                         }
                         getOptionLabel={(option) => option.label}
                         style={{ width: 400 }}
-                        onChange={(event, newInputValue) =>
-                          handleOptionChange(newInputValue, i, event)
+                        onChange={(event, newInputValue, reason) =>
+                          handleOptionChange(newInputValue, i, event, reason)
                         }
                         renderInput={(params) => (
                           <TextField
@@ -205,6 +253,7 @@ const ExtraFeeStructure = ({
                         variant="outlined"
                         name="Discount"
                         type="number"
+                        disabled={s.active ? false : true}
                         onWheelCapture={(e) => {
                           e.target.blur();
                         }}
@@ -212,7 +261,13 @@ const ExtraFeeStructure = ({
                           symbolsArr.includes(e.key) && e.preventDefault()
                         }
                         onChange={(e) =>
-                          handleChange(i, s, e.target.value, e.target.name)
+                          handleChange(
+                            i,
+                            s,
+                            e.target.value,
+                            e.target.name,
+                            s.FeeAmount
+                          )
                         }
                       />
                     </StyledTableCell>
@@ -269,9 +324,11 @@ const ExtraFeeStructure = ({
                   }, 0)}
                 </StyledTableCell>
                 <StyledTableCell>
-                  {currentFee?.reduce((acc, item) => {
-                    return acc + Number(item.Cr);
-                  }, 0)}
+                  {currentFee
+                    ?.filter((x) => x.active === true)
+                    ?.reduce((acc, item) => {
+                      return acc + Number(item.Cr);
+                    }, 0)}
                 </StyledTableCell>
                 <StyledTableCell></StyledTableCell>
                 <StyledTableCell></StyledTableCell>

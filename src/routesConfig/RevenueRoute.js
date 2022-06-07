@@ -40,6 +40,12 @@ export const RevenueRoute = [
     exact: false,
   },
   {
+    name: "Bill Generate",
+    route: "/bill-generate",
+    icon: PermContactCalendarIcon,
+    exact: false,
+  },
+  {
     name: "Student Due",
     route: "/student-due",
     icon: LibraryBooksIcon,

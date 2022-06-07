@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getActiveStudentForLedgeronlyAction,
-  getAllAdmitStudentAction,
-  getBulkEditAdmitStudentAction,
-  postAdmitStudentAction,
-} from "./AdmitStudentActions";
 import { Button, Toolbar, Grid, TextField } from "@material-ui/core";
 import SelectControl from "../../components/controls/SelectControl";
 import InputControl from "../../components/controls/InputControl";
@@ -13,23 +7,28 @@ import CustomContainer from "../../components/CustomContainer";
 import Notification from "../../components/Notification";
 import LoadingComp from "../../components/LoadingComp";
 import {
-  GET_ACTIVE_STUDENT_FOR_LEDGERONLY_RESET,
-  GET_ALL_ADMIT_STUDENT_RESET,
-  GET_BULK_EDIT_ADMIT_STUDENT_RESET,
-  POST_ADMIT_STUDENT_RESET,
-} from "./AdmitStudentConstants";
-import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import FeeStructure from "./feeStructure/FeeStructure";
-import MonthlyFeeStructure from "./monthlyFeeStructure/MonthlyFeeStructure";
-import ExtraFeeStructure from "./extraFeeStructure/ExtraFeeStructure";
-import AdmitStudentPrint from "./AdmitStudentPrint";
 import Popup from "../../components/Popup";
+import {
+  GET_ACTIVE_STUDENT_FOR_BILL_GENERATE_RESET,
+  GET_ALL_BILL_GENERATE_RESET,
+  GET_BULK_EDIT_BILL_GENERATE_RESET,
+  POST_BILL_GENERATE_RESET,
+} from "./BillgenerateConstants";
+import {
+  getActiveStudentForBillGenerateAction,
+  getAllBillGenerateAction,
+  getBulkEditBillGenerateAction,
+  postBillGenerateAction,
+} from "./BillgenerateActions";
+import MonthlyFeeStructure from "./monthlyFeeStructure/MonthlyFeeStructure";
+import BillgeneratePrint from "./BillgeneratePrint";
+import ExtraFeeStructure from "./extraFeeStructure/ExtraFeeStructure";
 
-const AdmitStudent = () => {
+const Billgenerate = () => {
   const [ddlAcaYear, setDdlAcaYear] = useState([]);
   const [acaYear, setAcaYear] = useState("");
   const [fiscalYearDdl, setFiscalYearDdl] = useState([]);
@@ -58,60 +57,62 @@ const AdmitStudent = () => {
   const dispatch = useDispatch();
   const [openPopup, setOpenPopup] = useState(false);
 
-  const { admitStudent, error: admitStudentError } = useSelector(
-    (state) => state.getAllAdmitStudent
+  const { billGenerate, error: billGenerateError } = useSelector(
+    (state) => state.getAllBillGenerate
   );
-  const { activeStudentForLedgeronly, error: activeStudentForLedgeronlyError } =
-    useSelector((state) => state.getAllActiveStudentForLedgeronly);
+  const {
+    activeStudentForBillGenerate,
+    error: activeStudentForBillGenerateError,
+  } = useSelector((state) => state.getAllActiveStudentForBillGenerate);
 
   const {
-    blukEditAdmitStudent,
-    error: blukEditAdmitStudentError,
-    loading: blukEditAdmitStudentLoading,
-  } = useSelector((state) => state.getBulkEditAdmitStudent);
+    blukEditBillGenerate,
+    error: blukEditBillGenerateError,
+    loading: blukEditBillGenerateLoading,
+  } = useSelector((state) => state.getBulkEditBillGenerate);
 
   const {
-    error: postAdmitStudentError,
-    loading: postAdmitStudentLoading,
-    success: postAdmitStudentSuccess,
-  } = useSelector((state) => state.postAdmitStudent);
+    error: postBillGenerateError,
+    loading: postBillGenerateLoading,
+    success: postBillGenerateSuccess,
+  } = useSelector((state) => state.postBillGenerate);
 
-  if (admitStudentError) {
+  if (billGenerateError) {
     setNotify({
       isOpen: true,
-      message: admitStudentError,
+      message: billGenerateError,
       type: "error",
     });
-    dispatch({ type: GET_ALL_ADMIT_STUDENT_RESET });
+    dispatch({ type: GET_ALL_BILL_GENERATE_RESET });
   }
-  if (postAdmitStudentError) {
+  if (postBillGenerateError) {
     setNotify({
       isOpen: true,
-      message: postAdmitStudentError,
+      message: postBillGenerateError,
       type: "error",
     });
-    dispatch({ type: POST_ADMIT_STUDENT_RESET });
+    dispatch({ type: POST_BILL_GENERATE_RESET });
   }
-  if (postAdmitStudentSuccess) {
+  if (postBillGenerateSuccess) {
     setOpenPopup(true);
-    dispatch({ type: POST_ADMIT_STUDENT_RESET });
-    dispatch({ type: GET_BULK_EDIT_ADMIT_STUDENT_RESET });
+    dispatch({ type: POST_BILL_GENERATE_RESET });
+    dispatch({ type: GET_BULK_EDIT_BILL_GENERATE_RESET });
   }
-  if (activeStudentForLedgeronlyError) {
+  if (activeStudentForBillGenerateError) {
     setNotify({
       isOpen: true,
-      message: activeStudentForLedgeronlyError,
+      message: activeStudentForBillGenerateError,
       type: "error",
     });
-    dispatch({ type: GET_ACTIVE_STUDENT_FOR_LEDGERONLY_RESET });
+    dispatch({ type: GET_ACTIVE_STUDENT_FOR_BILL_GENERATE_RESET });
   }
-  if (blukEditAdmitStudentError) {
+  if (blukEditBillGenerateError) {
     setNotify({
       isOpen: true,
-      message: blukEditAdmitStudentError,
+      message: blukEditBillGenerateError,
       type: "error",
     });
-    dispatch({ type: GET_BULK_EDIT_ADMIT_STUDENT_RESET });
+    dispatch({ type: GET_BULK_EDIT_BILL_GENERATE_RESET });
   }
   const handleYearChange = (value) => {
     dispatch(
@@ -121,54 +122,54 @@ const AdmitStudent = () => {
   };
   const handleClassChange = (value) => {
     dispatch(
-      getActiveStudentForLedgeronlyAction(acaYear, faculty, value, shift)
+      getActiveStudentForBillGenerateAction(acaYear, faculty, value, shift)
     );
     setClassId(value);
   };
   useEffect(() => {
-    if (admitStudent) {
-      setFiscalYearDdl(admitStudent?.searchFilterModel?.ddlAccountFiscalYear);
+    if (billGenerate) {
+      setFiscalYearDdl(billGenerate?.searchFilterModel?.ddlAccountFiscalYear);
       setFiscalYear(
-        admitStudent?.searchFilterModel?.ddlAccountFiscalYear[0]?.Key
+        billGenerate?.searchFilterModel?.ddlAccountFiscalYear[0]?.Key
       );
-      setDdlAcaYear(admitStudent?.searchFilterModel?.ddlAcademicYear);
-      setAcaYear(admitStudent?.searchFilterModel?.ddlAcademicYear[0]?.Key);
-      setClassDdl(admitStudent?.searchFilterModel?.ddlClass);
-      setClassId(admitStudent?.searchFilterModel?.ddlClass[0]?.Key);
-      setMonthDdl(admitStudent?.searchFilterModel?.ddlnpMonth);
-      setMonthId(admitStudent?.searchFilterModel?.npMonth);
+      setDdlAcaYear(billGenerate?.searchFilterModel?.ddlAcademicYear);
+      setAcaYear(billGenerate?.searchFilterModel?.ddlAcademicYear[0]?.Key);
+      setClassDdl(billGenerate?.searchFilterModel?.ddlClass);
+      setClassId(billGenerate?.searchFilterModel?.ddlClass[0]?.Key);
+      setMonthDdl(billGenerate?.searchFilterModel?.ddlnpMonth);
+      setMonthId(billGenerate?.searchFilterModel?.npMonth);
       setFaculty(
-        admitStudent?.searchFilterModel?.ddlFacultyProgramLink[0]?.Key
+        billGenerate?.searchFilterModel?.ddlFacultyProgramLink[0]?.Key
       );
       dispatch(
-        getActiveStudentForLedgeronlyAction(
-          admitStudent?.searchFilterModel?.ddlAcademicYear[0]?.Key,
-          admitStudent?.searchFilterModel?.ddlFacultyProgramLink[0]?.Key,
-          admitStudent?.searchFilterModel?.ddlClass[0]?.Key,
+        getActiveStudentForBillGenerateAction(
+          billGenerate?.searchFilterModel?.ddlAcademicYear[0]?.Key,
+          billGenerate?.searchFilterModel?.ddlFacultyProgramLink[0]?.Key,
+          billGenerate?.searchFilterModel?.ddlClass[0]?.Key,
           shift
         )
       );
     }
-  }, [admitStudent]);
+  }, [billGenerate]);
 
   useEffect(() => {
-    if (activeStudentForLedgeronly) {
-      setStudentDdl(activeStudentForLedgeronly);
-      setStudentId(activeStudentForLedgeronly[0]?.Key);
+    if (activeStudentForBillGenerate) {
+      setStudentDdl(activeStudentForBillGenerate);
+      setStudentId(activeStudentForBillGenerate[0]?.Key);
     }
-  }, [activeStudentForLedgeronly]);
+  }, [activeStudentForBillGenerate]);
 
   useEffect(() => {
-    if (blukEditAdmitStudent) {
+    if (blukEditBillGenerate) {
       setTransactionDate(
-        blukEditAdmitStudent?.dbModel?.TransactionDate?.slice(0, 10)
+        blukEditBillGenerate?.dbModel?.TransactionDate?.slice(0, 10)
       );
-      setVoucher(blukEditAdmitStudent?.dbModel?.VoucherBillNo);
+      setVoucher(blukEditBillGenerate?.dbModel?.VoucherBillNo);
     }
-  }, [blukEditAdmitStudent]);
+  }, [blukEditBillGenerate]);
 
   useEffect(() => {
-    dispatch(getAllAdmitStudentAction());
+    dispatch(getAllBillGenerateAction());
     dispatch({ type: "GET_LINK", payload: "/revenue" });
   }, []);
 
@@ -187,7 +188,7 @@ const AdmitStudent = () => {
   const handleListSearch = () => {
     if (validate()) {
       dispatch(
-        getBulkEditAdmitStudentAction(
+        getBulkEditBillGenerateAction(
           fiscalYear,
           acaYear,
           classId,
@@ -200,22 +201,21 @@ const AdmitStudent = () => {
 
   const handleSubmit = () => {
     dispatch(
-      postAdmitStudentAction(
-        feeStructure,
+      postBillGenerateAction(
         monthlyFee,
         extraFee,
-        blukEditAdmitStudent.dbModel,
-        blukEditAdmitStudent.searchFilterModel,
+        blukEditBillGenerate.dbModel,
+        blukEditBillGenerate.searchFilterModel,
         narration
       )
     );
   };
 
   useEffect(() => {
-    if (blukEditAdmitStudent?.dbModel) {
-      setDbModelContainer({ ...blukEditAdmitStudent.dbModel });
+    if (blukEditBillGenerate?.dbModel) {
+      setDbModelContainer({ ...blukEditBillGenerate.dbModel });
     }
-  }, [blukEditAdmitStudent?.dbModel]);
+  }, [blukEditBillGenerate?.dbModel]);
 
   return (
     <>
@@ -290,10 +290,10 @@ const AdmitStudent = () => {
           </Grid>
         </Toolbar>
 
-        {blukEditAdmitStudentLoading ? (
+        {blukEditBillGenerateLoading ? (
           <LoadingComp />
         ) : (
-          blukEditAdmitStudent && (
+          blukEditBillGenerate && (
             <div
               style={{
                 marginTop: "20px",
@@ -334,37 +334,20 @@ const AdmitStudent = () => {
               </Toolbar>
               <div style={{ height: "15px" }}></div>
               <h3>Admission Fee</h3>
-              <FeeStructure
-                admissionFee={blukEditAdmitStudent?.admissionFeeStructureLst}
-                regKey={
-                  blukEditAdmitStudent?.searchFilterModel?.RegistrationKey
-                }
-                idFacLink={blukEditAdmitStudent?.dbModel?.IDYearFacultyLink}
-                voucherBill={blukEditAdmitStudent?.dbModel?.VoucherBillNo}
-                idAcaYear={
-                  blukEditAdmitStudent?.searchFilterModel?.idAcademicYear
-                }
-                level={blukEditAdmitStudent?.searchFilterModel?.level}
-                fiscalYear={blukEditAdmitStudent?.dbModel?.IDFiscalYear}
-                month={blukEditAdmitStudent?.searchFilterModel?.IDMonth}
-                date={transactionDate}
-                currentFee={feeStructure}
-                setCurrentFee={setFeeStructure}
-              />
               <h3>Monthly Fee</h3>
               <MonthlyFeeStructure
-                admissionFee={blukEditAdmitStudent?.monthlyFeeStructureLst}
+                admissionFee={blukEditBillGenerate?.monthlyFeeStructureLst}
                 regKey={
-                  blukEditAdmitStudent?.searchFilterModel?.RegistrationKey
+                  blukEditBillGenerate?.searchFilterModel?.RegistrationKey
                 }
-                idFacLink={blukEditAdmitStudent?.dbModel?.IDYearFacultyLink}
-                voucherBill={blukEditAdmitStudent?.dbModel?.VoucherBillNo}
+                idFacLink={blukEditBillGenerate?.dbModel?.IDYearFacultyLink}
+                voucherBill={blukEditBillGenerate?.dbModel?.VoucherBillNo}
                 idAcaYear={
-                  blukEditAdmitStudent?.searchFilterModel?.idAcademicYear
+                  blukEditBillGenerate?.searchFilterModel?.idAcademicYear
                 }
-                level={blukEditAdmitStudent?.searchFilterModel?.level}
-                fiscalYear={blukEditAdmitStudent?.dbModel?.IDFiscalYear}
-                month={blukEditAdmitStudent?.searchFilterModel?.IDMonth}
+                level={blukEditBillGenerate?.searchFilterModel?.level}
+                fiscalYear={blukEditBillGenerate?.dbModel?.IDFiscalYear}
+                month={blukEditBillGenerate?.searchFilterModel?.IDMonth}
                 date={transactionDate}
                 currentFee={monthlyFee}
                 setCurrentFee={setMonthlyFee}
@@ -372,16 +355,16 @@ const AdmitStudent = () => {
               <h3>Extra Activities Fee</h3>
               <ExtraFeeStructure
                 regKey={
-                  blukEditAdmitStudent?.searchFilterModel?.RegistrationKey
+                  blukEditBillGenerate?.searchFilterModel?.RegistrationKey
                 }
-                idFacLink={blukEditAdmitStudent?.dbModel?.IDYearFacultyLink}
-                voucherBill={blukEditAdmitStudent?.dbModel?.VoucherBillNo}
+                idFacLink={blukEditBillGenerate?.dbModel?.IDYearFacultyLink}
+                voucherBill={blukEditBillGenerate?.dbModel?.VoucherBillNo}
                 idAcaYear={
-                  blukEditAdmitStudent?.searchFilterModel?.idAcademicYear
+                  blukEditBillGenerate?.searchFilterModel?.idAcademicYear
                 }
-                level={blukEditAdmitStudent?.searchFilterModel?.level}
-                fiscalYear={blukEditAdmitStudent?.dbModel?.IDFiscalYear}
-                month={blukEditAdmitStudent?.searchFilterModel?.IDMonth}
+                level={blukEditBillGenerate?.searchFilterModel?.level}
+                fiscalYear={blukEditBillGenerate?.dbModel?.IDFiscalYear}
+                month={blukEditBillGenerate?.searchFilterModel?.IDMonth}
                 date={transactionDate}
                 currentFee={extraFee}
                 setCurrentFee={setExtraFee}
@@ -390,9 +373,6 @@ const AdmitStudent = () => {
               <div>
                 <TextField
                   value={
-                    feeStructure?.reduce((acc, item) => {
-                      return acc + Number(item.Cr);
-                    }, 0) +
                     monthlyFee
                       ?.filter((x) => x.active === true)
                       ?.reduce((acc, item) => {
@@ -435,7 +415,7 @@ const AdmitStudent = () => {
         setOpenPopup={setOpenPopup}
         title="Print Student Bill"
       >
-        <AdmitStudentPrint
+        <BillgeneratePrint
           date={transactionDate}
           dbModel={dbModelContainer}
           classDdl={classDdl}
@@ -445,7 +425,7 @@ const AdmitStudent = () => {
           monthDdl={monthDdl}
           monthId={monthId}
           voucher={voucher}
-          feeStructure={feeStructure}
+          //   feeStructure={feeStructure}
           monthlyFee={monthlyFee}
           extraFee={extraFee}
           setOpenPopup={setOpenPopup}
@@ -456,4 +436,4 @@ const AdmitStudent = () => {
   );
 };
 
-export default AdmitStudent;
+export default Billgenerate;

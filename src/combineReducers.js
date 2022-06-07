@@ -109,6 +109,13 @@ import {
   getListFeeCollectionReducer,
   getPrintFeeCollectionReducer,
 } from "./revenue/feeCollection/FeeCollectionReducers";
+import {
+  getAllActiveStudentForBillGenerateReducer,
+  getAllBillGenerateReducer,
+  getBulkEditBillGenerateReducer,
+  getExtraFeeBillGenerateReducer,
+  postBillGenerateReducer,
+} from "./revenue/billGenerate/BillgenerateReducers";
 
 //examination reducers link end
 export const reducers = combineReducers({
@@ -176,6 +183,13 @@ export const reducers = combineReducers({
   getBulkEditAdmitStudent: getBulkEditAdmitStudentReducer,
   getExtraFeeAdmitStudent: getExtraFeeAdmitStudentReducer,
   postAdmitStudent: postAdmitStudentReducer,
+
+  //REVENUE BILL GENERATE REDUCERS:
+  getAllBillGenerate: getAllBillGenerateReducer,
+  getAllActiveStudentForBillGenerate: getAllActiveStudentForBillGenerateReducer,
+  getBulkEditBillGenerate: getBulkEditBillGenerateReducer,
+  getExtraFeeBillGenerate: getExtraFeeBillGenerateReducer,
+  postBillGenerate: postBillGenerateReducer,
 
   //ADMISSION FACULTY FEE STRUCTURE REDUCERS:
   getAllAdmissionFacultyFeeStructure: getAllAdmissionFacultyFeeStructureReducer,
