@@ -60,15 +60,44 @@ export const getListStudentLedgerAction =
   };
 
 export const postStudentLedgerAction =
-  (studentLedgerModel, searchFilterModel) => async (dispatch) => {
+  (
+    studentLedgerModels,
+    amount,
+    discount,
+    advanced,
+    narration,
+    searchFilterModels
+  ) =>
+  async (dispatch) => {
     try {
       dispatch({ type: POST_STUDENT_LEDGER_REQUEST });
+      // let amount;
+      // let discount;
+      // let advanced;
+      // let narration;
 
+      const dbModel = {
+        ...studentLedgerModels,
+        AmountPaid: amount,
+        DiscountInTotal: discount,
+        AdvancedPaid: advanced,
+        Narration: narration,
+        MatCenter: 1,
+      };
+
+      const search = {
+        ...searchFilterModels,
+        studentLedgerModel: {
+          ...searchFilterModels.studentLedgerModel,
+          MatCenter: 1,
+        },
+      };
       const jsonData = JSON.stringify({
-        studentLedgerModel,
-        searchFilterModel,
+        studentLedgerModel: dbModel,
+        searchFilterModel: search,
       });
 
+      console.log(jsonData);
       const { data } = await axiosInstance.post(
         `/api/StudentLedger/PostStudentLedger`,
         jsonData,

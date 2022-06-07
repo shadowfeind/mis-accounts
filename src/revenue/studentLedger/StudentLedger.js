@@ -11,6 +11,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
+import { useForm, Form } from "../../customHooks/useForm";
 import DatePickerControl from "../../components/controls/DatePickerControl";
 import useCustomTable from "../../customHooks/useCustomTable";
 import SelectControl from "../../components/controls/SelectControl";
@@ -27,12 +28,13 @@ import {
   GET_ALL_STUDENT_LEDGER_RESET,
   GET_LIST_STUDENT_LEDGER_RESET,
   GET_UNIVERSITY_FACULTY_RESET,
+  POST_STUDENT_LEDGER_RESET,
 } from "./StudentLedgerConstants";
 import {
   getActiveStudentOnlyAction,
   getAllStudentLedgerAction,
   getListStudentLedgerAction,
-  getUniversityFacultyAction,
+  postStudentLedgerAction,
 } from "./StudentLedgerActions";
 import {
   KeyboardDatePicker,
@@ -51,6 +53,51 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const initialFormValues = {
+  IDTransactionDrCr: 0,
+  AccountType: "",
+  AccountName: "",
+  TransactionType: "",
+  AccountSubmitCode: 0,
+  MatCenter: 1,
+  VoucherBillNo: "",
+  TransactionDate: "2022-06-07T04:18:21.347Z",
+  Dr: 0,
+  Cr: 0,
+  Narration: "",
+  CreateDate: "2022-06-07T04:18:21.347Z",
+  UpdateDate: "2022-06-07T04:18:21.347Z",
+  UpdateMachineCode: "",
+  IDVoucherType: 0,
+  IDAccountType: 0,
+  StartDate: "2022-06-07T04:18:21.347Z",
+  EndDate: "2022-06-07T04:18:21.347Z",
+  RegistrationKey: "",
+  IDYearFacultyLink: 0,
+  Fee: 0,
+  Discount: 0,
+  PercentageDiscount: 0,
+  DiscountAmount: 0,
+  NarrationForAmountPaid: "",
+  AmountPaid: 0,
+  DiscountInTotal: 0,
+  Advance: 0,
+  PreviousBalance: 0,
+  BalanceDue: 0,
+  AdvancedPaid: 0,
+  StudentName: "",
+  AmountPaidIntoList: 0,
+  idTable: 0,
+  TableName: "",
+  Level: 0,
+  RollNo: 0,
+  IsAccountReceivable: true,
+  IDFiscalYear: 0,
+  IsActive: true,
+  Created_On: "2022-06-07T04:18:21.347Z",
+  Updated_On: "2022-06-07T04:18:21.347Z",
+};
+
 const tableHeader = [
   { id: "idDrCr", label: "idDrCr" },
   { id: "Voucher/BillNo", label: "Voucher/BillNo" },
@@ -68,7 +115,7 @@ const tableHeader = [
   { id: "actions", label: "Actions", disableSorting: true },
 ];
 
-const StudentLedger = () => {
+const StudentLedger = ({ searchFilterModel }) => {
   const [ddlClass, setDdlClass] = useState([]);
   const [academicYearDdl, setAcademicYearDdl] = useState([]);
   const [classId, setClassId] = useState("");
@@ -79,7 +126,13 @@ const StudentLedger = () => {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [fiscalYear, setFiscalYear] = useState("");
+  const [amountPaid, setAmountPaid] = useState("");
+  const [discount, setDiscount] = useState("");
+  const [advanced, setAdvanced] = useState("");
+  const [naration, setNaration] = useState("");
+
   const [errors, setErrors] = useState({});
+  const [errorTable, setErrorTable] = useState({});
   const [tableData, setTableData] = useState([]);
   const [filterFn, setFilterFn] = useState({
     fn: (item) => {
@@ -95,6 +148,8 @@ const StudentLedger = () => {
   const classes = useStyles();
   const test = [{ Key: "", Value: "" }];
   const dispatch = useDispatch();
+
+  const { values, setValues, handleInputChange } = useForm(initialFormValues);
 
   const handleSearch = (e) => {
     setFilterFn({
@@ -264,6 +319,21 @@ const StudentLedger = () => {
         getListStudentLedgerAction(fiscalYear, student, startDate, endDate)
       );
     }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    dispatch(
+      postStudentLedgerAction(
+        listStudentLedger?.studentLedgerModel,
+        amountPaid,
+        discount,
+        advanced,
+        naration,
+        listStudentLedger?.searchFilterModel
+      )
+    );
   };
 
   const symbolsArr = ["e", "E", "+", "-", "ArrowUp", "ArrowDown"];
@@ -458,101 +528,96 @@ const StudentLedger = () => {
                     <TableCell></TableCell>
                     <TableCell></TableCell>
                   </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <strong>Amount Paid</strong>
-                    </TableCell>
-                    <TableCell>
-                      <TextField
-                        type="number"
-                        variant="outlined"
-                        onKeyDown={(e) =>
-                          symbolsArr.includes(e.key) && e.preventDefault()
-                        }
-                        onWheelCapture={(e) => {
-                          e.target.blur();
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <strong>Discount in Total</strong>
-                    </TableCell>
-                    <TableCell>
-                      <TextField
-                        type="number"
-                        variant="outlined"
-                        onWheelCapture={(e) => {
-                          e.target.blur();
-                        }}
-                        onKeyDown={(e) =>
-                          symbolsArr.includes(e.key) && e.preventDefault()
-                        }
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <strong>Advance Paid</strong>
-                    </TableCell>
-                    <TableCell>
-                      <TextField
-                        type="number"
-                        variant="outlined"
-                        onWheelCapture={(e) => {
-                          e.target.blur();
-                        }}
-                        onKeyDown={(e) =>
-                          symbolsArr.includes(e.key) && e.preventDefault()
-                        }
-                      />
-                    </TableCell>
-                    <TableCell align="right">
-                      <strong>Narration</strong>
-                    </TableCell>
-                    <TableCell>
-                      <TextField variant="outlined" multiline rows={2} />
-                    </TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        // onClick={() => setOpenPopup(false)}
-                        style={{ margin: "10px 0 0 10px" }}
-                      >
-                        SUBMIT
-                      </Button>
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        // type="submit"
-                        style={{ margin: "10px 0 0 10px" }}
-                      >
-                        PRINT
-                      </Button>
-                    </TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
                 </TableBody>
               </TableContainer>
+            )}
+            {listStudentLedger && (
+              <Grid container style={{ fontSize: "12px" }}>
+                <Grid item xs={3}>
+                  <InputControl
+                    name="AmountPaid"
+                    label="Amount Paid"
+                    type="number"
+                    variant="outlined"
+                    value={amountPaid}
+                    onKeyDown={(e) =>
+                      symbolsArr.includes(e.key) && e.preventDefault()
+                    }
+                    onWheelCapture={(e) => {
+                      e.target.blur();
+                    }}
+                    onChange={(e) => setAmountPaid(e.target.value)}
+                  />
+                </Grid>
+
+                <Grid item xs={3}>
+                  <InputControl
+                    name="DiscountInTotal"
+                    label="Discount In Total"
+                    type="number"
+                    variant="outlined"
+                    value={discount}
+                    onWheelCapture={(e) => {
+                      e.target.blur();
+                    }}
+                    onChange={(e) => setDiscount(e.target.value)}
+                    onKeyDown={(e) =>
+                      symbolsArr.includes(e.key) && e.preventDefault()
+                    }
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <InputControl
+                    name="AdvancedPaid"
+                    label="Advanced Paid"
+                    type="number"
+                    variant="outlined"
+                    value={advanced}
+                    onWheelCapture={(e) => {
+                      e.target.blur();
+                    }}
+                    onChange={(e) => setAdvanced(e.target.value)}
+                    onKeyDown={(e) =>
+                      symbolsArr.includes(e.key) && e.preventDefault()
+                    }
+                  />
+                </Grid>
+              </Grid>
+            )}
+            <div style={{ height: "15px" }}></div>
+            {listStudentLedger && (
+              <Grid container style={{ fontSize: "12px" }}>
+                <Grid item xs={6}>
+                  <InputControl
+                    name="Narration"
+                    label="Narration"
+                    variant="outlined"
+                    value={naration}
+                    onChange={(e) => setNaration(e.target.value)}
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSubmit}
+                    type="submit"
+                    style={{ margin: "10px 0 0 10px" }}
+                  >
+                    SUBMIT
+                  </Button>
+
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    // type="submit"
+                    style={{ margin: "10px 0 0 10px" }}
+                  >
+                    PRINT
+                  </Button>
+                </Grid>
+              </Grid>
             )}
 
             {listStudentLedger && <TblPagination />}
