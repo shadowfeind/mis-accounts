@@ -102,6 +102,7 @@ import {
   getAllAdmitStudentReducer,
   getBulkEditAdmitStudentReducer,
   getExtraFeeAdmitStudentReducer,
+  postAdmitStudentReducer,
 } from "./revenue/admitStudent/AdmitStudentReducers";
 import {
   getAllFeeCollectionReducer,
@@ -174,6 +175,7 @@ export const reducers = combineReducers({
   getAllActiveStudentForLedgeronly: getAllActiveStudentForLedgeronlyReducer,
   getBulkEditAdmitStudent: getBulkEditAdmitStudentReducer,
   getExtraFeeAdmitStudent: getExtraFeeAdmitStudentReducer,
+  postAdmitStudent: postAdmitStudentReducer,
 
   //ADMISSION FACULTY FEE STRUCTURE REDUCERS:
   getAllAdmissionFacultyFeeStructure: getAllAdmissionFacultyFeeStructureReducer,

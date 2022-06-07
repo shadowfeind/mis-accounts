@@ -13,6 +13,9 @@ import {
   GET_EXTRA_FEE_ADMIT_STUDENT_REQUEST,
   GET_EXTRA_FEE_ADMIT_STUDENT_RESET,
   GET_EXTRA_FEE_ADMIT_STUDENT_SUCCESS,
+  POST_ADMIT_STUDENT_FAIL,
+  POST_ADMIT_STUDENT_REQUEST,
+  POST_ADMIT_STUDENT_SUCCESS,
 } from "./AdmitStudentConstants";
 
 export const getAllAdmitStudentAction = () => async (dispatch) => {
@@ -101,6 +104,42 @@ export const getExtraFeeAdmitStudentAction =
     } catch (error) {
       dispatch({
         type: GET_EXTRA_FEE_ADMIT_STUDENT_RESET,
+        payload: error?.response?.data?.Message
+          ? error?.response?.data?.Message
+          : error?.message,
+      });
+    }
+  };
+
+export const postAdmitStudentAction =
+  (fee, monthly, extra, dbModel, searchFilterModel) => async (dispatch) => {
+    try {
+      dispatch({ type: POST_ADMIT_STUDENT_REQUEST });
+
+      const newMonthly = monthly?.filter((x) => x.active === true);
+
+      const newExtra = extra?.filter((x) => x.active === true);
+
+      const jsonData = JSON.stringify({
+        dbModel,
+        searchFilterModel,
+        admissionFeeStructureLstForBill: fee,
+        monthlyFeeStructureLstForBill: newMonthly,
+        extraFeeStructureLstForBill: newExtra,
+      });
+
+      console.log(jsonData);
+
+      const { data } = await axiosInstance.post(
+        `/api/AdmitStudent/PostAdmitStudent`,
+        jsonData,
+        tokenConfig()
+      );
+
+      dispatch({ type: POST_ADMIT_STUDENT_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: POST_ADMIT_STUDENT_FAIL,
         payload: error?.response?.data?.Message
           ? error?.response?.data?.Message
           : error?.message,

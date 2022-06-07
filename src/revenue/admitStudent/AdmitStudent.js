@@ -4,6 +4,7 @@ import {
   getActiveStudentForLedgeronlyAction,
   getAllAdmitStudentAction,
   getBulkEditAdmitStudentAction,
+  postAdmitStudentAction,
 } from "./AdmitStudentActions";
 import {
   Button,
@@ -24,6 +25,7 @@ import {
   GET_ACTIVE_STUDENT_FOR_LEDGERONLY_RESET,
   GET_ALL_ADMIT_STUDENT_RESET,
   GET_BULK_EDIT_ADMIT_STUDENT_RESET,
+  POST_ADMIT_STUDENT_RESET,
 } from "./AdmitStudentConstants";
 import {
   KeyboardDatePicker,
@@ -72,6 +74,12 @@ const AdmitStudent = () => {
     loading: blukEditAdmitStudentLoading,
   } = useSelector((state) => state.getBulkEditAdmitStudent);
 
+  const {
+    error: postAdmitStudentError,
+    loading: postAdmitStudentLoading,
+    success: postAdmitStudentSuccess,
+  } = useSelector((state) => state.postAdmitStudent);
+
   if (admitStudentError) {
     setNotify({
       isOpen: true,
@@ -79,6 +87,22 @@ const AdmitStudent = () => {
       type: "error",
     });
     dispatch({ type: GET_ALL_ADMIT_STUDENT_RESET });
+  }
+  if (postAdmitStudentError) {
+    setNotify({
+      isOpen: true,
+      message: postAdmitStudentError,
+      type: "error",
+    });
+    dispatch({ type: POST_ADMIT_STUDENT_RESET });
+  }
+  if (postAdmitStudentSuccess) {
+    setNotify({
+      isOpen: true,
+      message: "Submitted Successfully",
+      type: "success",
+    });
+    dispatch({ type: POST_ADMIT_STUDENT_RESET });
   }
   if (activeStudentForLedgeronlyError) {
     setNotify({
@@ -119,7 +143,7 @@ const AdmitStudent = () => {
       setClassDdl(admitStudent?.searchFilterModel?.ddlClass);
       setClassId(admitStudent?.searchFilterModel?.ddlClass[0]?.Key);
       setMonthDdl(admitStudent?.searchFilterModel?.ddlnpMonth);
-      setMonthId(admitStudent?.searchFilterModel?.ddlnpMonth[0]?.Key);
+      setMonthId(admitStudent?.searchFilterModel?.npMonth);
       setFaculty(
         admitStudent?.searchFilterModel?.ddlFacultyProgramLink[0]?.Key
       );
@@ -179,6 +203,18 @@ const AdmitStudent = () => {
         )
       );
     }
+  };
+
+  const handleSubmit = () => {
+    dispatch(
+      postAdmitStudentAction(
+        feeStructure,
+        monthlyFee,
+        extraFee,
+        blukEditAdmitStudent.dbModel,
+        blukEditAdmitStudent.searchFilterModel
+      )
+    );
   };
 
   return (
@@ -299,20 +335,66 @@ const AdmitStudent = () => {
               <h3>Admission Fee</h3>
               <FeeStructure
                 admissionFee={blukEditAdmitStudent?.admissionFeeStructureLst}
+                regKey={
+                  blukEditAdmitStudent?.searchFilterModel?.RegistrationKey
+                }
+                idFacLink={blukEditAdmitStudent?.dbModel?.IDYearFacultyLink}
+                voucherBill={blukEditAdmitStudent?.dbModel?.VoucherBillNo}
+                idAcaYear={
+                  blukEditAdmitStudent?.searchFilterModel?.idAcademicYear
+                }
+                level={blukEditAdmitStudent?.searchFilterModel?.level}
+                fiscalYear={blukEditAdmitStudent?.dbModel?.IDFiscalYear}
+                month={blukEditAdmitStudent?.searchFilterModel?.IDMonth}
+                date={transactionDate}
                 currentFee={feeStructure}
                 setCurrentFee={setFeeStructure}
               />
               <h3>Monthly Fee</h3>
               <MonthlyFeeStructure
                 admissionFee={blukEditAdmitStudent?.monthlyFeeStructureLst}
+                regKey={
+                  blukEditAdmitStudent?.searchFilterModel?.RegistrationKey
+                }
+                idFacLink={blukEditAdmitStudent?.dbModel?.IDYearFacultyLink}
+                voucherBill={blukEditAdmitStudent?.dbModel?.VoucherBillNo}
+                idAcaYear={
+                  blukEditAdmitStudent?.searchFilterModel?.idAcademicYear
+                }
+                level={blukEditAdmitStudent?.searchFilterModel?.level}
+                fiscalYear={blukEditAdmitStudent?.dbModel?.IDFiscalYear}
+                month={blukEditAdmitStudent?.searchFilterModel?.IDMonth}
+                date={transactionDate}
                 currentFee={monthlyFee}
                 setCurrentFee={setMonthlyFee}
               />
               <h3>Extra Activities Fee</h3>
               <ExtraFeeStructure
+                regKey={
+                  blukEditAdmitStudent?.searchFilterModel?.RegistrationKey
+                }
+                idFacLink={blukEditAdmitStudent?.dbModel?.IDYearFacultyLink}
+                voucherBill={blukEditAdmitStudent?.dbModel?.VoucherBillNo}
+                idAcaYear={
+                  blukEditAdmitStudent?.searchFilterModel?.idAcademicYear
+                }
+                level={blukEditAdmitStudent?.searchFilterModel?.level}
+                fiscalYear={blukEditAdmitStudent?.dbModel?.IDFiscalYear}
+                month={blukEditAdmitStudent?.searchFilterModel?.IDMonth}
+                date={transactionDate}
                 currentFee={extraFee}
                 setCurrentFee={setExtraFee}
               />
+              <div style={{ height: "10px" }}></div>
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                style={{ margin: "10px 0 0 10px" }}
+                onClick={handleSubmit}
+              >
+                SUBMIT
+              </Button>
             </div>
           )
         )}

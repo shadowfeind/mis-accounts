@@ -36,7 +36,19 @@ const useStyles = makeStyles({
   },
 });
 
-const MonthlyFeeStructure = ({ admissionFee, currentFee, setCurrentFee }) => {
+const MonthlyFeeStructure = ({
+  admissionFee,
+  regKey,
+  idFacLink,
+  voucherBill,
+  idAcaYear,
+  level,
+  fiscalYear,
+  month,
+  date,
+  currentFee,
+  setCurrentFee,
+}) => {
   // const [currentFee, setCurrentFee] = useState([]);
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -117,14 +129,29 @@ const MonthlyFeeStructure = ({ admissionFee, currentFee, setCurrentFee }) => {
           PercentageDiscount: null,
           DiscountAmount: null,
           Narration: null,
+          fee: fee.FeeAmount,
+          Dr: fee.FeeAmount,
           Cr: fee.FeeAmount,
+          RegistrationKey: regKey,
+          IDYearFacultyLink: idFacLink,
+          VoucherBillNo: voucherBill,
+          IDAcademicYear: idAcaYear,
+          Level: level,
+          IDFiscalYear: fiscalYear,
+          IDMonth: month,
+          TransactionDate: date,
+          IsAccountReceivable: false,
+          IsActive: true,
+          Created_On: date,
+          Updated_On: date,
+          MatCenter: 1,
           checked: false,
           active: false,
         });
       });
       setCurrentFee([...feeContainer]);
     }
-  }, [admissionFee]);
+  }, [admissionFee, date]);
 
   const symbolsArr = ["e", "E", "+", "-", "ArrowUp", "ArrowDown"];
 

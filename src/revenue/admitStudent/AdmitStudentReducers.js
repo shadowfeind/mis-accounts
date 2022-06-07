@@ -15,6 +15,10 @@ import {
   GET_EXTRA_FEE_ADMIT_STUDENT_REQUEST,
   GET_EXTRA_FEE_ADMIT_STUDENT_RESET,
   GET_EXTRA_FEE_ADMIT_STUDENT_SUCCESS,
+  POST_ADMIT_STUDENT_FAIL,
+  POST_ADMIT_STUDENT_REQUEST,
+  POST_ADMIT_STUDENT_RESET,
+  POST_ADMIT_STUDENT_SUCCESS,
 } from "./AdmitStudentConstants";
 
 export const getAllAdmitStudentReducer = (state = {}, action) => {
@@ -75,6 +79,24 @@ export const getExtraFeeAdmitStudentReducer = (state = {}, action) => {
     case GET_EXTRA_FEE_ADMIT_STUDENT_FAIL:
       return { loading: false, error: action.payload };
     case GET_EXTRA_FEE_ADMIT_STUDENT_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const postAdmitStudentReducer = (state = {}, action) => {
+  switch (action.type) {
+    case POST_ADMIT_STUDENT_REQUEST:
+      return { loading: true };
+    case POST_ADMIT_STUDENT_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+    case POST_ADMIT_STUDENT_FAIL:
+      return { loading: false, error: action.payload };
+    case POST_ADMIT_STUDENT_RESET:
       return {};
     default:
       return state;

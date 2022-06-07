@@ -39,7 +39,18 @@ const useStyles = makeStyles({
   },
 });
 
-const ExtraFeeStructure = ({ currentFee, setCurrentFee }) => {
+const ExtraFeeStructure = ({
+  regKey,
+  idFacLink,
+  voucherBill,
+  idAcaYear,
+  level,
+  fiscalYear,
+  month,
+  date,
+  currentFee,
+  setCurrentFee,
+}) => {
   // const [currentFee, setCurrentFee] = useState(dummyData);
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -93,27 +104,6 @@ const ExtraFeeStructure = ({ currentFee, setCurrentFee }) => {
     });
   };
 
-  const handleActive = (index, fee, e) => {
-    let newObject;
-    if (e.target.checked) {
-      newObject = {
-        ...fee,
-        active: true,
-      };
-    } else {
-      newObject = {
-        ...fee,
-        active: false,
-      };
-    }
-
-    setCurrentFee((prev) => {
-      const newArr = [...prev];
-      newArr[index] = newObject;
-      return newArr;
-    });
-  };
-
   const symbolsArr = ["e", "E", "+", "-", "ArrowUp", "ArrowDown"];
   const test = [];
   const handleExtraChange = (e, i) => {
@@ -121,17 +111,34 @@ const ExtraFeeStructure = ({ currentFee, setCurrentFee }) => {
       dispatch(getExtraFeeAdmitStudentAction(e, i));
     }
   };
-  const handleOptionChange = (inputObj, index) => {
+  const handleOptionChange = (inputObj, index, event) => {
+    console.log(event);
     let newObject = {
       AccountName: inputObj.label,
-      Cr: inputObj.amount,
-      Discount: null,
-      DiscountAmount: null,
       FeeAmount: inputObj.amount,
       IDAccountType: inputObj.val,
-      Narration: null,
+      Discount: null,
       PercentageDiscount: null,
+      DiscountAmount: null,
+      Narration: null,
+      fee: inputObj.amount,
+      Dr: inputObj.amount,
+      Cr: inputObj.amount,
+      RegistrationKey: regKey,
+      IDYearFacultyLink: idFacLink,
+      VoucherBillNo: voucherBill,
+      IDAcademicYear: idAcaYear,
+      Level: level,
+      IDFiscalYear: fiscalYear,
+      IDMonth: month,
+      TransactionDate: date,
+      IsAccountReceivable: false,
+      IsActive: true,
+      Created_On: date,
+      Updated_On: date,
+      MatCenter: 1,
       checked: false,
+      active: true,
     };
 
     setCurrentFee((prev) => {
@@ -176,7 +183,7 @@ const ExtraFeeStructure = ({ currentFee, setCurrentFee }) => {
                         getOptionLabel={(option) => option.label}
                         style={{ width: 400 }}
                         onChange={(event, newInputValue) =>
-                          handleOptionChange(newInputValue, i)
+                          handleOptionChange(newInputValue, i, event)
                         }
                         renderInput={(params) => (
                           <TextField
