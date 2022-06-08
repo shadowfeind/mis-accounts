@@ -58,6 +58,7 @@ const AccountHeader = () => {
       return item;
     },
   });
+
   const [openPopup, setOpenPopup] = useState(false);
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
   const [notify, setNotify] = useState({

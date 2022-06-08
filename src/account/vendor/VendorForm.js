@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Grid } from "@material-ui/core";
 import InputControl from "../../components/controls/InputControl";
 import { useForm, Form } from "../../customHooks/useForm";
@@ -26,6 +26,7 @@ const initialFormValues = {
 
 const VendorForm = ({ createAccount, editAccount, setOpenPopup }) => {
   const dispatch = useDispatch();
+  const [activeButton, setActiveButton] = useState(false);
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     temp.VendorName = !fieldValues.VendorName
@@ -103,6 +104,7 @@ const VendorForm = ({ createAccount, editAccount, setOpenPopup }) => {
     e.preventDefault();
 
     if (validate()) {
+      setActiveButton(true);
       if (values.IDVendor === 0) {
         dispatch(postVendorAction(values));
       } else {
@@ -249,9 +251,10 @@ const VendorForm = ({ createAccount, editAccount, setOpenPopup }) => {
           variant="contained"
           color="primary"
           type="submit"
+          disabled={activeButton}
           style={{ margin: "10px 0 0 10px" }}
         >
-          SUBMIT
+          {activeButton ? "...PROCESSING" : "SUBMIT"}
         </Button>
       </div>
     </Form>

@@ -64,14 +64,19 @@ export const RevenueRoute = [
     icon: EventNoteIcon,
     exact: false,
   },
-  // { name: "Notice", route: "/notice", icon: PostAdd, exact: false },
+  {
+    name: "One Time Bill Print",
+    route: "/one-time-bill-print",
+    icon: MenuBookIcon,
+    exact: false,
+  },
 
-  // {
-  //   name: "Old Questions",
-  //   route: "/old-questions",
-  //   icon: MenuBookIcon,
-  //   exact: false,
-  // },
+  {
+    name: "Student Ledger",
+    route: "/student-ledger",
+    icon: MenuBookIcon,
+    exact: false,
+  },
   // {
   //   name: "Syllabus",
   //   route: "/syllabus",

@@ -1,0 +1,226 @@
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  InputAdornment,
+  makeStyles,
+  TableBody,
+  Toolbar,
+  Grid,
+} from "@material-ui/core";
+import useCustomTable from "../../customHooks/useCustomTable";
+import SelectControl from "../../components/controls/SelectControl";
+import InputControl from "../../components/controls/InputControl";
+import { Search } from "@material-ui/icons";
+import AddIcon from "@material-ui/icons/Add";
+import Popup from "../../components/Popup";
+import CustomContainer from "../../components/CustomContainer";
+import { useDispatch, useSelector } from "react-redux";
+import Notification from "../../components/Notification";
+import ConfirmDialog from "../../components/ConfirmDialog";
+import LoadingComp from "../../components/LoadingComp";
+import {
+  GET_ALL_ONE_TIME_BILL_PRINT_RESET,
+  GET_PRINT_ONE_TIME_BILL_PRINT_RESET,
+} from "./OneTimeBillPrintConstants";
+import {
+  getAllOneTimeBillPrintAction,
+  getPrintOneTimeBillPrintAction,
+} from "./OneTimeBillPrintActions";
+
+const useStyles = makeStyles((theme) => ({
+  searchInput: {
+    width: "75%",
+    fontSize: "12px",
+  },
+  button: {
+    position: "absolute",
+    right: "10px",
+  },
+}));
+
+const OneTimeBillPrint = () => {
+  const [ddlClass, setDdlClass] = useState([]);
+  const [academicYearDdl, setAcademicYearDdl] = useState([]);
+  const [classId, setClassId] = useState("");
+  const [acaYear, setAcaYear] = useState("");
+  const [ddlFiscalYear, setDdlFiscalYear] = useState([]);
+  const [ddlStudent, setDdlStudent] = useState([]);
+  const [student, setStudent] = useState("");
+  const [npMonthDdl, setNpMonthDdl] = useState([]);
+  const [npMonth, setNpMonth] = useState("");
+  const [fiscalYear, setFiscalYear] = useState("");
+  const [errors, setErrors] = useState({});
+  const [filterFn, setFilterFn] = useState({
+    fn: (item) => {
+      return item;
+    },
+  });
+  const [openPopup, setOpenPopup] = useState(false);
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
+  const classes = useStyles();
+  const test = [{ Key: "", Value: "" }];
+  const dispatch = useDispatch();
+
+  const { oneTimeBillPrint, error } = useSelector(
+    (state) => state.getAllOneTimeBillPrint
+  );
+
+  const { printOneTimeBill, error: printOneTimeBillError } = useSelector(
+    (state) => state.getPrintOneTimeBillPrint
+  );
+
+  if (error) {
+    setNotify({
+      isOpen: true,
+      message: error,
+      type: "error",
+    });
+    dispatch({ type: GET_ALL_ONE_TIME_BILL_PRINT_RESET });
+  }
+
+  if (printOneTimeBillError) {
+    setNotify({
+      isOpen: true,
+      message: printOneTimeBillError,
+      type: "error",
+    });
+    dispatch({ type: GET_PRINT_ONE_TIME_BILL_PRINT_RESET });
+  }
+
+  useEffect(() => {
+    dispatch(getAllOneTimeBillPrintAction());
+  }, []);
+
+  useEffect(() => {
+    dispatch({ type: "GET_LINK", payload: "/revenue" });
+  }, []);
+
+  useEffect(() => {
+    if (oneTimeBillPrint) {
+      setDdlFiscalYear(
+        oneTimeBillPrint?.searchFilterModel?.ddlAccountFiscalYear
+      );
+      setFiscalYear(
+        oneTimeBillPrint?.searchFilterModel?.ddlAccountFiscalYear[0]?.Key
+      );
+      setAcademicYearDdl(oneTimeBillPrint?.searchFilterModel?.ddlAcademicYear);
+      setAcaYear(oneTimeBillPrint?.searchFilterModel.ddlAcademicYear[0]?.Key);
+      setDdlClass(oneTimeBillPrint?.searchFilterModel?.ddlClass);
+      setClassId(oneTimeBillPrint?.searchFilterModel.ddlClass[0]?.Key);
+      setDdlStudent(oneTimeBillPrint?.searchFilterModel?.ddlStudent);
+      setStudent(oneTimeBillPrint?.searchFilterModel.ddlStudent[0]?.Key);
+      setNpMonthDdl(oneTimeBillPrint?.searchFilterModel?.ddlnpMonth);
+      setNpMonth(oneTimeBillPrint?.searchFilterModel.ddlnpMonth[0]?.Key);
+    }
+  }, [oneTimeBillPrint]);
+
+  const validate = () => {
+    let temp = {};
+
+    temp.fiscalYear = !fiscalYear ? "This field is required" : "";
+    temp.acaYear = !acaYear ? "This feild is required" : "";
+    temp.classId = !classId ? "This feild is required" : "";
+    temp.student = !student ? "This feild is required" : "";
+    temp.npMonth = !npMonth ? "This feild is required" : "";
+
+    setErrors({ ...temp });
+    return Object.values(temp).every((x) => x === "");
+  };
+
+  //   const handleListPrint = (id, feeStructure) => {
+  //     if (validate()) {
+  //       dispatch(
+  //         getPrintOneTimeBillPrintAction(
+  //           acaYear,
+  //           classId,
+  //           feeStructure,
+  //           fiscalYear,
+  //           id
+  //         )
+  //       );
+  //     }
+  //   };
+
+  return (
+    <>
+      <CustomContainer>
+        <Toolbar>
+          <Grid container style={{ fontSize: "12px" }}>
+            <Grid item xs={3}>
+              <SelectControl
+                name="FiscalYear"
+                label="Fiscal Year"
+                value={fiscalYear}
+                onChange={(e) => setFiscalYear(e.target.value)}
+                options={ddlFiscalYear}
+                errors={errors.fiscalYear}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <SelectControl
+                name="AcademicYear"
+                label="Academic Year"
+                value={acaYear}
+                onChange={(e) => setAcaYear(e.target.value)}
+                options={academicYearDdl}
+                errors={errors.acaYear}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <SelectControl
+                name="Classes"
+                label="Classes"
+                value={classId}
+                onChange={(e) => setClassId(e.target.value)}
+                options={ddlClass}
+                errors={errors.classId}
+              />
+            </Grid>
+
+            <Grid item xs={3}>
+              <SelectControl
+                name="student"
+                label="Student"
+                value={student}
+                onChange={(e) => setStudent(e.target.value)}
+                options={ddlStudent}
+                errors={errors.student}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <div style={{ height: "15px" }}></div>
+
+              <SelectControl
+                name="npMonth"
+                label="Nepali Month"
+                value={npMonth}
+                onChange={(e) => setNpMonth(e.target.value)}
+                options={npMonthDdl}
+                errors={errors.npMonth}
+              />
+            </Grid>
+
+            <Grid item xs={3}>
+              <div style={{ height: "15px" }}></div>
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                style={{ margin: "10px 0 0 10px" }}
+                // onClick={handleListPrint}
+              >
+                PRINT
+              </Button>
+            </Grid>
+          </Grid>
+        </Toolbar>
+      </CustomContainer>
+    </>
+  );
+};
+
+export default OneTimeBillPrint;

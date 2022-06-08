@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Grid } from "@material-ui/core";
 import InputControl from "../../components/controls/InputControl";
 import { useForm, Form } from "../../customHooks/useForm";
@@ -33,6 +33,7 @@ const AdmissionFeeStructureForm = ({
   setOpenPopup,
 }) => {
   const dispatch = useDispatch();
+  const [activeButton, setActiveButton] = useState(false);
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -65,6 +66,7 @@ const AdmissionFeeStructureForm = ({
     e.preventDefault();
 
     if (validate()) {
+      setActiveButton(true);
       if (values.IDAccountType === 0) {
         dispatch(postAdmissionFeeStructureAction(values));
       } else {
@@ -172,9 +174,10 @@ const AdmissionFeeStructureForm = ({
           variant="contained"
           color="primary"
           type="submit"
+          disabled={activeButton}
           style={{ margin: "10px 0 0 10px" }}
         >
-          SUBMIT
+          {activeButton ? "...PROCESSING" : "SUBMIT"}
         </Button>
       </div>
     </Form>

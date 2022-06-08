@@ -110,6 +110,17 @@ import {
   getPrintFeeCollectionReducer,
 } from "./revenue/feeCollection/FeeCollectionReducers";
 import {
+  getAllOneTimeBillPrintReducer,
+  getPrintOneTimeBillPrintReducer,
+} from "./revenue/oneTimeBillPrint/OneTimeBillPrintReducers";
+import {
+  getActiveStudentOnlyReducer,
+  getAllStudentLedgerReducer,
+  getListStudentLedgerReducer,
+  getUniversityFacultyReducer,
+  postStudentLedgerReducer,
+} from "./revenue/studentLedger/StudentLedgerReducers";
+import {
   getAllActiveStudentForBillGenerateReducer,
   getAllBillGenerateReducer,
   getBulkEditBillGenerateReducer,
@@ -238,6 +249,18 @@ export const reducers = combineReducers({
   getListFeeCollection: getListFeeCollectionReducer,
   getPrintFeeCollection: getPrintFeeCollectionReducer,
 
+  //ONE TIME BILL PRINT:
+  getAllOneTimeBillPrint: getAllOneTimeBillPrintReducer,
+  getPrintOneTimeBillPrint: getPrintOneTimeBillPrintReducer,
+
+  //STUDENT LEDGER:
+  getAllStudentLedger: getAllStudentLedgerReducer,
+  getListStudentLedger: getListStudentLedgerReducer,
+  postStudentLedger: postStudentLedgerReducer,
+  getActiveStudentOnly: getActiveStudentOnlyReducer,
+  getUniversityFaculty: getUniversityFacultyReducer,
+
+  //HOLIDAY REDUCER
   holiday: getAllHoliday,
   createHoliday: createHolidayReducer,
   getSingleHoliday: getSingleHolidayReducer,
