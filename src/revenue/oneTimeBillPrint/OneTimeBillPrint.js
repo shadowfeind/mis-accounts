@@ -26,6 +26,11 @@ import {
   getAllOneTimeBillPrintAction,
   getPrintOneTimeBillPrintAction,
 } from "./OneTimeBillPrintActions";
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 
 const useStyles = makeStyles((theme) => ({
   searchInput: {
@@ -49,6 +54,8 @@ const OneTimeBillPrint = () => {
   const [npMonthDdl, setNpMonthDdl] = useState([]);
   const [npMonth, setNpMonth] = useState("");
   const [fiscalYear, setFiscalYear] = useState("");
+  const [transactionDate, setTransactionDate] = useState();
+  const [idFeeStructure, setIdFeeStructure] = useState("");
   const [errors, setErrors] = useState({});
   const [filterFn, setFilterFn] = useState({
     fn: (item) => {
@@ -114,7 +121,11 @@ const OneTimeBillPrint = () => {
       setDdlStudent(oneTimeBillPrint?.searchFilterModel?.ddlStudent);
       setStudent(oneTimeBillPrint?.searchFilterModel.ddlStudent[0]?.Key);
       setNpMonthDdl(oneTimeBillPrint?.searchFilterModel?.ddlnpMonth);
-      setNpMonth(oneTimeBillPrint?.searchFilterModel.ddlnpMonth[0]?.Key);
+      setNpMonth(oneTimeBillPrint?.searchFilterModel.npMonth);
+      setIdFeeStructure(
+        oneTimeBillPrint?.searchFilterModel.idAdmissionFeeStructure
+      );
+      setTransactionDate(oneTimeBillPrint?.Datetime?.slice(0, 10));
     }
   }, [oneTimeBillPrint]);
 
@@ -124,26 +135,26 @@ const OneTimeBillPrint = () => {
     temp.fiscalYear = !fiscalYear ? "This field is required" : "";
     temp.acaYear = !acaYear ? "This feild is required" : "";
     temp.classId = !classId ? "This feild is required" : "";
-    temp.student = !student ? "This feild is required" : "";
+    // temp.student = !student ? "This feild is required" : "";
     temp.npMonth = !npMonth ? "This feild is required" : "";
 
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x === "");
   };
 
-  //   const handleListPrint = (id, feeStructure) => {
-  //     if (validate()) {
-  //       dispatch(
-  //         getPrintOneTimeBillPrintAction(
-  //           acaYear,
-  //           classId,
-  //           feeStructure,
-  //           fiscalYear,
-  //           id
-  //         )
-  //       );
-  //     }
-  //   };
+  const handleListPrint = () => {
+    if (validate()) {
+      dispatch(
+        getPrintOneTimeBillPrintAction(
+          acaYear,
+          classId,
+          npMonth,
+          fiscalYear,
+          student
+        )
+      );
+    }
+  };
 
   return (
     <>
@@ -203,6 +214,28 @@ const OneTimeBillPrint = () => {
                 errors={errors.npMonth}
               />
             </Grid>
+            <Grid item xs={3}>
+              <div style={{ height: "15px" }}></div>
+
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                  disableToolbar
+                  variant="inline"
+                  inputVariant="outlined"
+                  format="dd-MM-yyyy"
+                  name="date"
+                  label="Date"
+                  value={transactionDate}
+                  onChange={(e) => {
+                    const newDate = new Date(e);
+                    console.log(newDate.toLocaleDateString().slice(0, 10));
+                    setTransactionDate(
+                      newDate.toLocaleDateString().slice(0, 10)
+                    );
+                  }}
+                />
+              </MuiPickersUtilsProvider>
+            </Grid>
 
             <Grid item xs={3}>
               <div style={{ height: "15px" }}></div>
@@ -211,7 +244,7 @@ const OneTimeBillPrint = () => {
                 color="primary"
                 type="submit"
                 style={{ margin: "10px 0 0 10px" }}
-                // onClick={handleListPrint}
+                onClick={handleListPrint}
               >
                 PRINT
               </Button>
