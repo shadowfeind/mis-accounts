@@ -13,22 +13,21 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import Popup from "../../components/Popup";
 import {
-  GET_ACTIVE_STUDENT_FOR_BILL_GENERATE_RESET,
-  GET_ALL_BILL_GENERATE_RESET,
-  GET_BULK_EDIT_BILL_GENERATE_RESET,
-  POST_BILL_GENERATE_RESET,
-} from "./BillgenerateConstants";
+  GET_ALL_ONE_TIME_BILL_RESET,
+  GET_BULK_EDIT_ONE_TIME_BILL_RESET,
+  POST_ONE_TIME_BILL_RESET,
+} from "./OneTimeBillConstants";
 import {
-  getActiveStudentForBillGenerateAction,
-  getAllBillGenerateAction,
-  getBulkEditBillGenerateAction,
-  postBillGenerateAction,
-} from "./BillgenerateActions";
+  getAllOneTimeBillAction,
+  getBulkEditOneTimeBillAction,
+  postOneTimeBillAction,
+} from "./OneTimeBillActions";
 import MonthlyFeeStructure from "./monthlyFeeStructure/MonthlyFeeStructure";
-import BillgeneratePrint from "./BillgeneratePrint";
 import ExtraFeeStructure from "./extraFeeStructure/ExtraFeeStructure";
+import StudentList from "./studentList/StudentList";
+import OneTimeBillPrint from "./OneTimeBillPrint";
 
-const Billgenerate = () => {
+const OneTimeBill = () => {
   const [ddlAcaYear, setDdlAcaYear] = useState([]);
   const [acaYear, setAcaYear] = useState("");
   const [fiscalYearDdl, setFiscalYearDdl] = useState([]);
@@ -38,15 +37,14 @@ const Billgenerate = () => {
   const [monthDdl, setMonthDdl] = useState([]);
   const [monthId, setMonthId] = useState("");
   const [studentDdl, setStudentDdl] = useState([]);
-  const [studentId, setStudentId] = useState("");
   const [faculty, setFaculty] = useState("");
   const [shift, setShift] = useState(0);
   const [errors, setErrors] = useState({});
   const [transactionDate, setTransactionDate] = useState();
   const [voucher, setVoucher] = useState("");
-  const [feeStructure, setFeeStructure] = useState([]);
   const [monthlyFee, setMonthlyFee] = useState([]);
   const [extraFee, setExtraFee] = useState([]);
+  const [studentSelected, setStudentSelected] = useState([]);
   const [dbModelContainer, setDbModelContainer] = useState({});
   const [narration, setNarration] = useState("");
   const [notify, setNotify] = useState({
@@ -57,129 +55,103 @@ const Billgenerate = () => {
   const dispatch = useDispatch();
   const [openPopup, setOpenPopup] = useState(false);
 
-  const { billGenerate, error: billGenerateError } = useSelector(
-    (state) => state.getAllBillGenerate
+  const { ontTimeBill, error: ontTimeBillError } = useSelector(
+    (state) => state.getAllOneTimeBill
   );
-  const {
-    activeStudentForBillGenerate,
-    error: activeStudentForBillGenerateError,
-  } = useSelector((state) => state.getAllActiveStudentForBillGenerate);
 
   const {
-    blukEditBillGenerate,
-    error: blukEditBillGenerateError,
-    loading: blukEditBillGenerateLoading,
-  } = useSelector((state) => state.getBulkEditBillGenerate);
+    blukEditOneTimeBill,
+    error: blukEditOneTimeBillError,
+    loading: blukEditOneTimeBillLoading,
+  } = useSelector((state) => state.getBulkEditOneTimeBill);
 
   const {
-    error: postBillGenerateError,
-    loading: postBillGenerateLoading,
-    success: postBillGenerateSuccess,
-  } = useSelector((state) => state.postBillGenerate);
+    error: postOneTimeBillError,
+    loading: postOneTimeBillLoading,
+    success: postOneTimeBillSuccess,
+  } = useSelector((state) => state.postOneTimeBill);
 
-  if (billGenerateError) {
+  if (ontTimeBillError) {
     setNotify({
       isOpen: true,
-      message: billGenerateError,
+      message: ontTimeBillError,
       type: "error",
     });
-    dispatch({ type: GET_ALL_BILL_GENERATE_RESET });
+    dispatch({ type: GET_ALL_ONE_TIME_BILL_RESET });
   }
-  if (postBillGenerateError) {
+
+  if (blukEditOneTimeBillError) {
     setNotify({
       isOpen: true,
-      message: postBillGenerateError,
+      message: blukEditOneTimeBillError,
       type: "error",
     });
-    dispatch({ type: POST_BILL_GENERATE_RESET });
+    dispatch({ type: GET_BULK_EDIT_ONE_TIME_BILL_RESET });
   }
-  if (postBillGenerateSuccess) {
+
+  if (postOneTimeBillError) {
+    setNotify({
+      isOpen: true,
+      message: postOneTimeBillError,
+      type: "error",
+    });
+    dispatch({ type: POST_ONE_TIME_BILL_RESET });
+  }
+
+  if (postOneTimeBillSuccess) {
     setOpenPopup(true);
-    dispatch({ type: POST_BILL_GENERATE_RESET });
-    dispatch({ type: GET_BULK_EDIT_BILL_GENERATE_RESET });
+    dispatch({ type: POST_ONE_TIME_BILL_RESET });
+    dispatch({ type: GET_BULK_EDIT_ONE_TIME_BILL_RESET });
   }
-  if (activeStudentForBillGenerateError) {
-    setNotify({
-      isOpen: true,
-      message: activeStudentForBillGenerateError,
-      type: "error",
-    });
-    dispatch({ type: GET_ACTIVE_STUDENT_FOR_BILL_GENERATE_RESET });
-  }
-  if (blukEditBillGenerateError) {
-    setNotify({
-      isOpen: true,
-      message: blukEditBillGenerateError,
-      type: "error",
-    });
-    dispatch({ type: GET_BULK_EDIT_BILL_GENERATE_RESET });
-  }
-  const handleYearChange = (value) => {
-    dispatch(
-      getActiveStudentForLedgeronlyAction(value, faculty, classId, shift)
-    );
-    setAcaYear(value);
-  };
-  const handleClassChange = (value) => {
-    dispatch(
-      getActiveStudentForBillGenerateAction(acaYear, faculty, value, shift)
-    );
-    setClassId(value);
-  };
+
   useEffect(() => {
-    if (billGenerate) {
-      setFiscalYearDdl(billGenerate?.searchFilterModel?.ddlAccountFiscalYear);
+    if (ontTimeBill) {
+      setFiscalYearDdl(ontTimeBill?.searchFilterModel?.ddlAccountFiscalYear);
       setFiscalYear(
-        billGenerate?.searchFilterModel?.ddlAccountFiscalYear[0]?.Key
+        ontTimeBill?.searchFilterModel?.ddlAccountFiscalYear[0]?.Key
       );
-      setDdlAcaYear(billGenerate?.searchFilterModel?.ddlAcademicYear);
-      setAcaYear(billGenerate?.searchFilterModel?.ddlAcademicYear[0]?.Key);
-      setClassDdl(billGenerate?.searchFilterModel?.ddlClass);
-      setClassId(billGenerate?.searchFilterModel?.ddlClass[0]?.Key);
-      setMonthDdl(billGenerate?.searchFilterModel?.ddlnpMonth);
-      setMonthId(billGenerate?.searchFilterModel?.npMonth);
-      setFaculty(
-        billGenerate?.searchFilterModel?.ddlFacultyProgramLink[0]?.Key
-      );
-      dispatch(
-        getActiveStudentForBillGenerateAction(
-          billGenerate?.searchFilterModel?.ddlAcademicYear[0]?.Key,
-          billGenerate?.searchFilterModel?.ddlFacultyProgramLink[0]?.Key,
-          billGenerate?.searchFilterModel?.ddlClass[0]?.Key,
-          shift
-        )
-      );
+      setDdlAcaYear(ontTimeBill?.searchFilterModel?.ddlAcademicYear);
+      setAcaYear(ontTimeBill?.searchFilterModel?.ddlAcademicYear[0]?.Key);
+      setClassDdl(ontTimeBill?.searchFilterModel?.ddlClass);
+      setClassId(ontTimeBill?.searchFilterModel?.ddlClass[0]?.Key);
+      setMonthDdl(ontTimeBill?.searchFilterModel?.ddlnpMonth);
+      setMonthId(ontTimeBill?.searchFilterModel?.npMonth);
+      setFaculty(ontTimeBill?.searchFilterModel?.ddlFacultyProgramLink[0]?.Key);
     }
-  }, [billGenerate]);
+  }, [ontTimeBill]);
 
   useEffect(() => {
-    if (activeStudentForBillGenerate) {
-      setStudentDdl(activeStudentForBillGenerate);
-      setStudentId(activeStudentForBillGenerate[0]?.Key);
-    }
-  }, [activeStudentForBillGenerate]);
-
-  useEffect(() => {
-    if (blukEditBillGenerate) {
-      setTransactionDate(
-        blukEditBillGenerate?.dbModel?.TransactionDate?.slice(0, 10)
-      );
-      setVoucher(blukEditBillGenerate?.dbModel?.VoucherBillNo);
-    }
-  }, [blukEditBillGenerate]);
-
-  useEffect(() => {
-    dispatch(getAllBillGenerateAction());
-    dispatch({ type: GET_BULK_EDIT_BILL_GENERATE_RESET });
+    dispatch(getAllOneTimeBillAction());
+    dispatch({ type: GET_BULK_EDIT_ONE_TIME_BILL_RESET });
     dispatch({ type: "GET_LINK", payload: "/revenue" });
   }, []);
+
+  useEffect(() => {
+    if (blukEditOneTimeBill) {
+      setTransactionDate(
+        blukEditOneTimeBill?.dbModel?.TransactionDate?.slice(0, 10)
+      );
+      setStudentDdl(
+        blukEditOneTimeBill?.dbModelLstForAdmissionRegistrationForOneTime
+      );
+      setStudentSelected(
+        blukEditOneTimeBill?.dbModelLstForAdmissionRegistrationForOneTime
+      );
+      setVoucher(blukEditOneTimeBill?.dbModel?.VoucherBillNo);
+    }
+  }, [blukEditOneTimeBill]);
+
+  useEffect(() => {
+    if (blukEditOneTimeBill?.dbModel) {
+      setDbModelContainer({ ...blukEditOneTimeBill.dbModel });
+    }
+  }, [blukEditOneTimeBill?.dbModel]);
 
   const validate = () => {
     let temp = {};
     temp.acaYear = !acaYear ? "This feild is required" : "";
     temp.fiscalYear = !fiscalYear ? "This feild is required" : "";
     temp.classId = !classId ? "This feild is required" : "";
-    temp.studentId = !studentId ? "This feild is required" : "";
     temp.monthId = !monthId ? "This feild is required" : "";
 
     setErrors({ ...temp });
@@ -189,34 +161,24 @@ const Billgenerate = () => {
   const handleListSearch = () => {
     if (validate()) {
       dispatch(
-        getBulkEditBillGenerateAction(
-          fiscalYear,
-          acaYear,
-          classId,
-          studentId,
-          monthId
-        )
+        getBulkEditOneTimeBillAction(fiscalYear, acaYear, classId, monthId)
       );
     }
   };
 
   const handleSubmit = () => {
+    debugger;
     dispatch(
-      postBillGenerateAction(
+      postOneTimeBillAction(
         monthlyFee,
         extraFee,
-        blukEditBillGenerate.dbModel,
-        blukEditBillGenerate.searchFilterModel,
+        studentDdl,
+        blukEditOneTimeBill.dbModel,
+        blukEditOneTimeBill.searchFilterModel,
         narration
       )
     );
   };
-
-  useEffect(() => {
-    if (blukEditBillGenerate?.dbModel) {
-      setDbModelContainer({ ...blukEditBillGenerate.dbModel });
-    }
-  }, [blukEditBillGenerate?.dbModel]);
 
   return (
     <>
@@ -253,19 +215,8 @@ const Billgenerate = () => {
                 errors={errors.classId}
               />
             </Grid>
-            <Grid item xs={3}>
-              <SelectControl
-                name="Student"
-                label="Student"
-                value={studentId}
-                onChange={(e) => setStudentId(e.target.value)}
-                options={studentDdl}
-                errors={errors.studentId}
-              />
-            </Grid>
 
             <Grid item xs={3}>
-              <div style={{ height: "10px" }}></div>
               <SelectControl
                 name="NepaliMonth"
                 label="Nepali Month"
@@ -291,10 +242,10 @@ const Billgenerate = () => {
           </Grid>
         </Toolbar>
 
-        {blukEditBillGenerateLoading ? (
+        {blukEditOneTimeBillLoading ? (
           <LoadingComp />
         ) : (
-          blukEditBillGenerate && (
+          blukEditOneTimeBill && (
             <div
               style={{
                 marginTop: "20px",
@@ -334,38 +285,41 @@ const Billgenerate = () => {
                 </Grid>
               </Toolbar>
               <div style={{ height: "15px" }}></div>
-              <h3>Students</h3>
+              <h3>Admission Fee</h3>
+              <StudentList
+                student={studentDdl}
+                studentSelected={studentSelected}
+                setStudentSelected={setStudentSelected}
+              />
               <h3>Monthly Fee</h3>
               <MonthlyFeeStructure
-                admissionFee={blukEditBillGenerate?.monthlyFeeStructureLst}
-                regKey={
-                  blukEditBillGenerate?.searchFilterModel?.RegistrationKey
+                admissionFee={
+                  blukEditOneTimeBill?.monthlyFeeStructureLstOneTime
                 }
-                idFacLink={blukEditBillGenerate?.dbModel?.IDYearFacultyLink}
-                voucherBill={blukEditBillGenerate?.dbModel?.VoucherBillNo}
+                regKey={blukEditOneTimeBill?.searchFilterModel?.RegistrationKey}
+                idFacLink={blukEditOneTimeBill?.dbModel?.IDYearFacultyLink}
+                voucherBill={blukEditOneTimeBill?.dbModel?.VoucherBillNo}
                 idAcaYear={
-                  blukEditBillGenerate?.searchFilterModel?.idAcademicYear
+                  blukEditOneTimeBill?.searchFilterModel?.idAcademicYear
                 }
-                level={blukEditBillGenerate?.searchFilterModel?.level}
-                fiscalYear={blukEditBillGenerate?.dbModel?.IDFiscalYear}
-                month={blukEditBillGenerate?.searchFilterModel?.IDMonth}
+                level={blukEditOneTimeBill?.searchFilterModel?.level}
+                fiscalYear={blukEditOneTimeBill?.dbModel?.IDFiscalYear}
+                month={blukEditOneTimeBill?.searchFilterModel?.IDMonth}
                 date={transactionDate}
                 currentFee={monthlyFee}
                 setCurrentFee={setMonthlyFee}
               />
               <h3>Extra Activities Fee</h3>
               <ExtraFeeStructure
-                regKey={
-                  blukEditBillGenerate?.searchFilterModel?.RegistrationKey
-                }
-                idFacLink={blukEditBillGenerate?.dbModel?.IDYearFacultyLink}
-                voucherBill={blukEditBillGenerate?.dbModel?.VoucherBillNo}
+                regKey={blukEditOneTimeBill?.searchFilterModel?.RegistrationKey}
+                idFacLink={blukEditOneTimeBill?.dbModel?.IDYearFacultyLink}
+                voucherBill={blukEditOneTimeBill?.dbModel?.VoucherBillNo}
                 idAcaYear={
-                  blukEditBillGenerate?.searchFilterModel?.idAcademicYear
+                  blukEditOneTimeBill?.searchFilterModel?.idAcademicYear
                 }
-                level={blukEditBillGenerate?.searchFilterModel?.level}
-                fiscalYear={blukEditBillGenerate?.dbModel?.IDFiscalYear}
-                month={blukEditBillGenerate?.searchFilterModel?.IDMonth}
+                level={blukEditOneTimeBill?.searchFilterModel?.level}
+                fiscalYear={blukEditOneTimeBill?.dbModel?.IDFiscalYear}
+                month={blukEditOneTimeBill?.searchFilterModel?.IDMonth}
                 date={transactionDate}
                 currentFee={extraFee}
                 setCurrentFee={setExtraFee}
@@ -416,7 +370,7 @@ const Billgenerate = () => {
         setOpenPopup={setOpenPopup}
         title="Print Student Bill"
       >
-        <BillgeneratePrint
+        <OneTimeBillPrint
           date={transactionDate}
           dbModel={dbModelContainer}
           classDdl={classDdl}
@@ -426,7 +380,6 @@ const Billgenerate = () => {
           monthDdl={monthDdl}
           monthId={monthId}
           voucher={voucher}
-          //   feeStructure={feeStructure}
           monthlyFee={monthlyFee}
           extraFee={extraFee}
           setOpenPopup={setOpenPopup}
@@ -437,4 +390,4 @@ const Billgenerate = () => {
   );
 };
 
-export default Billgenerate;
+export default OneTimeBill;

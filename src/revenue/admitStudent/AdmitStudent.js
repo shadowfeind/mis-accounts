@@ -169,6 +169,7 @@ const AdmitStudent = () => {
 
   useEffect(() => {
     dispatch(getAllAdmitStudentAction());
+    dispatch({ type: GET_BULK_EDIT_ADMIT_STUDENT_RESET });
     dispatch({ type: "GET_LINK", payload: "/revenue" });
   }, []);
 

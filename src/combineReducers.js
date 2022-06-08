@@ -116,6 +116,11 @@ import {
   getExtraFeeBillGenerateReducer,
   postBillGenerateReducer,
 } from "./revenue/billGenerate/BillgenerateReducers";
+import {
+  getAllOneTimeBillReducer,
+  getBulkEditOneTimeBillReducer,
+  postOneTimeBillReducer,
+} from "./revenue/oneTimeBill/OneTimeBillReducers";
 
 //examination reducers link end
 export const reducers = combineReducers({
@@ -190,6 +195,11 @@ export const reducers = combineReducers({
   getBulkEditBillGenerate: getBulkEditBillGenerateReducer,
   getExtraFeeBillGenerate: getExtraFeeBillGenerateReducer,
   postBillGenerate: postBillGenerateReducer,
+
+  //REVENUE ONE TIME BILL REDUCERS
+  getAllOneTimeBill: getAllOneTimeBillReducer,
+  getBulkEditOneTimeBill: getBulkEditOneTimeBillReducer,
+  postOneTimeBill: postOneTimeBillReducer,
 
   //ADMISSION FACULTY FEE STRUCTURE REDUCERS:
   getAllAdmissionFacultyFeeStructure: getAllAdmissionFacultyFeeStructureReducer,

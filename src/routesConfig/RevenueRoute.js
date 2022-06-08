@@ -46,6 +46,12 @@ export const RevenueRoute = [
     exact: false,
   },
   {
+    name: "One Time Bill",
+    route: "/one-time-bill",
+    icon: PermContactCalendarIcon,
+    exact: false,
+  },
+  {
     name: "Student Due",
     route: "/student-due",
     icon: LibraryBooksIcon,
