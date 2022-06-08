@@ -30,12 +30,14 @@ import {
 import {
   getAllSchoolDueAction,
   getListSchoolDueAction,
+  getPrintSchoolDueAction,
 } from "./StudentDueActions";
 import StudentDueTableCollapse from "./StudentDueTableCollapse";
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
+import StudentDuePrint from "./StudentDuePrint";
 
 const useStyles = makeStyles((theme) => ({
   searchInput: {
@@ -49,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const tableHeader = [
+  { id: "SN.", label: "SN." },
   { id: "RegistrationKey", label: "Registration Key" },
   { id: "Name", label: "Name" },
   { id: "RemainingDues", label: "Remaining Dues" },
@@ -61,6 +64,7 @@ const StudentDue = () => {
   const [endDate, setEndDate] = useState();
   const [errors, setErrors] = useState([]);
   const [tableData, setTableData] = useState([]);
+  const [openPopup, setOpenPopup] = useState(false);
   const [filterFn, setFilterFn] = useState({
     fn: (item) => {
       return item;
@@ -90,9 +94,11 @@ const StudentDue = () => {
     loading,
   } = useSelector((state) => state.getListStudentDue);
 
-  const { printStudentDue, error: printStudentDueError } = useSelector(
-    (state) => state.getPrintStudentDue
-  );
+  const {
+    printStudentDue,
+    error: printStudentDueError,
+    loading: printStudentDueLoading,
+  } = useSelector((state) => state.getPrintStudentDue);
 
   if (error) {
     setNotify({
@@ -177,6 +183,13 @@ const StudentDue = () => {
   const handleListSearch = () => {
     if (validate()) {
       dispatch(getListSchoolDueAction(fiscalYear, date, endDate));
+    }
+  };
+
+  const handlePrint = () => {
+    if (validate()) {
+      setOpenPopup(true);
+      dispatch(getPrintSchoolDueAction(date, endDate, fiscalYear));
     }
   };
 
@@ -267,31 +280,73 @@ const StudentDue = () => {
                 <TblHead />
 
                 <TableBody>
-                  {tableDataAfterPagingAndSorting()?.map((item) => (
-                    <StudentDueTableCollapse item={item} key={item.$id} />
+                  {tableDataAfterPagingAndSorting()?.map((item, index) => (
+                    <StudentDueTableCollapse
+                      item={item}
+                      key={item.$id}
+                      index={index}
+                    />
                   ))}
-                  <TableRow>
-                    <TableCell></TableCell>
-                    <TableCell>
-                      <strong>Total</strong>
-                    </TableCell>
-                    <TableCell>
-                      {tableDataAfterPagingAndSorting()
-                        ?.reduce((acc, curr) => {
-                          return acc + curr.RemainingDue;
-                        }, 0)
-                        ?.toFixed(2)}
-                    </TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
+                  {listStudentDue?.studentDueModelLsts?.length > 0 ? (
+                    <TableRow>
+                      <TableCell></TableCell>
+                      <TableCell>
+                        <strong>Total</strong>
+                      </TableCell>
+                      <TableCell>
+                        {tableDataAfterPagingAndSorting()
+                          ?.reduce((acc, curr) => {
+                            return acc + curr.RemainingDue;
+                          }, 0)
+                          ?.toFixed(2)}
+                      </TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                  ) : (
+                    <TableRow>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell>
+                        <strong>No Data</strong>
+                      </TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </TableContainer>
             )}
 
-            {listStudentDue && <TblPagination />}
+            {listStudentDue?.length > 0 && (
+              <>
+                {" "}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  // style={{ marginBottom: "-60px" }}
+                  onClick={handlePrint}
+                >
+                  PRINT
+                </Button>{" "}
+                <TblPagination />{" "}
+              </>
+            )}
           </>
         )}
       </CustomContainer>
+      <Popup
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+        title="Print Student Dues"
+      >
+        {printStudentDueLoading ? (
+          <LoadingComp />
+        ) : (
+          <>
+            <StudentDuePrint />
+          </>
+        )}
+      </Popup>
+      <Notification notify={notify} setNotify={setNotify} />
     </>
   );
 };

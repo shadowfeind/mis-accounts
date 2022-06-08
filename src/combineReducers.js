@@ -101,6 +101,8 @@ import {
   getAllActiveStudentForLedgeronlyReducer,
   getAllAdmitStudentReducer,
   getBulkEditAdmitStudentReducer,
+  getExtraFeeAdmitStudentReducer,
+  postAdmitStudentReducer,
 } from "./revenue/admitStudent/AdmitStudentReducers";
 import {
   getAllFeeCollectionReducer,
@@ -118,6 +120,18 @@ import {
   getUniversityFacultyReducer,
   postStudentLedgerReducer,
 } from "./revenue/studentLedger/StudentLedgerReducers";
+import {
+  getAllActiveStudentForBillGenerateReducer,
+  getAllBillGenerateReducer,
+  getBulkEditBillGenerateReducer,
+  getExtraFeeBillGenerateReducer,
+  postBillGenerateReducer,
+} from "./revenue/billGenerate/BillgenerateReducers";
+import {
+  getAllOneTimeBillReducer,
+  getBulkEditOneTimeBillReducer,
+  postOneTimeBillReducer,
+} from "./revenue/oneTimeBill/OneTimeBillReducers";
 
 //examination reducers link end
 export const reducers = combineReducers({
@@ -183,6 +197,20 @@ export const reducers = combineReducers({
   getAllAdmitStudent: getAllAdmitStudentReducer,
   getAllActiveStudentForLedgeronly: getAllActiveStudentForLedgeronlyReducer,
   getBulkEditAdmitStudent: getBulkEditAdmitStudentReducer,
+  getExtraFeeAdmitStudent: getExtraFeeAdmitStudentReducer,
+  postAdmitStudent: postAdmitStudentReducer,
+
+  //REVENUE BILL GENERATE REDUCERS:
+  getAllBillGenerate: getAllBillGenerateReducer,
+  getAllActiveStudentForBillGenerate: getAllActiveStudentForBillGenerateReducer,
+  getBulkEditBillGenerate: getBulkEditBillGenerateReducer,
+  getExtraFeeBillGenerate: getExtraFeeBillGenerateReducer,
+  postBillGenerate: postBillGenerateReducer,
+
+  //REVENUE ONE TIME BILL REDUCERS
+  getAllOneTimeBill: getAllOneTimeBillReducer,
+  getBulkEditOneTimeBill: getBulkEditOneTimeBillReducer,
+  postOneTimeBill: postOneTimeBillReducer,
 
   //ADMISSION FACULTY FEE STRUCTURE REDUCERS:
   getAllAdmissionFacultyFeeStructure: getAllAdmissionFacultyFeeStructureReducer,

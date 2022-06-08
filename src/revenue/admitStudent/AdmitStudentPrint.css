@@ -1,0 +1,33 @@
+.student-print-container {
+    box-sizing: border-box;
+    width: 100mm;
+    padding: 3mm;
+    border: 1px solid #000;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px #f3f3f3;
+    color: #707478;
+}
+
+.student-print-container  h6 {
+    margin: 0;
+    padding-top: 4px;
+    font-size: 10px;
+}
+.student-admit-name-container {
+    margin-top: 12px;
+}
+.student-print-container table {
+    width: 100%;
+    font-size: 11px;
+    font-weight: 500;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+.student-print-container td, .student-print-container th {
+    border: 1px solid #000;
+    margin: 0;
+    padding:7px 15px;
+}
+.student-admit-bottom-container-signature {
+    margin-top: 30px;
+}

@@ -11,6 +11,10 @@ import {
 
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 
+const OneTimeBill = lazy(() => import("./revenue/oneTimeBill/OneTimeBill"));
+
+const Billgenerate = lazy(() => import("./revenue/billGenerate/Billgenerate"));
+
 const AdmitStudent = lazy(() => import("./revenue/admitStudent/AdmitStudent"));
 
 const AutoSearch = lazy(() => import("./userProfile/autoSearch/AutoSearch"));
@@ -124,6 +128,8 @@ const App = () => {
               {/* Revenue Routes */}
               <Route path={"/revenue"} component={Revenue} />
               <Route path={"/admit-student"} component={AdmitStudent} />
+              <Route path={"/bill-generate"} component={Billgenerate} />
+              <Route path={"/one-time-bill"} component={OneTimeBill} />
               <Route
                 path={"/admission-faculty-fee"}
                 component={AdmissionFacultyFee}

@@ -130,9 +130,7 @@ const StudentLedger = ({ searchFilterModel }) => {
   const [discount, setDiscount] = useState("");
   const [advanced, setAdvanced] = useState("");
   const [naration, setNaration] = useState("");
-
   const [errors, setErrors] = useState({});
-  const [errorTable, setErrorTable] = useState({});
   const [tableData, setTableData] = useState([]);
   const [filterFn, setFilterFn] = useState({
     fn: (item) => {
@@ -289,6 +287,10 @@ const StudentLedger = ({ searchFilterModel }) => {
   useEffect(() => {
     if (listStudentLedger) {
       setTableData(listStudentLedger?.studentLedgerModelLstsForStudent);
+      setAmountPaid(listStudentLedger?.studentLedgerModel?.AmountPaid);
+      setDiscount(listStudentLedger?.studentLedgerModel?.DiscountInTotal);
+      setAdvanced(listStudentLedger?.studentLedgerModel?.AdvancedPaid);
+      setNaration(listStudentLedger?.studentLedgerModel?.Narration);
     }
   }, [listStudentLedger]);
 
