@@ -289,8 +289,10 @@ const StudentLedger = ({ searchFilterModel }) => {
       setTableData(listStudentLedger?.studentLedgerModelLstsForStudent);
       setAmountPaid(listStudentLedger?.studentLedgerModel?.AmountPaid);
       setDiscount(listStudentLedger?.studentLedgerModel?.DiscountInTotal);
-      setAdvanced(listStudentLedger?.studentLedgerModel?.AdvancedPaid);
-      setNaration(listStudentLedger?.studentLedgerModel?.Narration);
+      setAdvanced(listStudentLedger?.studentLedgerModel?.Advance);
+      setNaration(
+        listStudentLedger?.studentLedgerModel?.NarrationForAmountPaid
+      );
     }
   }, [listStudentLedger]);
 
@@ -467,12 +469,17 @@ const StudentLedger = ({ searchFilterModel }) => {
                   {tableDataAfterPagingAndSorting().map((item) => (
                     <StudentLedgerTableCollapse item={item} key={item.$id} />
                   ))}
-                  <TableRow>
-                    <TableCell style={{ backgroundColor: "grey" }}>
-                      <strong>Previous Balance</strong>
-                    </TableCell>
-                    <TableCell style={{ backgroundColor: "lightgrey" }}>
-                      {listStudentLedger?.studentLedgerModelLstsForStudent[
+                </TableBody>
+              </TableContainer>
+            )}
+            {listStudentLedger && (
+              <Grid container style={{ fontSize: "12px" }}>
+                <Grid item xs={3}>
+                  <InputControl
+                    disabled
+                    label="Amount Paid"
+                    value={
+                      listStudentLedger?.studentLedgerModelLstsForStudent[
                         listStudentLedger?.studentLedgerModelLstsForStudent
                           ?.length - 1
                       ]?.Balance > 0
@@ -480,13 +487,16 @@ const StudentLedger = ({ searchFilterModel }) => {
                             listStudentLedger?.studentLedgerModelLstsForStudent
                               ?.length - 1
                           ]?.Balance?.toFixed(2)
-                        : "0"}
-                    </TableCell>
-                    <TableCell style={{ backgroundColor: "grey" }}>
-                      <strong>Balance Due</strong>
-                    </TableCell>
-                    <TableCell style={{ backgroundColor: "lightgrey" }}>
-                      {listStudentLedger?.studentLedgerModelLstsForStudent[
+                        : "0"
+                    }
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <InputControl
+                    disabled
+                    label="Discount in Total"
+                    value={
+                      listStudentLedger?.studentLedgerModelLstsForStudent[
                         listStudentLedger?.studentLedgerModelLstsForStudent
                           ?.length - 1
                       ]?.Balance > 0
@@ -494,13 +504,16 @@ const StudentLedger = ({ searchFilterModel }) => {
                             listStudentLedger?.studentLedgerModelLstsForStudent
                               ?.length - 1
                           ]?.Balance?.toFixed(2)
-                        : "0"}
-                    </TableCell>
-                    <TableCell style={{ backgroundColor: "grey" }}>
-                      <strong>Advanced</strong>
-                    </TableCell>
-                    <TableCell style={{ backgroundColor: "lightgrey" }}>
-                      {listStudentLedger?.studentLedgerModelLstsForStudent[
+                        : "0"
+                    }
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <InputControl
+                    disabled
+                    label="Advanced"
+                    value={
+                      listStudentLedger?.studentLedgerModelLstsForStudent[
                         listStudentLedger?.studentLedgerModelLstsForStudent
                           ?.length - 1
                       ]?.Balance <= 0
@@ -508,31 +521,24 @@ const StudentLedger = ({ searchFilterModel }) => {
                             listStudentLedger?.studentLedgerModelLstsForStudent
                               ?.length - 1
                           ]?.Balance?.toFixed(2) * -1
-                        : "0"}
-                    </TableCell>
-
-                    <TableCell style={{ backgroundColor: "grey" }}>
-                      <strong>Transaction Date</strong>
-                    </TableCell>
-                    <TableCell
-                      style={{ backgroundColor: "lightgrey" }}
-                      width="40%"
-                    >
-                      {listStudentLedger?.studentLedgerModelLstsForStudent[
-                        listStudentLedger?.studentLedgerModelLstsForStudent
-                          ?.length - 1
-                      ]?.TransactionDate?.slice(0, 10)}
-                    </TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                </TableBody>
-              </TableContainer>
+                        : "0"
+                    }
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <InputControl
+                    disabled
+                    label="Transaction Date"
+                    width="40%"
+                    value={listStudentLedger?.studentLedgerModelLstsForStudent[
+                      listStudentLedger?.studentLedgerModelLstsForStudent
+                        ?.length - 1
+                    ]?.TransactionDate?.slice(0, 10)}
+                  />
+                </Grid>
+              </Grid>
             )}
+            <div style={{ height: "25px" }}></div>
             {listStudentLedger && (
               <Grid container style={{ fontSize: "12px" }}>
                 <Grid item xs={3}>
@@ -570,7 +576,7 @@ const StudentLedger = ({ searchFilterModel }) => {
                 </Grid>
                 <Grid item xs={3}>
                   <InputControl
-                    name="AdvancedPaid"
+                    name="Advance"
                     label="Advanced Paid"
                     type="number"
                     variant="outlined"
@@ -584,22 +590,17 @@ const StudentLedger = ({ searchFilterModel }) => {
                     }
                   />
                 </Grid>
-              </Grid>
-            )}
-            <div style={{ height: "15px" }}></div>
-            {listStudentLedger && (
-              <Grid container style={{ fontSize: "12px" }}>
-                <Grid item xs={6}>
+                <Grid item xs={3}>
                   <InputControl
-                    name="Narration"
+                    name="NarrationForAmountPaid"
                     label="Narration"
                     variant="outlined"
                     value={naration}
                     onChange={(e) => setNaration(e.target.value)}
                   />
                 </Grid>
-
-                <Grid item xs={6}>
+                <div style={{ height: "15px" }}></div>
+                <Grid item xs={3}>
                   <Button
                     variant="contained"
                     color="primary"
@@ -621,7 +622,6 @@ const StudentLedger = ({ searchFilterModel }) => {
                 </Grid>
               </Grid>
             )}
-
             {listStudentLedger && <TblPagination />}
           </>
         )}

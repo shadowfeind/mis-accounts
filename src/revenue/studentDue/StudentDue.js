@@ -289,18 +289,22 @@ const StudentDue = () => {
                   ))}
                   {listStudentDue?.studentDueModelLsts?.length > 0 ? (
                     <TableRow>
-                      <TableCell></TableCell>
-                      <TableCell>
+                      <TableCell
+                        style={{ backgroundColor: "lightgrey" }}
+                      ></TableCell>
+                      <TableCell style={{ backgroundColor: "lightgrey" }}>
                         <strong>Total</strong>
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={{ backgroundColor: "lightgrey" }}>
                         {tableDataAfterPagingAndSorting()
                           ?.reduce((acc, curr) => {
                             return acc + curr.RemainingDue;
                           }, 0)
                           ?.toFixed(2)}
                       </TableCell>
-                      <TableCell></TableCell>
+                      <TableCell
+                        style={{ backgroundColor: "lightgrey" }}
+                      ></TableCell>
                     </TableRow>
                   ) : (
                     <TableRow>
@@ -316,7 +320,7 @@ const StudentDue = () => {
               </TableContainer>
             )}
 
-            {listStudentDue?.length > 0 && (
+            {listStudentDue?.studentDueModelLsts?.length > 0 && (
               <>
                 {" "}
                 <Button
