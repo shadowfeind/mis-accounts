@@ -90,11 +90,9 @@ export const postOneTimeBillAction =
         monthlyFeeStructureLstForBill: newMonthly,
         extraFeeStructureLstForBill: newExtra,
       });
-      debugger;
-      console.log(jsonData);
 
       const { data } = await axiosInstance.post(
-        `/api/BillGenerate/PostBillGenerate`,
+        `/api/OneTimeBill/PostBillGenerate`,
         jsonData,
         tokenConfig()
       );

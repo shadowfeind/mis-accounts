@@ -21,6 +21,7 @@ const OneTimeBillPrint = ({
   voucher,
   monthlyFee,
   extraFee,
+  studentDdl,
   setOpenPopup,
 }) => {
   const [notify, setNotify] = useState({
@@ -111,8 +112,10 @@ const OneTimeBillPrint = ({
                 ?.map((s, i) => (
                   <tr key={s.IDAccountType}>
                     <td>{i + 1}</td>
-                    <td>{s.AccountName}</td>
-                    <td>{Number(s.Cr)?.toFixed(2)}</td>
+                    <td>
+                      {s.AccountName} * {studentDdl?.length}
+                    </td>
+                    <td>{Number(s.Cr)?.toFixed(2) * studentDdl?.length}</td>
                   </tr>
                 ))}
               {extraFee
@@ -124,15 +127,12 @@ const OneTimeBillPrint = ({
                         i +
                         1}
                     </td>
-                    <td>{s.AccountName}</td>
-                    <td>{Number(s.Cr)?.toFixed(2)}</td>
+                    <td>
+                      {s.AccountName} * {studentDdl?.length}
+                    </td>
+                    <td>{Number(s.Cr)?.toFixed(2) * studentDdl?.length}</td>
                   </tr>
                 ))}
-              <tr>
-                <td></td>
-                <td>Previous Balance</td>
-                <td>0.00</td>
-              </tr>
               <tr>
                 <td></td>
                 <td>Total</td>
@@ -142,12 +142,14 @@ const OneTimeBillPrint = ({
                       ?.filter((x) => x.active === true)
                       ?.reduce((acc, item) => {
                         return acc + Number(item.Cr);
-                      }, 0) +
+                      }, 0) *
+                      studentDdl?.length +
                     extraFee
                       ?.filter((x) => x.active === true)
                       ?.reduce((acc, item) => {
                         return acc + Number(item.Cr);
-                      }, 0)
+                      }, 0) *
+                      studentDdl?.length
                   ).toFixed(2)}
                 </td>
               </tr>

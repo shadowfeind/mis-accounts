@@ -31,6 +31,7 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import OneTimeBillPrintModal from "./OneTimeBillPrintModal";
 
 const useStyles = makeStyles((theme) => ({
   searchInput: {
@@ -153,6 +154,7 @@ const OneTimeBillPrint = () => {
           student
         )
       );
+      setOpenPopup(true);
     }
   };
 
@@ -252,6 +254,23 @@ const OneTimeBillPrint = () => {
           </Grid>
         </Toolbar>
       </CustomContainer>
+      <Popup
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+        title="Bill Print"
+      >
+        <OneTimeBillPrintModal
+          printOneTimeBill={printOneTimeBill}
+          date={transactionDate}
+          classDdl={ddlClass}
+          classId={classId}
+          ddlAcaYear={academicYearDdl}
+          acaYear={acaYear}
+          monthDdl={npMonthDdl}
+          monthId={npMonth}
+          setOpenPopup={setOpenPopup}
+        />
+      </Popup>
     </>
   );
 };
