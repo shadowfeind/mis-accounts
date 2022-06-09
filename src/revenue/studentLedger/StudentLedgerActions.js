@@ -80,8 +80,8 @@ export const postStudentLedgerAction =
         ...studentLedgerModels,
         AmountPaid: amount,
         DiscountInTotal: discount,
-        AdvancedPaid: advanced,
-        Narration: narration,
+        Advance: advanced,
+        NarrationForAmountPaid: narration,
         MatCenter: 1,
       };
 

@@ -17,6 +17,8 @@ import DatePickerControl from "../../components/controls/DatePickerControl";
 import AddIcon from "@material-ui/icons/Add";
 import Popup from "../../components/Popup";
 import DateFnsUtils from "@date-io/date-fns";
+import Notification from "../../components/Notification";
+import { getPrintFeeCollectionAction } from "./FeeCollectionActions";
 import CustomContainer from "../../components/CustomContainer";
 import { useDispatch, useSelector } from "react-redux";
 import LoadingComp from "../../components/LoadingComp";
@@ -34,6 +36,7 @@ import {
   getListFeeCollectionAction,
 } from "./FeeCollectionActions";
 import FeeCollectionTableCollapse from "./FeeCollectionTableCollapse";
+import FeeCollectionPrint from "./FeeCollectionPrint";
 
 const useStyles = makeStyles((theme) => ({
   searchInput: {
@@ -63,6 +66,7 @@ const FeeCollection = () => {
   const [endDate, setEndDate] = useState();
   const [errors, setErrors] = useState([]);
   const [tableData, setTableData] = useState([]);
+  const [openPopup, setOpenPopup] = useState(false);
   const [filterFn, setFilterFn] = useState({
     fn: (item) => {
       return item;
@@ -88,9 +92,11 @@ const FeeCollection = () => {
     loading,
   } = useSelector((state) => state.getListFeeCollection);
 
-  const { printFeeCollection, error: printFeeCollectionError } = useSelector(
-    (state) => state.getPrintFeeCollection
-  );
+  const {
+    printFeeCollection,
+    error: printFeeCollectionError,
+    loading: printFeeCollectionLoading,
+  } = useSelector((state) => state.getPrintFeeCollection);
 
   if (error) {
     setNotify({
@@ -178,6 +184,12 @@ const FeeCollection = () => {
     }
   };
 
+  const handlePrint = () => {
+    if (validate()) {
+      setOpenPopup(true);
+      dispatch(getPrintFeeCollectionAction(date, endDate, fiscalYear));
+    }
+  };
   return (
     <>
       <CustomContainer>
@@ -268,32 +280,86 @@ const FeeCollection = () => {
                   {tableDataAfterPagingAndSorting()?.map((item) => (
                     <FeeCollectionTableCollapse item={item} key={item.$id} />
                   ))}
-                  <TableRow>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
-                    <TableCell>
-                      <strong>Total</strong>
-                    </TableCell>
-                    <TableCell>
-                      {" "}
-                      {tableDataAfterPagingAndSorting()
-                        ?.reduce((acc, curr) => {
-                          return acc + curr.Dr;
-                        }, 0)
-                        ?.toFixed(2)}
-                    </TableCell>
-                  </TableRow>
+
+                  {listFeeCollection?.feeCollectionLst?.length > 0 ? (
+                    <TableRow style={{ backgroundColor: "lightgrey" }}>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell align="right">
+                        <strong>Total:</strong>
+                      </TableCell>
+                      <TableCell>
+                        {" "}
+                        {tableDataAfterPagingAndSorting()
+                          ?.reduce((acc, curr) => {
+                            return acc + curr.Dr;
+                          }, 0)
+                          ?.toFixed(2)}
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    <TableRow>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell align="right">
+                        <strong>No Data Found</strong>
+                      </TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </TableContainer>
             )}
 
-            {listFeeCollection && <TblPagination />}
+            {listFeeCollection?.feeCollectionLst?.length > 0 && (
+              <>
+                {" "}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handlePrint}
+                >
+                  PRINT
+                </Button>{" "}
+                <TblPagination />{" "}
+              </>
+            )}
           </>
         )}
       </CustomContainer>
+      <Popup
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+        title="Print Fee Collection"
+      >
+        {printFeeCollectionLoading ? (
+          <LoadingComp />
+        ) : (
+          <>
+            <FeeCollectionPrint
+              printFee={
+                printFeeCollection && printFeeCollection?.feeCollectionLst
+              }
+              date={
+                printFeeCollection && printFeeCollection?.feeCollectionModel
+              }
+              iDFiscalYear={listFeeCollection?.searchFilterModel?.IDFiscalYear}
+              fiscalYearDdl={
+                listFeeCollection?.searchFilterModel?.ddlAccountFiscalYear
+              }
+              setOpenPopup={setOpenPopup}
+            />
+          </>
+        )}
+      </Popup>
+
+      <Notification notify={notify} setNotify={setNotify} />
     </>
   );
 };
