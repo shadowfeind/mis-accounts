@@ -1,14 +1,16 @@
 .fee-collection-container {
   box-sizing: border-box;
   width: 100%;
-  padding: 3mm;
-  border: 1px solid #000;
-  border-radius: 10px;
-  box-shadow: 2px 2px 2px #f3f3f3;
   color: #707478;
   margin: 0 auto;
 }
-
+.fee-collection {
+  margin: 10px;
+  border: 1px solid #000;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 2px #f3f3f3;
+}
 .fee-collection-container h6 {
   margin: 0;
   padding-top: 4px;
@@ -30,6 +32,6 @@
   margin: 0;
   padding: 7px 15px;
 }
-.student-admit-bottom-container-signature {
-  margin-top: 30px;
+.fee-collection-bottom-container-signature {
+  margin-top: 90px;
 }

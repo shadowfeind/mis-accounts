@@ -4,7 +4,7 @@ import { Button, Grid } from "@material-ui/core";
 import Notification from "../../components/Notification";
 import { API_URL } from "../../constants";
 import { useReactToPrint } from "react-to-print";
-import "../admitStudent/AdmitStudentPrint.css";
+import "./FeeCollectionPrint.css";
 import { getHeaderBannerAction } from "../../dashboard/DashboardActions";
 
 const FeeCollectionPrint = ({
@@ -50,81 +50,82 @@ const FeeCollectionPrint = ({
   return (
     <>
       <div className="fee-collection-container" ref={componentRef}>
-        <Grid container>
-          <Grid item xs={3}>
-            <h6>
-              BillDate: <br />
-              {date?.TransactionDate?.slice(0, 10)}
-            </h6>
-          </Grid>
-          <Grid item xs={6}>
-            <img src={`${API_URL}${headerBanners}`} width="100%" />
-          </Grid>
-          <Grid item xs={3}>
-            <h6>
-              Fiscal Year:
-              <br /> {fiscalYear && fiscalYear[0]?.Value}{" "}
-            </h6>
-          </Grid>
-        </Grid>
-
-        <div className="student-admit-table-container">
-          <table>
-            <thead>
-              <tr>
-                <th style={{ width: "30%", textAlign: "center" }}>RollNo.</th>
-                <th style={{ width: "65%" }}>Student Name</th>
-                <th style={{ width: "35%", textAlign: "center" }}>Class</th>
-                <th style={{ width: "35%", textAlign: "center" }}>Reg No.</th>
-                <th style={{ width: "35%", textAlign: "center" }}>
-                  Academic Year
-                </th>
-                <th style={{ width: "35%", textAlign: "center" }}>
-                  Collection(Rs)
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {printFee?.map((s, i) => (
-                <tr key={s.IDAccountType}>
-                  <td>{s.RollNo}</td>
-                  <td>{s.FullName}</td>
-                  <td>{s.ClassName}</td>
-                  <td>{s.RegistrationKey}</td>
-                  <td>{s.AcademicYear}</td>
-                  <td>{Number(s.Dr)?.toFixed(2)}</td>
-                </tr>
-              ))}
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-
-                <td>Total</td>
-                <td>
-                  {printFee
-                    ?.reduce((acc, item) => {
-                      return acc + Number(item.Dr);
-                    }, 0)
-                    ?.toFixed(2)}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div className="student-admit-bottom-container">
-          <div className="student-admit-bottom-container-signature">
-            {" "}
-            <Grid container>
-              <Grid item xs={4}></Grid>
-              <Grid item xs={4}>
-                <h6>School Stamp</h6>
-              </Grid>
-              <Grid item xs={4}>
-                <h6>Accountant</h6>
-              </Grid>
+        <div className="fee-collection">
+          <Grid container>
+            <Grid item xs={3}>
+              <h4>
+                BillDate: &nbsp;
+                {date?.StartDate?.slice(0, 10)} to {date?.EndDate?.slice(0, 10)}
+              </h4>
             </Grid>
+            <Grid item xs={6}>
+              <img src={`${API_URL}${headerBanners}`} width="100%" />
+            </Grid>
+            <Grid item xs={3}>
+              <h4>Fee Collection</h4>
+            </Grid>
+          </Grid>
+
+          <div className="student-admit-table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th style={{ width: "5%", textAlign: "left" }}>RollNo.</th>
+                  <th style={{ width: "30%", textAlign: "left" }}>
+                    Student Name
+                  </th>
+                  <th style={{ width: "15%", textAlign: "left" }}>Class</th>
+                  <th style={{ width: "10%", textAlign: "left" }}>Reg No.</th>
+                  <th style={{ width: "15%", textAlign: "left" }}>
+                    Academic Year
+                  </th>
+                  <th style={{ width: "15%", textAlign: "left" }}>
+                    Collection(Rs)
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {printFee?.map((s, i) => (
+                  <tr key={s.IDAccountType}>
+                    <td>{s.RollNo}</td>
+                    <td>{s.FullName}</td>
+                    <td>{s.ClassName}</td>
+                    <td>{s.RegistrationKey}</td>
+                    <td>{s.AcademicYear}</td>
+                    <td>{Number(s.Dr)?.toFixed(2)}</td>
+                  </tr>
+                ))}
+                <tr>
+                  <td></td>
+                  <td>Total</td>
+                  <td></td>
+                  <td></td>
+
+                  <td></td>
+                  <td>
+                    {printFee
+                      ?.reduce((acc, item) => {
+                        return acc + Number(item.Dr);
+                      }, 0)
+                      ?.toFixed(2)}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="fee-collection-bottom-container">
+            <div className="fee-collection-bottom-container-signature">
+              {" "}
+              <Grid container>
+                <Grid item xs={4}></Grid>
+                <Grid item xs={4}>
+                  <h4>School Stamp</h4>
+                </Grid>
+                <Grid item xs={4}>
+                  <h4>Accountant</h4>
+                </Grid>
+              </Grid>
+            </div>
           </div>
         </div>
       </div>
