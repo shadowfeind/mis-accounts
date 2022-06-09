@@ -2,13 +2,13 @@ import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Grid } from "@material-ui/core";
 import Notification from "../../components/Notification";
+import { API_URL } from "../../constants";
 import { useReactToPrint } from "react-to-print";
 import "../admitStudent/AdmitStudentPrint.css";
-import { API_URL } from "../../constants";
 import { getHeaderBannerAction } from "../../dashboard/DashboardActions";
 
-const StudentDuePrint = ({
-  printDue,
+const FeeCollectionPrint = ({
+  printFee,
   date,
   fiscalYearDdl,
   iDFiscalYear,
@@ -25,6 +25,8 @@ const StudentDuePrint = ({
     (state) => state.getHeaderBanner
   );
 
+  const fiscalYear = fiscalYearDdl?.filter((x) => x.Key == iDFiscalYear);
+
   if (headerBannersError) {
     dispatch({ type: GET_HEADER_BANNER_RESET });
     setNotify({
@@ -33,8 +35,6 @@ const StudentDuePrint = ({
       type: "error",
     });
   }
-
-  const year = fiscalYearDdl?.filter((x) => x.Key == iDFiscalYear);
 
   const componentRef = useRef();
   const printPdf = useReactToPrint({
@@ -49,7 +49,7 @@ const StudentDuePrint = ({
 
   return (
     <>
-      <div className="student-print-container" ref={componentRef}>
+      <div className="fee-collection-container" ref={componentRef}>
         <Grid container>
           <Grid item xs={3}>
             <h6>
@@ -63,36 +63,49 @@ const StudentDuePrint = ({
           <Grid item xs={3}>
             <h6>
               Fiscal Year:
-              <br /> {year && year[0]?.Value}{" "}
+              <br /> {fiscalYear && fiscalYear[0]?.Value}{" "}
             </h6>
           </Grid>
         </Grid>
+
         <div className="student-admit-table-container">
           <table>
             <thead>
               <tr>
-                <th style={{ width: "30%", textAlign: "center" }}>Reg Key</th>
+                <th style={{ width: "30%", textAlign: "center" }}>RollNo.</th>
                 <th style={{ width: "65%" }}>Student Name</th>
+                <th style={{ width: "35%", textAlign: "center" }}>Class</th>
+                <th style={{ width: "35%", textAlign: "center" }}>Reg No.</th>
                 <th style={{ width: "35%", textAlign: "center" }}>
-                  Remaining Due(Rs)
+                  Academic Year
+                </th>
+                <th style={{ width: "35%", textAlign: "center" }}>
+                  Collection(Rs)
                 </th>
               </tr>
             </thead>
             <tbody>
-              {printDue?.map((s, i) => (
+              {printFee?.map((s, i) => (
                 <tr key={s.IDAccountType}>
-                  <td>{s.RegistrationKey}</td>
+                  <td>{s.RollNo}</td>
                   <td>{s.FullName}</td>
-                  <td>{Number(s.RemainingDue)?.toFixed(2)}</td>
+                  <td>{s.ClassName}</td>
+                  <td>{s.RegistrationKey}</td>
+                  <td>{s.AcademicYear}</td>
+                  <td>{Number(s.Dr)?.toFixed(2)}</td>
                 </tr>
               ))}
               <tr>
                 <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
                 <td>Total</td>
                 <td>
-                  {printDue
+                  {printFee
                     ?.reduce((acc, item) => {
-                      return acc + Number(item.RemainingDue);
+                      return acc + Number(item.Dr);
                     }, 0)
                     ?.toFixed(2)}
                 </td>
@@ -102,6 +115,7 @@ const StudentDuePrint = ({
         </div>
         <div className="student-admit-bottom-container">
           <div className="student-admit-bottom-container-signature">
+            {" "}
             <Grid container>
               <Grid item xs={4}></Grid>
               <Grid item xs={4}>
@@ -146,4 +160,4 @@ const StudentDuePrint = ({
   );
 };
 
-export default StudentDuePrint;
+export default FeeCollectionPrint;

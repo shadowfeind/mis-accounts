@@ -292,8 +292,16 @@ const StudentDue = () => {
                       <TableCell
                         style={{ backgroundColor: "lightgrey" }}
                       ></TableCell>
-                      <TableCell style={{ backgroundColor: "lightgrey" }}>
-                        <strong>Total</strong>
+                      <TableCell
+                        style={{ backgroundColor: "lightgrey" }}
+                      ></TableCell>
+                      <TableCell
+                        style={{
+                          backgroundColor: "lightgrey",
+                          textAlign: "right",
+                        }}
+                      >
+                        <strong>Total:</strong>
                       </TableCell>
                       <TableCell style={{ backgroundColor: "lightgrey" }}>
                         {tableDataAfterPagingAndSorting()
@@ -302,16 +310,13 @@ const StudentDue = () => {
                           }, 0)
                           ?.toFixed(2)}
                       </TableCell>
-                      <TableCell
-                        style={{ backgroundColor: "lightgrey" }}
-                      ></TableCell>
                     </TableRow>
                   ) : (
                     <TableRow>
                       <TableCell></TableCell>
                       <TableCell></TableCell>
                       <TableCell>
-                        <strong>No Data</strong>
+                        <strong>No Data Found</strong>
                       </TableCell>
                       <TableCell></TableCell>
                     </TableRow>
@@ -346,7 +351,15 @@ const StudentDue = () => {
           <LoadingComp />
         ) : (
           <>
-            <StudentDuePrint />
+            <StudentDuePrint
+              setOpenPopup={setOpenPopup}
+              printDue={printStudentDue && printStudentDue?.studentDueModelLsts}
+              date={printStudentDue && printStudentDue?.studentDueModel}
+              iDFiscalYear={listStudentDue?.searchFilterModel?.IDFiscalYear}
+              fiscalYearDdl={
+                listStudentDue?.searchFilterModel?.ddlAccountFiscalYear
+              }
+            />
           </>
         )}
       </Popup>

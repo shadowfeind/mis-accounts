@@ -1,31 +1,31 @@
-.student-print-container {
+.fee-collection-container {
   box-sizing: border-box;
-  width: 100mm;
+  width: 100%;
   padding: 3mm;
   border: 1px solid #000;
   border-radius: 10px;
   box-shadow: 2px 2px 2px #f3f3f3;
   color: #707478;
-  margin: 2mm;
+  margin: 0 auto;
 }
 
-.student-print-container h6 {
+.fee-collection-container h6 {
   margin: 0;
   padding-top: 4px;
-  font-size: 10px;
+  font-size: 14px;
 }
 .student-admit-name-container {
   margin-top: 12px;
 }
-.student-print-container table {
+.fee-collection-container table {
   width: 100%;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 500;
   border-collapse: collapse;
   margin-top: 10px;
 }
-.student-print-container td,
-.student-print-container th {
+.fee-collection-container td,
+.fee-collection-container th {
   border: 1px solid #000;
   margin: 0;
   padding: 7px 15px;
