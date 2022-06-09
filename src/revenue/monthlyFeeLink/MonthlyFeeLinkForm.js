@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import { postMonthlyFeeLinkAction } from "./MonthlyFeeLinkActions";
+import { symbolsArr } from "../../helpers/excludeSymbol";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -142,8 +143,6 @@ const MonthlyFeeLinkForm = ({
       // console.log(formCheck);
     }
   };
-
-  const symbolsArr = ["e", "E", "+", "-", ".", "ArrowUp", "ArrowDown"];
 
   return (
     <>

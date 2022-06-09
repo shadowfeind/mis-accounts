@@ -17,6 +17,7 @@ import InputControl from "../../components/controls/InputControl";
 import { useForm, Form } from "../../customHooks/useForm";
 import Paper from "@material-ui/core/Paper";
 import { postAdmissionFacultyFeeStructureAction } from "./AdmissionFacultyFeeActions";
+import { symbolsArr } from "../../helpers/excludeSymbol";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -138,8 +139,6 @@ const AdmissionFacultyFeeForm = ({
       );
     }
   };
-
-  const symbolsArr = ["e", "E", "+", "-", "ArrowUp", "ArrowDown"];
 
   return (
     <>

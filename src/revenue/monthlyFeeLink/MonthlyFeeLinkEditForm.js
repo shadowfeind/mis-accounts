@@ -4,6 +4,7 @@ import InputControl from "../../components/controls/InputControl";
 import { useForm, Form } from "../../customHooks/useForm";
 import { useDispatch } from "react-redux";
 import { putMonthlyFeeLinkAction } from "./MonthlyFeeLinkActions";
+import { symbolsArr } from "../../helpers/excludeSymbol";
 
 const initialFormValues = {
   IDAdmissionFacultyFeeStructure: 0,
@@ -45,7 +46,6 @@ const MonthlyFeeLinkEditForm = ({ editForm, setOpenPopup }) => {
 
   const test = [{ Key: "", Value: "" }];
 
-  const symbolsArr = ["e", "E", "+", "-", "ArrowUp", "ArrowDown"];
   useEffect(() => {
     if (editForm) {
       setValues({ ...editForm?.dbModel });
