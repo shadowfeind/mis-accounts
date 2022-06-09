@@ -79,6 +79,11 @@ const OneTimeBillPrint = lazy(() =>
 const StudentLedger = lazy(() =>
   import("./revenue/studentLedger/StudentLedger")
 );
+
+// Ledger Account Wise:
+const LedgerAccountWise = lazy(() =>
+  import("./revenue/ledgerAccountwise/LedgerAccountWise")
+);
 const theme = createTheme({
   palette: {
     background: {
@@ -141,6 +146,10 @@ const App = () => {
               <Route
                 path={"/one-time-bill-print"}
                 component={OneTimeBillPrint}
+              />
+              <Route
+                path={"/ledger-account-wise"}
+                component={LedgerAccountWise}
               />
               <Route path={"/student-ledger"} component={StudentLedger} />
               {/* Revenue Routes Ends */}

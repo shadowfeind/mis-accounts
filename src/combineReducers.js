@@ -132,6 +132,10 @@ import {
   getBulkEditOneTimeBillReducer,
   postOneTimeBillReducer,
 } from "./revenue/oneTimeBill/OneTimeBillReducers";
+import {
+  getAllLedgerAccountWiseReducer,
+  getListLedgerAccountWiseReducer,
+} from "./revenue/ledgerAccountwise/LedgerAccountWiseReducers";
 
 //examination reducers link end
 export const reducers = combineReducers({
@@ -259,6 +263,10 @@ export const reducers = combineReducers({
   postStudentLedger: postStudentLedgerReducer,
   getActiveStudentOnly: getActiveStudentOnlyReducer,
   getUniversityFaculty: getUniversityFacultyReducer,
+
+  //LEDGER ACCOUNT WISE:
+  getAllLedgerAccountWise: getAllLedgerAccountWiseReducer,
+  getListLedgerAccountWise: getListLedgerAccountWiseReducer,
 
   //HOLIDAY REDUCER
   holiday: getAllHoliday,

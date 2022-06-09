@@ -77,10 +77,10 @@ export const RevenueRoute = [
     icon: MenuBookIcon,
     exact: false,
   },
-  // {
-  //   name: "Syllabus",
-  //   route: "/syllabus",
-  //   icon: DescriptionIcon,
-  //   exact: false,
-  // },
+  {
+    name: "Ledger Account Wise",
+    route: "/ledger-account-wise",
+    icon: DescriptionIcon,
+    exact: false,
+  },
 ];
