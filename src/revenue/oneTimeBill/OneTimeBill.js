@@ -382,6 +382,7 @@ const OneTimeBill = () => {
           voucher={voucher}
           monthlyFee={monthlyFee}
           extraFee={extraFee}
+          studentDdl={studentDdl}
           setOpenPopup={setOpenPopup}
         />
       </Popup>
