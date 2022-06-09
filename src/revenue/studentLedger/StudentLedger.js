@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Notification from "../../components/Notification";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import LoadingComp from "../../components/LoadingComp";
+import { symbolsArr } from "../../helpers/excludeSymbol";
 import {
   GET_ACTIVE_STUDENT_ONLY_RESET,
   GET_ALL_STUDENT_LEDGER_RESET,
@@ -339,8 +340,6 @@ const StudentLedger = ({ searchFilterModel }) => {
       )
     );
   };
-
-  const symbolsArr = ["e", "E", "+", "-", "ArrowUp", "ArrowDown"];
 
   return (
     <>

@@ -10,6 +10,7 @@ import {
   postAdmissionFeeStructureAction,
   putAdmissionFeeStructureAction,
 } from "./AdmissionFeeStructureActions";
+import { symbolsArr } from "../../helpers/excludeSymbol";
 
 const initialFormValues = {
   IDAccountType: 0,
@@ -76,8 +77,6 @@ const AdmissionFeeStructureForm = ({
   };
 
   const test = [{ Key: "", Value: "" }];
-
-  const symbolsArr = ["e", "E", "+", "-", ".", "ArrowUp", "ArrowDown"];
 
   useEffect(() => {
     if (createAccount) {

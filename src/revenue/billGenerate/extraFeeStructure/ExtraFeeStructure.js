@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { dummyData } from "./Dummy";
 import { Autocomplete } from "@material-ui/lab";
 import { getExtraFeeBillGenerateAction } from "../BillgenerateActions";
+import { symbolsArr } from "../../../helpers/excludeSymbol";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -116,7 +117,6 @@ const ExtraFeeStructure = ({
     });
   };
 
-  const symbolsArr = ["e", "E", "+", "-", "ArrowUp", "ArrowDown"];
   const test = [];
   const handleExtraChange = (e, i) => {
     if (e.length > 2) {

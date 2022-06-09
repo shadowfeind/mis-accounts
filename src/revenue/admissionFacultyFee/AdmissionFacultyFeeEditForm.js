@@ -8,6 +8,7 @@ import DatePickerControl from "../../components/controls/DatePickerControl";
 import CheckBoxControl from "../../components/controls/CheckBoxControl";
 
 import { putAdmissionFacultyFeeStructureAction } from "./AdmissionFacultyFeeActions";
+import { symbolsArr } from "../../helpers/excludeSymbol";
 
 const initialFormValues = {
   IDAdmissionFacultyFeeStructure: 0,
@@ -62,8 +63,6 @@ const AdmissionFacultyFeeStructureEditForm = ({
   };
 
   const test = [{ Key: "", Value: "" }];
-
-  const symbolsArr = ["e", "E", "+", "-", ".", "ArrowUp", "ArrowDown"];
 
   useEffect(() => {
     if (editAccount) {

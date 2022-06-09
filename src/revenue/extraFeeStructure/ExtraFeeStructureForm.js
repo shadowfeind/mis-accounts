@@ -10,6 +10,7 @@ import {
   postExtraFeeStructureAction,
   putExtraFeeStructureAction,
 } from "./ExtraFeeStructureActions";
+import { symbolsArr } from "../../helpers/excludeSymbol";
 
 const initialFormValues = {
   IDAccountType: 0,
@@ -69,8 +70,6 @@ const ExtraFeeStructureForm = ({
   };
 
   const test = [{ Key: "", Value: "" }];
-
-  const symbolsArr = ["e", "E", "+", "-", ".", "ArrowUp", "ArrowDown"];
 
   useEffect(() => {
     if (createAccount) {

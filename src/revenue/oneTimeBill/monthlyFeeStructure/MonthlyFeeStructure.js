@@ -12,6 +12,7 @@ import {
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import { useDispatch } from "react-redux";
+import { symbolsArr } from "../../../helpers/excludeSymbol";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -170,8 +171,6 @@ const MonthlyFeeStructure = ({
       setCurrentFee([...feeContainer]);
     }
   }, [admissionFee, date]);
-
-  const symbolsArr = ["e", "E", "+", "-", "ArrowUp", "ArrowDown"];
 
   return (
     <>

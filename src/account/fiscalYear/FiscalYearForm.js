@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import DatePickerControl from "../../components/controls/DatePickerControl";
 import CheckBoxControl from "../../components/controls/CheckBoxControl";
 import { postFiscalYearAction, putFiscalYearAction } from "./FiscalYearActions";
+import { symbolsArr } from "../../helpers/excludeSymbol";
 
 const initialFormValues = {
   IDFiscalYear: 0,
@@ -55,7 +56,6 @@ const FiscalYearForm = ({ createAccount, editAccount, setOpenPopup }) => {
       }
     }
   };
-  const symbolsArr = ["e", "E", "+", "-", ".", "ArrowUp", "ArrowDown"];
 
   useEffect(() => {
     if (createAccount) {

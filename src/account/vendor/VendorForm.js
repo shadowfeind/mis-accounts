@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import DatePickerControl from "../../components/controls/DatePickerControl";
 import CheckBoxControl from "../../components/controls/CheckBoxControl";
 import { postVendorAction, putVendorAction } from "./VendorActions";
+import { symbolsArrPhone } from "../../helpers/excludeSymbol";
 
 const initialFormValues = {
   IDVendor: 0,
@@ -113,8 +114,6 @@ const VendorForm = ({ createAccount, editAccount, setOpenPopup }) => {
     }
   };
 
-  const symbolsArr = ["e", "E", "+", "-", ".", "ArrowUp", "ArrowDown"];
-
   useEffect(() => {
     if (createAccount) {
       setValues({ ...createAccount?.vendorModel });
@@ -168,7 +167,9 @@ const VendorForm = ({ createAccount, editAccount, setOpenPopup }) => {
             onWheelCapture={(e) => {
               e.target.blur();
             }}
-            onKeyDown={(e) => symbolsArr.includes(e.key) && e.preventDefault()}
+            onKeyDown={(e) =>
+              symbolsArrPhone.includes(e.key) && e.preventDefault()
+            }
             type="number"
             value={values.ContactNumber}
             onChange={handleInputChange}
@@ -180,7 +181,9 @@ const VendorForm = ({ createAccount, editAccount, setOpenPopup }) => {
             onWheelCapture={(e) => {
               e.target.blur();
             }}
-            onKeyDown={(e) => symbolsArr.includes(e.key) && e.preventDefault()}
+            onKeyDown={(e) =>
+              symbolsArrPhone.includes(e.key) && e.preventDefault()
+            }
             type="number"
             value={values.ContactMobileNo}
             onChange={handleInputChange}
@@ -199,7 +202,9 @@ const VendorForm = ({ createAccount, editAccount, setOpenPopup }) => {
             onWheelCapture={(e) => {
               e.target.blur();
             }}
-            onKeyDown={(e) => symbolsArr.includes(e.key) && e.preventDefault()}
+            onKeyDown={(e) =>
+              symbolsArrPhone.includes(e.key) && e.preventDefault()
+            }
             type="number"
             value={values.OfficeNumber}
             onChange={handleInputChange}
@@ -212,7 +217,9 @@ const VendorForm = ({ createAccount, editAccount, setOpenPopup }) => {
             onWheelCapture={(e) => {
               e.target.blur();
             }}
-            onKeyDown={(e) => symbolsArr.includes(e.key) && e.preventDefault()}
+            onKeyDown={(e) =>
+              symbolsArrPhone.includes(e.key) && e.preventDefault()
+            }
             type="number"
             onChange={handleInputChange}
             errors={errors.OfficeFax}
