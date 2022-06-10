@@ -1,4 +1,8 @@
 import {
+  GET_ACTIVE_LEDGER_ACCOUNT_WISE_FAIL,
+  GET_ACTIVE_LEDGER_ACCOUNT_WISE_REQUEST,
+  GET_ACTIVE_LEDGER_ACCOUNT_WISE_RESET,
+  GET_ACTIVE_LEDGER_ACCOUNT_WISE_SUCCESS,
   GET_ALL_LEDGER_ACCOUNT_WISE_FAIL,
   GET_ALL_LEDGER_ACCOUNT_WISE_REQUEST,
   GET_ALL_LEDGER_ACCOUNT_WISE_RESET,
@@ -33,6 +37,21 @@ export const getListLedgerAccountWiseReducer = (state = {}, action) => {
     case GET_LIST_LEDGER_ACCOUNT_WISE_FAIL:
       return { loading: false, error: action.payload };
     case GET_LIST_LEDGER_ACCOUNT_WISE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const getActiveLedgerAccountWiseReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_ACTIVE_LEDGER_ACCOUNT_WISE_REQUEST:
+      return { loading: true };
+    case GET_ACTIVE_LEDGER_ACCOUNT_WISE_SUCCESS:
+      return { loading: false, activeLedgerAccountWise: action.payload };
+    case GET_ACTIVE_LEDGER_ACCOUNT_WISE_FAIL:
+      return { loading: false, error: action.payload };
+    case GET_ACTIVE_LEDGER_ACCOUNT_WISE_RESET:
       return {};
     default:
       return state;

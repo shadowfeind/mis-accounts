@@ -133,6 +133,7 @@ import {
   postOneTimeBillReducer,
 } from "./revenue/oneTimeBill/OneTimeBillReducers";
 import {
+  getActiveLedgerAccountWiseReducer,
   getAllLedgerAccountWiseReducer,
   getListLedgerAccountWiseReducer,
 } from "./revenue/ledgerAccountwise/LedgerAccountWiseReducers";
@@ -267,6 +268,7 @@ export const reducers = combineReducers({
   //LEDGER ACCOUNT WISE:
   getAllLedgerAccountWise: getAllLedgerAccountWiseReducer,
   getListLedgerAccountWise: getListLedgerAccountWiseReducer,
+  getActiveLedgerAccountWise: getActiveLedgerAccountWiseReducer,
 
   //HOLIDAY REDUCER
   holiday: getAllHoliday,
