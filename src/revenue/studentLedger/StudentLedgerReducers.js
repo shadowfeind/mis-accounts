@@ -19,6 +19,18 @@ import {
   GET_UNIVERSITY_FACULTY_SUCCESS,
   GET_UNIVERSITY_FACULTY_FAIL,
   GET_UNIVERSITY_FACULTY_RESET,
+  GET_ACCOUNT_NAME_REQUEST,
+  GET_ACCOUNT_NAME_SUCCESS,
+  GET_ACCOUNT_NAME_FAIL,
+  GET_ACCOUNT_NAME_RESET,
+  GET_SINGLE_BILL_PRINT_REQUEST,
+  GET_SINGLE_BILL_PRINT_SUCCESS,
+  GET_SINGLE_BILL_PRINT_FAIL,
+  GET_SINGLE_BILL_PRINT_RESET,
+  GET_RECEIPT_PRINT_REQUEST,
+  GET_RECEIPT_PRINT_SUCCESS,
+  GET_RECEIPT_PRINT_FAIL,
+  GET_RECEIPT_PRINT_RESET,
 } from "./StudentLedgerConstants";
 
 export const getAllStudentLedgerReducer = (state = {}, action) => {
@@ -90,6 +102,51 @@ export const getUniversityFacultyReducer = (state = {}, action) => {
     case GET_UNIVERSITY_FACULTY_FAIL:
       return { loading: false, error: action.payload };
     case GET_UNIVERSITY_FACULTY_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const getAccountNameReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_ACCOUNT_NAME_REQUEST:
+      return { loading: true };
+    case GET_ACCOUNT_NAME_SUCCESS:
+      return { loading: false, accountName: action.payload };
+    case GET_ACCOUNT_NAME_FAIL:
+      return { loading: false, error: action.payload };
+    case GET_ACCOUNT_NAME_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const getReceiptPrintReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_RECEIPT_PRINT_REQUEST:
+      return { loading: true };
+    case GET_RECEIPT_PRINT_SUCCESS:
+      return { loading: false, receiptPrint: action.payload };
+    case GET_RECEIPT_PRINT_FAIL:
+      return { loading: false, error: action.payload };
+    case GET_RECEIPT_PRINT_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const getSingleBillPrintReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_SINGLE_BILL_PRINT_REQUEST:
+      return { loading: true };
+    case GET_SINGLE_BILL_PRINT_SUCCESS:
+      return { loading: false, singleBillPrint: action.payload };
+    case GET_SINGLE_BILL_PRINT_FAIL:
+      return { loading: false, error: action.payload };
+    case GET_SINGLE_BILL_PRINT_RESET:
       return {};
     default:
       return state;

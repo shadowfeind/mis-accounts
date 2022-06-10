@@ -28,13 +28,18 @@ import {
   GET_ACTIVE_STUDENT_ONLY_RESET,
   GET_ALL_STUDENT_LEDGER_RESET,
   GET_LIST_STUDENT_LEDGER_RESET,
+  GET_RECEIPT_PRINT_RESET,
+  GET_SINGLE_BILL_PRINT_RESET,
   GET_UNIVERSITY_FACULTY_RESET,
   POST_STUDENT_LEDGER_RESET,
 } from "./StudentLedgerConstants";
 import {
+  getAccountNameAction,
   getActiveStudentOnlyAction,
   getAllStudentLedgerAction,
   getListStudentLedgerAction,
+  getReceiptPrintAction,
+  getSingleBillPrintAction,
   postStudentLedgerAction,
 } from "./StudentLedgerActions";
 import {
@@ -42,6 +47,8 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import StudentLedgerTableCollapse from "./StudentLedgerTableCollapse";
+import StudentLedgerBillPrint from "./StudentLedgerBillPrint";
+import StudentLedgerRecipt from "./StudentLedgerRecipt";
 
 const useStyles = makeStyles((theme) => ({
   searchInput: {
@@ -126,11 +133,14 @@ const StudentLedger = ({ searchFilterModel }) => {
   const [student, setStudent] = useState("");
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
+  const [month, setMonth] = useState();
   const [fiscalYear, setFiscalYear] = useState("");
   const [amountPaid, setAmountPaid] = useState("");
   const [discount, setDiscount] = useState("");
   const [advanced, setAdvanced] = useState("");
   const [naration, setNaration] = useState("");
+  const [regKey, setRegKey] = useState("");
+  const [openPopup, setOpenPopup] = useState(false);
   const [errors, setErrors] = useState({});
   const [tableData, setTableData] = useState([]);
   const [filterFn, setFilterFn] = useState({
@@ -176,9 +186,20 @@ const StudentLedger = ({ searchFilterModel }) => {
     (state) => state.getUniversityFaculty
   );
 
+  const { accountName } = useSelector((state) => state.getAccountName);
+
+  const { singleBillPrint, error: singleBillPrintError } = useSelector(
+    (state) => state.getSingleBillPrint
+  );
+
+  const { receiptPrint, error: receiptPrintError } = useSelector(
+    (state) => state.getReceiptPrint
+  );
+
   const {
     listStudentLedger,
     loading,
+    loading: printReceiptLoading,
     error: listStudentLedgerError,
   } = useSelector((state) => state.getListStudentLedger);
   const { success: postStudentLedgerSuccess, error: postStudentLedgerError } =
@@ -200,6 +221,24 @@ const StudentLedger = ({ searchFilterModel }) => {
       type: "error",
     });
     dispatch({ type: GET_LIST_STUDENT_LEDGER_RESET });
+  }
+
+  if (singleBillPrintError) {
+    setNotify({
+      isOpen: true,
+      message: singleBillPrintError,
+      type: "error",
+    });
+    dispatch({ type: GET_SINGLE_BILL_PRINT_RESET });
+  }
+
+  if (receiptPrintError) {
+    setNotify({
+      isOpen: true,
+      message: receiptPrintError,
+      type: "error",
+    });
+    dispatch({ type: GET_RECEIPT_PRINT_RESET });
   }
 
   if (postStudentLedgerSuccess) {
@@ -247,6 +286,10 @@ const StudentLedger = ({ searchFilterModel }) => {
   useEffect(() => {
     dispatch({ type: "GET_LINK", payload: "/revenue" });
   }, []);
+
+  // useEffect(() => {
+  //   dispatch(getAccountNameAction());
+  // }, []);
 
   useEffect(() => {
     if (studentLedger) {
@@ -339,7 +382,27 @@ const StudentLedger = ({ searchFilterModel }) => {
         listStudentLedger?.searchFilterModel
       )
     );
+    setOpenPopup(true);
   };
+
+  useEffect(
+    (code, id) => {
+      if (singleBillPrint) {
+        dispatch(
+          getSingleBillPrintAction(
+            code,
+            classId,
+            acaYear,
+            student,
+            fiscalYear,
+            month,
+            id
+          )
+        );
+      }
+    },
+    [singleBillPrint]
+  );
 
   return (
     <>
@@ -465,9 +528,22 @@ const StudentLedger = ({ searchFilterModel }) => {
               <TableContainer className={classes.table}>
                 <TblHead />
                 <TableBody>
-                  {tableDataAfterPagingAndSorting().map((item) => (
-                    <StudentLedgerTableCollapse item={item} key={item.$id} />
-                  ))}
+                  {listStudentLedger?.studentLedgerModelLstsForStudent?.map(
+                    (item) => (
+                      <StudentLedgerTableCollapse
+                        item={item}
+                        key={item.$id}
+                        ddlClass={
+                          listStudentLedger?.searchFilterModel?.ddlClass
+                        }
+                        ddlNpMonth={
+                          listStudentLedger?.searchFilterModel?.ddlnpMonth
+                        }
+                        accountName={accountName}
+                        setOpenPopup={setOpenPopup}
+                      />
+                    )
+                  )}
                 </TableBody>
               </TableContainer>
             )}
@@ -493,9 +569,9 @@ const StudentLedger = ({ searchFilterModel }) => {
                 <Grid item xs={3}>
                   <InputControl
                     disabled
-                    label="Discount in Total"
+                    label="Balance Due"
                     value={
-                      listStudentLedger?.studentLedgerModelLstsForStudent[
+                      (listStudentLedger?.studentLedgerModelLstsForStudent[
                         listStudentLedger?.studentLedgerModelLstsForStudent
                           ?.length - 1
                       ]?.Balance > 0
@@ -503,7 +579,9 @@ const StudentLedger = ({ searchFilterModel }) => {
                             listStudentLedger?.studentLedgerModelLstsForStudent
                               ?.length - 1
                           ]?.Balance?.toFixed(2)
-                        : "0"
+                        : "0") -
+                      amountPaid -
+                      discount
                     }
                   />
                 </Grid>
@@ -553,7 +631,17 @@ const StudentLedger = ({ searchFilterModel }) => {
                     onWheelCapture={(e) => {
                       e.target.blur();
                     }}
-                    onChange={(e) => setAmountPaid(e.target.value)}
+                    onChange={(e) =>
+                      e.target.value <=
+                      listStudentLedger?.studentLedgerModelLstsForStudent[
+                        listStudentLedger?.studentLedgerModelLstsForStudent
+                          ?.length - 1
+                      ]?.Balance
+                        ? setAmountPaid(e.target.value)
+                        : alert(
+                            "Please fill Amount less than or equal to Previous Balance "
+                          )
+                    }
                   />
                 </Grid>
 
@@ -567,7 +655,17 @@ const StudentLedger = ({ searchFilterModel }) => {
                     onWheelCapture={(e) => {
                       e.target.blur();
                     }}
-                    onChange={(e) => setDiscount(e.target.value)}
+                    onChange={(e) =>
+                      e.target.value <=
+                      listStudentLedger?.studentLedgerModelLstsForStudent[
+                        listStudentLedger?.studentLedgerModelLstsForStudent
+                          ?.length - 1
+                      ]?.Balance
+                        ? setDiscount(e.target.value)
+                        : alert(
+                            "Please fill Amount less than or equal to Previous Balance "
+                          )
+                    }
                     onKeyDown={(e) =>
                       symbolsArr.includes(e.key) && e.preventDefault()
                     }
@@ -621,10 +719,84 @@ const StudentLedger = ({ searchFilterModel }) => {
                 </Grid>
               </Grid>
             )}
-            {listStudentLedger && <TblPagination />}
           </>
         )}
       </CustomContainer>
+      {/* <Popup
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+        title="Print Student Ledger Bill"
+      >
+        <StudentLedgerBillPrint
+          date={singleBillPrint}
+          dbModel={singleBillPrint}
+          classDdl={ddlClass}
+          classId={classId}
+          ddlAcaYear={academicYearDdl}
+          acaYear={acaYear}
+          ddlNpMonth={listStudentLedger?.searchFilterModel?.ddlnpMonth}
+          // voucher={singleBillPrint}
+          // //   feeStructure={feeStructure}
+          // monthlyFee={singleBillPrint}
+          // extraFee={extraFee}
+          setOpenPopup={setOpenPopup}
+        />
+      </Popup> */}
+      <Popup
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+        title="Print Student Ledger Reciept"
+      >
+        {printReceiptLoading ? (
+          <LoadingComp />
+        ) : (
+          <>
+            <StudentLedgerRecipt
+              regKey={
+                listStudentLedger &&
+                listStudentLedger?.studentLedgerModelLstsForStudent
+                  ?.RegistrationKey
+              }
+              printReceipt={
+                listStudentLedger && listStudentLedger?.studentLedgerModel
+              }
+              date={listStudentLedger && listStudentLedger?.studentLedgerModel}
+              ddlClass={studentLedger?.ddlClass}
+              iDFiscalYear={listStudentLedger?.searchFilterModel?.IDFiscalYear}
+              fiscalYearDdl={
+                listStudentLedger?.searchFilterModel?.ddlAccountFiscalYear
+              }
+              ddlAcademicYear={studentLedger?.ddlAcademicYear}
+              idYear={
+                listStudentLedger?.studentLedgerModelLstsForStudent
+                  ?.idAcademicYear
+              }
+              idClass={studentLedger?.idClass}
+              setOpenPopup={setOpenPopup}
+              prevBal={
+                listStudentLedger?.studentLedgerModelLstsForStudent[
+                  listStudentLedger?.studentLedgerModelLstsForStudent?.length -
+                    1
+                ]?.Balance
+              }
+              amountPaid={amountPaid}
+              balDue={
+                (listStudentLedger?.studentLedgerModelLstsForStudent[
+                  listStudentLedger?.studentLedgerModelLstsForStudent?.length -
+                    1
+                ]?.Balance > 0
+                  ? listStudentLedger?.studentLedgerModelLstsForStudent[
+                      listStudentLedger?.studentLedgerModelLstsForStudent
+                        ?.length - 1
+                    ]?.Balance?.toFixed(2)
+                  : "0") -
+                amountPaid -
+                discount
+              }
+            />
+          </>
+        )}
+      </Popup>
       <Notification notify={notify} setNotify={setNotify} />
     </>
   );

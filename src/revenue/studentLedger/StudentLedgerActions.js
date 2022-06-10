@@ -1,6 +1,9 @@
 import { axiosInstance, tokenConfig } from "../../constants";
 
 import {
+  GET_ACCOUNT_NAME_FAIL,
+  GET_ACCOUNT_NAME_REQUEST,
+  GET_ACCOUNT_NAME_SUCCESS,
   GET_ACTIVE_STUDENT_ONLY_FAIL,
   GET_ACTIVE_STUDENT_ONLY_REQUEST,
   GET_ACTIVE_STUDENT_ONLY_SUCCESS,
@@ -10,6 +13,12 @@ import {
   GET_LIST_STUDENT_LEDGER_FAIL,
   GET_LIST_STUDENT_LEDGER_REQUEST,
   GET_LIST_STUDENT_LEDGER_SUCCESS,
+  GET_RECEIPT_PRINT_FAIL,
+  GET_RECEIPT_PRINT_REQUEST,
+  GET_RECEIPT_PRINT_SUCCESS,
+  GET_SINGLE_BILL_PRINT_FAIL,
+  GET_SINGLE_BILL_PRINT_REQUEST,
+  GET_SINGLE_BILL_PRINT_SUCCESS,
   GET_UNIVERSITY_FACULTY_FAIL,
   GET_UNIVERSITY_FACULTY_REQUEST,
   GET_UNIVERSITY_FACULTY_SUCCESS,
@@ -155,3 +164,65 @@ export const getUniversityFacultyAction = (year) => async (dispatch) => {
     });
   }
 };
+
+export const getAccountNameAction = () => async (dispatch) => {
+  try {
+    dispatch({ type: GET_ACCOUNT_NAME_REQUEST });
+
+    const { data } = await axiosInstance.get(
+      `/api/StudentLedger/GetAccountNameJsonList`,
+      tokenConfig()
+    );
+
+    dispatch({ type: GET_ACCOUNT_NAME_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: GET_ACCOUNT_NAME_FAIL,
+      payload: error?.response?.data?.Message
+        ? error?.response?.data?.Message
+        : error?.message,
+    });
+  }
+};
+
+export const getSingleBillPrintAction =
+  (code, classId, acaYear, regKey, fiscalYear, month) => async (dispatch) => {
+    try {
+      dispatch({ type: GET_SINGLE_BILL_PRINT_REQUEST });
+
+      const { data } = await axiosInstance.get(
+        `/api/StudentLedger/GetSingleBillPrint?accountSubmitCode=${code}&idClass=${classId}&idAcademicYear=${acaYear}&registrationKey=${regKey}&idFiscalYear=${fiscalYear}&idMonth=${month}&company=2&searchKey=1`,
+        tokenConfig()
+      );
+
+      dispatch({ type: GET_SINGLE_BILL_PRINT_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: GET_SINGLE_BILL_PRINT_FAIL,
+        payload: error?.response?.data?.Message
+          ? error?.response?.data?.Message
+          : error?.message,
+      });
+    }
+  };
+
+export const getReceiptPrintAction =
+  (code, regKey, startDate, endDate, ipValue, dateTime) => async (dispatch) => {
+    try {
+      dispatch({ type: GET_RECEIPT_PRINT_REQUEST });
+
+      const { data } = await axiosInstance.get(
+        `/api/StudentLedger/GetReceiptPrint?idSubmitCode=${code}&registrationKey=${regKey}&startDate=${startDate}&endDate=${endDate}&ipvalue=${ipValue}&lessThanReceiptDateAndTime=${dateTime}&searchKey=1`,
+        tokenConfig()
+      );
+
+      dispatch({ type: GET_RECEIPT_PRINT_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: GET_RECEIPT_PRINT_FAIL,
+        payload: error?.response?.data?.Message
+          ? error?.response?.data?.Message
+          : error?.message,
+      });
+    }
+  };
