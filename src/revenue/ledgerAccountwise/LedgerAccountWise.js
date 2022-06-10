@@ -38,6 +38,7 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import LedgerAccountWiseTableCollapse from "./LedgerAccountWiseTableCollapse";
+import { axiosInstance, tokenConfig } from "../../constants";
 
 const useStyles = makeStyles((theme) => ({
   searchInput: {
@@ -73,6 +74,10 @@ const LedgerAccountWise = () => {
   const [tableData, setTableData] = useState([]);
   const [openPopup, setOpenPopup] = useState(false);
   const [currentSearchQuery, setCurrentSearchQuery] = useState("");
+
+  //this code will be deleted soon
+  const [accountType, setAccountType] = useState([]);
+  //this code will be deleted soon
 
   const [filterFn, setFilterFn] = useState({
     fn: (item) => {
@@ -156,6 +161,27 @@ const LedgerAccountWise = () => {
         listLedgerAccountWise?.ledgerAccountWiseModelLstsWithoutFiscalYear
       );
     }
+    //this code will be deleted soon
+    if (
+      listLedgerAccountWise?.ledgerAccountWiseModelLstsWithoutFiscalYear
+        ?.length > 1
+    ) {
+      const fetchData = async () => {
+        try {
+          const { data } = await axiosInstance.get(
+            `/api/LedgerAccountWise/GetAccountTypeJsonList?searchkey=0`,
+            tokenConfig()
+          );
+          setAccountType(data);
+        } catch (error) {
+          console.log(error);
+          setAccountType("");
+        }
+      };
+
+      fetchData();
+    }
+    //this code will be deleted soon
   }, [listLedgerAccountWise?.ledgerAccountWiseModelLstsWithoutFiscalYear]);
 
   useEffect(() => {
@@ -329,6 +355,7 @@ const LedgerAccountWise = () => {
                     <LedgerAccountWiseTableCollapse
                       item={item}
                       key={item.$id}
+                      accountType={accountType}
                       i={i}
                     />
                   ))}

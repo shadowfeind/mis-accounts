@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { TableRow, TableCell } from "@material-ui/core";
 import { axiosInstance, tokenConfig } from "../../constants";
 
-const LedgerAccountWiseTableCollapse = ({ item, i }) => {
+const LedgerAccountWiseTableCollapse = ({ item, i, accountType }) => {
   const [studentName, setStudentName] = useState("");
+  const [account, setAccount] = useState("");
   useEffect(() => {
     if (i !== 0) {
       const fetchData = async () => {
@@ -19,6 +20,12 @@ const LedgerAccountWiseTableCollapse = ({ item, i }) => {
         }
       };
 
+      const newAccountType = accountType?.filter(
+        (x) => x.val === item.IDAccountType
+      );
+      if (newAccountType?.length > 0) {
+        setAccount(newAccountType[0]?.label);
+      }
       fetchData();
     }
   }, []);
@@ -29,12 +36,7 @@ const LedgerAccountWiseTableCollapse = ({ item, i }) => {
         <TableCell>{i + 1}</TableCell>
         <TableCell>{item.TransactionDate?.slice(0, 10)}</TableCell>
         <TableCell>{studentName}</TableCell>
-        <TableCell>
-          {/* {item.IDAccountType &&
-            apiCallerForLedger(
-              `/api/LedgerAccountWise/GetAccountTypeJsonList?searchkey=${item.IDAccountType}`
-            )} */}
-        </TableCell>
+        <TableCell>{account}</TableCell>
         <TableCell>{item.VoucherBillNo}</TableCell>
         <TableCell>{item.AccountType}</TableCell>
         <TableCell>{item.TransactionType}</TableCell>
