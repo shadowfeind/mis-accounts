@@ -53,7 +53,8 @@ const useStyles = makeStyles((theme) => ({
 const tableHeader = [
   { id: "S.No.", label: "S.No." },
   { id: "TransactionDate", label: "TransactionDate" },
-  { id: "AccountName", label: "AccountName" },
+  { id: "RegistrationKey", label: "Student Name" },
+  { id: "IDAccountType", label: "Account Name" },
   { id: "VoucherBillNo", label: "Bill No." },
   { id: "AccountType", label: "A/C Type" },
   { id: "TransactionType", label: "Dr/Cr" },
@@ -65,6 +66,7 @@ const tableHeader = [
 const LedgerAccountWise = () => {
   const [fiscalYearDdl, setFiscalYearDdl] = useState([]);
   const [fiscalYear, setFiscalYear] = useState("");
+  const [searchAccount, setSearchAccount] = useState("");
   const [date, setDate] = useState();
   const [endDate, setEndDate] = useState();
   const [errors, setErrors] = useState([]);
@@ -149,10 +151,12 @@ const LedgerAccountWise = () => {
   }, []);
 
   useEffect(() => {
-    if (listLedgerAccountWise) {
-      setTableData(listLedgerAccountWise?.ledgerAccountWiseModelLsts);
+    if (listLedgerAccountWise?.ledgerAccountWiseModelLstsWithoutFiscalYear) {
+      setTableData(
+        listLedgerAccountWise?.ledgerAccountWiseModelLstsWithoutFiscalYear
+      );
     }
-  }, [listLedgerAccountWise]);
+  }, [listLedgerAccountWise?.ledgerAccountWiseModelLstsWithoutFiscalYear]);
 
   useEffect(() => {
     dispatch({ type: "GET_LINK", payload: "/revenue" });
@@ -161,6 +165,7 @@ const LedgerAccountWise = () => {
   const validate = () => {
     let temp = {};
     temp.fiscalYear = !fiscalYear ? "This feild is required" : "";
+    temp.searchAccount = !searchAccount ? "This feild is required" : "";
 
     setErrors({ ...temp });
     return Object.values(temp).every((x) => x === "");
@@ -175,19 +180,19 @@ const LedgerAccountWise = () => {
     tableDataAfterPagingAndSorting,
   } = useCustomTable(tableData, tableHeader, filterFn);
 
-  const handleSearch = (e) => {
-    setFilterFn({
-      fn: (item) => {
-        if (e.target.value === "") {
-          return item;
-        } else {
-          return item.filter((x) =>
-            x.AccountName.toLowerCase().includes(e.target.value?.toLowerCase())
-          );
-        }
-      },
-    });
-  };
+  // const handleSearch = (e) => {
+  //   setFilterFn({
+  //     fn: (item) => {
+  //       if (e.target.value === "") {
+  //         return item;
+  //       } else {
+  //         return item.filter((x) =>
+  //           x.AccountName.toLowerCase().includes(e.target.value?.toLowerCase())
+  //         );
+  //       }
+  //     },
+  //   });
+  // };
 
   const handleChange = (e) => {
     if (e.length >= 2) {
@@ -196,15 +201,19 @@ const LedgerAccountWise = () => {
     }
   };
 
-  const handleOptionChange = ({ newInputValue }) => {
-    dispatch(
-      getListLedgerAccountWiseAction(newInputValue, date, endDate, fiscalYear)
-    );
+  const handleOptionChange = (newInputValue, reason) => {
+    if (reason == "clear") {
+      setSearchAccount("");
+    } else {
+      setSearchAccount(newInputValue.val);
+    }
   };
 
-  const handleListSearch = ({ id }) => {
+  const handleListSearch = () => {
     if (validate()) {
-      dispatch(getListLedgerAccountWiseAction(id, date, endDate, fiscalYear));
+      dispatch(
+        getListLedgerAccountWiseAction(searchAccount, date, endDate, fiscalYear)
+      );
     }
   };
   return (
@@ -229,8 +238,8 @@ const LedgerAccountWise = () => {
                 }
                 getOptionLabel={(option) => option.label}
                 style={{ width: 300 }}
-                onChange={(event, newInputValue) =>
-                  handleOptionChange(newInputValue)
+                onChange={(event, newInputValue, reason) =>
+                  handleOptionChange(newInputValue, reason)
                 }
                 renderInput={(params) => (
                   <TextField
@@ -238,6 +247,8 @@ const LedgerAccountWise = () => {
                     label="Search Account Name"
                     onChange={(e) => handleChange(e.target.value)}
                     variant="outlined"
+                    helperText={errors.searchAccount}
+                    error={errors.searchAccount && true}
                   />
                 )}
               />
@@ -291,7 +302,7 @@ const LedgerAccountWise = () => {
           </Grid>
         </Toolbar>
         <div style={{ height: "15px" }}></div>
-        <Toolbar>
+        {/* <Toolbar>
           <InputControl
             className={classes.searchInput}
             label="Search Ledger Account Wise by Name"
@@ -304,7 +315,7 @@ const LedgerAccountWise = () => {
             }}
             onChange={handleSearch}
           />
-        </Toolbar>
+        </Toolbar> */}
         {loading ? (
           <LoadingComp />
         ) : (
@@ -314,10 +325,11 @@ const LedgerAccountWise = () => {
                 <TblHead />
 
                 <TableBody>
-                  {tableDataAfterPagingAndSorting()?.map((item) => (
+                  {tableDataAfterPagingAndSorting()?.map((item, i) => (
                     <LedgerAccountWiseTableCollapse
                       item={item}
                       key={item.$id}
+                      i={i}
                     />
                   ))}
                 </TableBody>
