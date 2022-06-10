@@ -8,10 +8,13 @@ import {
   TableCell,
   Toolbar,
   Grid,
+  TextField,
 } from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
 import SelectControl from "../../components/controls/SelectControl";
 import useCustomTable from "../../customHooks/useCustomTable";
 import {
+  getActiveLedgerAccountWiseAction,
   getAllLedgerAccountWiseAction,
   getListLedgerAccountWiseAction,
 } from "./LedgerAccountWiseActions";
@@ -25,6 +28,7 @@ import Notification from "../../components/Notification";
 import CustomContainer from "../../components/CustomContainer";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  GET_ACTIVE_LEDGER_ACCOUNT_WISE_RESET,
   GET_ALL_LEDGER_ACCOUNT_WISE_RESET,
   GET_LIST_LEDGER_ACCOUNT_WISE_RESET,
 } from "./LedgerAccountWiseConstants";
@@ -66,6 +70,8 @@ const LedgerAccountWise = () => {
   const [errors, setErrors] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [openPopup, setOpenPopup] = useState(false);
+  const [currentSearchQuery, setCurrentSearchQuery] = useState("");
+
   const [filterFn, setFilterFn] = useState({
     fn: (item) => {
       return item;
@@ -91,6 +97,9 @@ const LedgerAccountWise = () => {
     loading,
   } = useSelector((state) => state.getListLedgerAccountWise);
 
+  const { activeLedgerAccountWise, error: activeLedgerAccountWiseError } =
+    useSelector((state) => state.getActiveLedgerAccountWise);
+
   if (error) {
     setNotify({
       isOpen: true,
@@ -107,6 +116,15 @@ const LedgerAccountWise = () => {
       type: "error",
     });
     dispatch({ type: GET_LIST_LEDGER_ACCOUNT_WISE_RESET });
+  }
+
+  if (activeLedgerAccountWiseError) {
+    setNotify({
+      isOpen: true,
+      message: activeLedgerAccountWiseError,
+      type: "error",
+    });
+    dispatch({ type: GET_ACTIVE_LEDGER_ACCOUNT_WISE_RESET });
   }
 
   useEffect(() => {
@@ -148,6 +166,8 @@ const LedgerAccountWise = () => {
     return Object.values(temp).every((x) => x === "");
   };
 
+  const test = [];
+
   const {
     TableContainer,
     TblHead,
@@ -168,7 +188,21 @@ const LedgerAccountWise = () => {
       },
     });
   };
-  const handleListSearch = (id) => {
+
+  const handleChange = (e) => {
+    if (e.length >= 2) {
+      setCurrentSearchQuery(e);
+      dispatch(getActiveLedgerAccountWiseAction(e));
+    }
+  };
+
+  const handleOptionChange = ({ newInputValue }) => {
+    dispatch(
+      getListLedgerAccountWiseAction(newInputValue, date, endDate, fiscalYear)
+    );
+  };
+
+  const handleListSearch = ({ id }) => {
     if (validate()) {
       dispatch(getListLedgerAccountWiseAction(id, date, endDate, fiscalYear));
     }
@@ -186,6 +220,26 @@ const LedgerAccountWise = () => {
                 onChange={(e) => setFiscalYear(e.target.value)}
                 options={fiscalYearDdl}
                 errors={errors.fiscalYear}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <Autocomplete
+                options={
+                  activeLedgerAccountWise ? activeLedgerAccountWise : test
+                }
+                getOptionLabel={(option) => option.label}
+                style={{ width: 300 }}
+                onChange={(event, newInputValue) =>
+                  handleOptionChange(newInputValue)
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Search Account Name"
+                    onChange={(e) => handleChange(e.target.value)}
+                    variant="outlined"
+                  />
+                )}
               />
             </Grid>
             <Grid item xs={3}>
