@@ -65,6 +65,9 @@ const StudentDuePrint = ({
               Fiscal Year:
               <br /> {year && year[0]?.Value}{" "}
             </h6>
+            <h6>
+              <strong>Student Due</strong>
+            </h6>
           </Grid>
         </Grid>
         <div className="student-admit-table-container">

@@ -287,9 +287,10 @@ const StudentLedger = ({ searchFilterModel }) => {
     dispatch({ type: "GET_LINK", payload: "/revenue" });
   }, []);
 
-  // useEffect(() => {
-  //   dispatch(getAccountNameAction());
-  // }, []);
+  useEffect(() => {
+    dispatch({ type: GET_LIST_STUDENT_LEDGER_RESET });
+    dispatch(getAccountNameAction());
+  }, []);
 
   useEffect(() => {
     if (studentLedger) {
@@ -309,6 +310,12 @@ const StudentLedger = ({ searchFilterModel }) => {
         studentLedger?.searchFilterModel?.studentLedgerModel?.EndDate?.slice(
           0,
           10
+        )
+      );
+      dispatch(
+        getActiveStudentOnlyAction(
+          studentLedger?.ddlAcademicYear[0]?.Key,
+          studentLedger?.ddlClass[0]?.Key
         )
       );
     }
@@ -349,6 +356,26 @@ const StudentLedger = ({ searchFilterModel }) => {
     setDdlStudent([]);
   };
 
+  const handleYearChange = (value) => {
+    setAcaYear(value);
+    if ((value, classId)) {
+      dispatch(getActiveStudentOnlyAction(value, classId));
+    }
+    setStudent("");
+    setDdlStudent([]);
+  };
+
+  const handleStudent = (value) => {
+    setStudent(value);
+  };
+
+  useEffect(() => {
+    if (activeStudentOnly) {
+      setDdlStudent(activeStudentOnly);
+      setStudent(activeStudentOnly[0]?.Key);
+    }
+  }, [activeStudentOnly]);
+
   const validate = () => {
     let temp = {};
 
@@ -385,24 +412,24 @@ const StudentLedger = ({ searchFilterModel }) => {
     setOpenPopup(true);
   };
 
-  useEffect(
-    (code, id) => {
-      if (singleBillPrint) {
-        dispatch(
-          getSingleBillPrintAction(
-            code,
-            classId,
-            acaYear,
-            student,
-            fiscalYear,
-            month,
-            id
-          )
-        );
-      }
-    },
-    [singleBillPrint]
-  );
+  // useEffect(
+  //   (code, id) => {
+  //     if (singleBillPrint) {
+  //       dispatch(
+  //         getSingleBillPrintAction(
+  //           code,
+  //           classId,
+  //           acaYear,
+  //           student,
+  //           fiscalYear,
+  //           month,
+  //           id
+  //         )
+  //       );
+  //     }
+  //   },
+  //   [singleBillPrint]
+  // );
 
   return (
     <>
@@ -424,7 +451,7 @@ const StudentLedger = ({ searchFilterModel }) => {
                 name="AcademicYear"
                 label="Academic Year"
                 value={acaYear}
-                onChange={(e) => setAcaYear(e.target.value)}
+                onChange={(e) => handleYearChange(e.target.value)}
                 options={academicYearDdl}
                 errors={errors.acaYear}
               />
@@ -445,7 +472,7 @@ const StudentLedger = ({ searchFilterModel }) => {
                 name="student"
                 label="Student"
                 value={student}
-                onChange={(e) => setStudent(e.target.value)}
+                onChange={(e) => handleStudent(e.target.value)}
                 options={ddlStudent}
                 // errors={errors.student}
               />
@@ -552,7 +579,7 @@ const StudentLedger = ({ searchFilterModel }) => {
                 <Grid item xs={3}>
                   <InputControl
                     disabled
-                    label="Amount Paid"
+                    label="Previous Balance"
                     value={
                       listStudentLedger?.studentLedgerModelLstsForStudent[
                         listStudentLedger?.studentLedgerModelLstsForStudent
@@ -753,9 +780,14 @@ const StudentLedger = ({ searchFilterModel }) => {
           <>
             <StudentLedgerRecipt
               regKey={
+                listStudentLedger?.studentLedgerModelLstsForStudent[
+                  listStudentLedger?.studentLedgerModelLstsForStudent?.length -
+                    1
+                ]?.RegistrationKey
+              }
+              word={
                 listStudentLedger &&
                 listStudentLedger?.studentLedgerModelLstsForStudent
-                  ?.RegistrationKey
               }
               printReceipt={
                 listStudentLedger && listStudentLedger?.studentLedgerModel
@@ -779,7 +811,12 @@ const StudentLedger = ({ searchFilterModel }) => {
                     1
                 ]?.Balance
               }
-              amountPaid={amountPaid}
+              amountPaid={
+                listStudentLedger?.studentLedgerModelLstsForStudent[
+                  listStudentLedger?.studentLedgerModelLstsForStudent?.length -
+                    1
+                ]?.Dr
+              }
               balDue={
                 (listStudentLedger?.studentLedgerModelLstsForStudent[
                   listStudentLedger?.studentLedgerModelLstsForStudent?.length -

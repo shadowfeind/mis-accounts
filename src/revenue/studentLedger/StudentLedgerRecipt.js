@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Grid } from "@material-ui/core";
 import Notification from "../../components/Notification";
+import inWords from "../../helpers/numToWords";
 import { API_URL } from "../../constants";
 import { useReactToPrint } from "react-to-print";
 import "../feeCollection/FeeCollectionPrint.css";
@@ -21,6 +22,7 @@ const StudentLedgerRecipt = ({
   prevBal,
   amountPaid,
   balDue,
+  word,
 }) => {
   const [notify, setNotify] = useState({
     isOpen: false,
@@ -95,12 +97,8 @@ const StudentLedgerRecipt = ({
                   </th>
                   <th style={{ width: "15%", textAlign: "left" }}>Class</th>
                   <th style={{ width: "10%", textAlign: "left" }}>Reg No.</th>
-                  <th style={{ width: "15%", textAlign: "left" }}>
-                    Academic Year
-                  </th>
-                  <th style={{ width: "15%", textAlign: "left" }}>
-                    Collection(Rs)
-                  </th>
+                  <th style={{ width: "15%", textAlign: "left" }}></th>
+                  <th style={{ width: "15%", textAlign: "left" }}></th>
                 </tr>
               </thead>
               <tbody>
@@ -109,8 +107,21 @@ const StudentLedgerRecipt = ({
                   <td>{printReceipt?.StudentName}</td>
                   <td>{classID?.length > 0 && classID[0]?.Value}</td>
                   <td>{regKey}</td>
-                  {/* <td>{s.AcademicYear}</td>
-                  <td>{Number(s.Dr)?.toFixed(2)}</td> */}
+                  <td>
+                    <h4>a sum of Rs.&nbsp;{amountPaid} </h4>
+                  </td>
+                  <td>
+                    <h6>
+                      In words:{" "}
+                      <strong>
+                        {inWords(
+                          word?.reduce((acc) => {
+                            return acc + amountPaid;
+                          }, 0)
+                        )}
+                      </strong>
+                    </h6>
+                  </td>
                 </tr>
 
                 <tr>
