@@ -571,11 +571,11 @@ const StudentLedger = ({ searchFilterModel }) => {
                     value={
                       listStudentLedger?.studentLedgerModelLstsForStudent[
                         listStudentLedger?.studentLedgerModelLstsForStudent
-                          ?.length - 1
+                          ?.length - 2
                       ]?.Balance > 0
                         ? listStudentLedger?.studentLedgerModelLstsForStudent[
                             listStudentLedger?.studentLedgerModelLstsForStudent
-                              ?.length - 1
+                              ?.length - 2
                           ]?.Balance?.toFixed(2)
                         : "0"
                     }
