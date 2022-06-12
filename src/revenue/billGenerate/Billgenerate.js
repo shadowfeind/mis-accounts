@@ -334,7 +334,7 @@ const Billgenerate = () => {
                 </Grid>
               </Toolbar>
               <div style={{ height: "15px" }}></div>
-              <h3>Students</h3>
+
               <h3>Monthly Fee</h3>
               <MonthlyFeeStructure
                 admissionFee={blukEditBillGenerate?.monthlyFeeStructureLst}
@@ -353,7 +353,7 @@ const Billgenerate = () => {
                 currentFee={monthlyFee}
                 setCurrentFee={setMonthlyFee}
               />
-              <h3>Extra Activities Fee</h3>
+              <h3>Extra Fee</h3>
               <ExtraFeeStructure
                 regKey={
                   blukEditBillGenerate?.searchFilterModel?.RegistrationKey
@@ -388,7 +388,7 @@ const Billgenerate = () => {
                   disabled
                   variant="outlined"
                   name="Total"
-                  label="Total"
+                  label="Grand Total"
                 />
                 <TextField
                   value={narration}
@@ -396,15 +396,17 @@ const Billgenerate = () => {
                   variant="outlined"
                   name="Narration"
                   label="Narration"
+                  style={{ width: "50%", marginLeft: "15px" }}
                 />
                 <Button
                   variant="contained"
                   color="primary"
                   type="submit"
+                  disabled={postBillGenerateLoading}
                   style={{ margin: "10px 0 0 10px" }}
                   onClick={handleSubmit}
                 >
-                  SUBMIT
+                  {postBillGenerateLoading ? "...PROCESSING" : "SUBMIT"}
                 </Button>
               </div>
             </div>

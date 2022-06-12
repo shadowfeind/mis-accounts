@@ -11,6 +11,10 @@ import {
   POST_ONE_TIME_BILL_REQUEST,
   POST_ONE_TIME_BILL_RESET,
   POST_ONE_TIME_BILL_SUCCESS,
+  GET_PREVIOUS_BLC_REQUEST,
+  GET_PREVIOUS_BLC_SUCCESS,
+  GET_PREVIOUS_BLC_FAIL,
+  GET_PREVIOUS_BLC_RESET,
 } from "./OneTimeBillConstants";
 
 export const getAllOneTimeBillReducer = (state = {}, action) => {
@@ -55,6 +59,21 @@ export const postOneTimeBillReducer = (state = {}, action) => {
     case POST_ONE_TIME_BILL_FAIL:
       return { loading: false, error: action.payload };
     case POST_ONE_TIME_BILL_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const getPreviousBlcReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_PREVIOUS_BLC_REQUEST:
+      return { loading: true };
+    case GET_PREVIOUS_BLC_SUCCESS:
+      return { loading: false, previousBlc: action.payload };
+    case GET_PREVIOUS_BLC_FAIL:
+      return { loading: false, error: action.payload };
+    case GET_PREVIOUS_BLC_RESET:
       return {};
     default:
       return state;

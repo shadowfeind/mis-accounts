@@ -370,7 +370,7 @@ const AdmitStudent = () => {
                 currentFee={monthlyFee}
                 setCurrentFee={setMonthlyFee}
               />
-              <h3>Extra Activities Fee</h3>
+              <h3>Extra Fee</h3>
               <ExtraFeeStructure
                 regKey={
                   blukEditAdmitStudent?.searchFilterModel?.RegistrationKey
@@ -408,7 +408,7 @@ const AdmitStudent = () => {
                   disabled
                   variant="outlined"
                   name="Total"
-                  label="Total"
+                  label="Grand Total"
                 />
                 <TextField
                   value={narration}
@@ -416,15 +416,17 @@ const AdmitStudent = () => {
                   variant="outlined"
                   name="Narration"
                   label="Narration"
+                  style={{ marginLeft: "12px", width: "50%" }}
                 />
                 <Button
                   variant="contained"
                   color="primary"
                   type="submit"
+                  disabled={postAdmitStudentLoading}
                   style={{ margin: "10px 0 0 10px" }}
                   onClick={handleSubmit}
                 >
-                  SUBMIT
+                  {postAdmitStudentLoading ? "...PROCESSING" : "SUBMIT"}
                 </Button>
               </div>
             </div>

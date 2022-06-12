@@ -133,6 +133,7 @@ import {
 import {
   getAllOneTimeBillReducer,
   getBulkEditOneTimeBillReducer,
+  getPreviousBlcReducer,
   postOneTimeBillReducer,
 } from "./revenue/oneTimeBill/OneTimeBillReducers";
 import {
@@ -219,6 +220,7 @@ export const reducers = combineReducers({
   getAllOneTimeBill: getAllOneTimeBillReducer,
   getBulkEditOneTimeBill: getBulkEditOneTimeBillReducer,
   postOneTimeBill: postOneTimeBillReducer,
+  getPreviousBlc: getPreviousBlcReducer,
 
   //ADMISSION FACULTY FEE STRUCTURE REDUCERS:
   getAllAdmissionFacultyFeeStructure: getAllAdmissionFacultyFeeStructureReducer,

@@ -167,7 +167,6 @@ const OneTimeBill = () => {
   };
 
   const handleSubmit = () => {
-    debugger;
     dispatch(
       postOneTimeBillAction(
         monthlyFee,
@@ -309,7 +308,7 @@ const OneTimeBill = () => {
                 currentFee={monthlyFee}
                 setCurrentFee={setMonthlyFee}
               />
-              <h3>Extra Activities Fee</h3>
+              <h3>Extra Fee</h3>
               <ExtraFeeStructure
                 regKey={blukEditOneTimeBill?.searchFilterModel?.RegistrationKey}
                 idFacLink={blukEditOneTimeBill?.dbModel?.IDYearFacultyLink}
@@ -342,7 +341,7 @@ const OneTimeBill = () => {
                   disabled
                   variant="outlined"
                   name="Total"
-                  label="Total"
+                  label="Grand Total"
                 />
                 <TextField
                   value={narration}
@@ -350,6 +349,7 @@ const OneTimeBill = () => {
                   variant="outlined"
                   name="Narration"
                   label="Narration"
+                  style={{ marginLeft: "12px", width: "50%" }}
                 />
                 <Button
                   variant="contained"
@@ -357,8 +357,9 @@ const OneTimeBill = () => {
                   type="submit"
                   style={{ margin: "10px 0 0 10px" }}
                   onClick={handleSubmit}
+                  disabled={postOneTimeBillLoading}
                 >
-                  SUBMIT
+                  {postOneTimeBillLoading ? "...PROCESSING" : "SUBMIT"}
                 </Button>
               </div>
             </div>

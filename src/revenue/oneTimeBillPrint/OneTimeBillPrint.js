@@ -257,7 +257,7 @@ const OneTimeBillPrint = () => {
       <Popup
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
-        title="Bill Print"
+        title="One Time Bill Print"
       >
         <OneTimeBillPrintModal
           printOneTimeBill={printOneTimeBill}

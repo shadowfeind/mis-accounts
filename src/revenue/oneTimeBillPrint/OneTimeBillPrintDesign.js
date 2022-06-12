@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
 import "../admitStudent/AdmitStudentPrint.css";
 import inWords from "../../helpers/numToWords";
-import { API_URL } from "../../constants";
+import { API_URL, axiosInstance, tokenConfig } from "../../constants";
 
 const OneTimeBillPrintDesign = ({
   currentStudentBill,
@@ -14,6 +14,30 @@ const OneTimeBillPrintDesign = ({
   voucherBillNo,
   student,
 }) => {
+  const [prevBlc, setPrevBlc] = useState(0);
+  let tdToRender = [];
+
+  for (let i = currentStudentBill.length; i <= 5; i++) {
+    tdToRender.push(i);
+  }
+
+  useEffect(() => {
+    const fetchData = async (id) => {
+      try {
+        const { data } = await axiosInstance.get(
+          `/api/OneTimeBillPrint/GetPreviousBalance?idAdmissionRegistration=${id}`,
+          tokenConfig()
+        );
+
+        setPrevBlc(data.Balance);
+      } catch (error) {
+        console.log(error);
+        setPrevBlc(0);
+      }
+    };
+    fetchData(student?.RegistrationKey);
+  }, [student?.RegistrationKey]);
+
   return (
     <div className="student-print-container">
       <Grid container>
@@ -69,11 +93,26 @@ const OneTimeBillPrintDesign = ({
                   <td>{s.Total}</td>
                 </tr>
               ))}
-
+            {tdToRender &&
+              tdToRender.map((x) => (
+                <tr key={x}>
+                  <td height={30}></td>
+                  <td height={30}> </td>
+                  <td height={30}> </td>
+                </tr>
+              ))}
             <tr>
               <td></td>
               <td>Previous Balance</td>
-              <td>0.00</td>
+              <td>
+                {prevBlc &&
+                  prevBlc -
+                    currentStudentBill
+                      ?.reduce((acc, item) => {
+                        return acc + item.Total;
+                      }, 0)
+                      .toFixed(2)}
+              </td>
             </tr>
             <tr>
               <td></td>

@@ -6,6 +6,9 @@ import {
   GET_BULK_EDIT_ONE_TIME_BILL_FAIL,
   GET_BULK_EDIT_ONE_TIME_BILL_REQUEST,
   GET_BULK_EDIT_ONE_TIME_BILL_SUCCESS,
+  GET_PREVIOUS_BLC_REQUEST,
+  GET_PREVIOUS_BLC_RESET,
+  GET_PREVIOUS_BLC_SUCCESS,
   POST_ONE_TIME_BILL_FAIL,
   POST_ONE_TIME_BILL_REQUEST,
   POST_ONE_TIME_BILL_SUCCESS,
@@ -107,3 +110,23 @@ export const postOneTimeBillAction =
       });
     }
   };
+
+export const getPreviousBlcAction = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: GET_PREVIOUS_BLC_REQUEST });
+
+    const { data } = await axiosInstance.get(
+      `/api/OneTimeBillPrint/GetPreviousBalance?idAdmissionRegistration=${id}`,
+      tokenConfig()
+    );
+
+    dispatch({ type: GET_PREVIOUS_BLC_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: GET_PREVIOUS_BLC_RESET,
+      payload: error?.response?.data?.Message
+        ? error?.response?.data?.Message
+        : error?.message,
+    });
+  }
+};
