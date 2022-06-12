@@ -5,7 +5,7 @@ import Notification from "../../components/Notification";
 import inWords from "../../helpers/numToWords";
 import { API_URL } from "../../constants";
 import { useReactToPrint } from "react-to-print";
-import "../feeCollection/FeeCollectionPrint.css";
+
 import { getHeaderBannerAction } from "../../dashboard/DashboardActions";
 
 const StudentLedgerRecipt = ({
@@ -22,7 +22,6 @@ const StudentLedgerRecipt = ({
   prevBal,
   amountPaid,
   balDue,
-  word,
 }) => {
   const [notify, setNotify] = useState({
     isOpen: false,
@@ -61,7 +60,7 @@ const StudentLedgerRecipt = ({
 
   return (
     <>
-      <div className="fee-collection-container" ref={componentRef}>
+      <div ref={componentRef}>
         <div className="fee-collection">
           <Grid container>
             <Grid item xs={3}>
@@ -87,7 +86,7 @@ const StudentLedgerRecipt = ({
             </Grid>
           </Grid>
 
-          <div className="student-admit-table-container">
+          <div>
             <table>
               <thead>
                 <tr>
@@ -112,14 +111,7 @@ const StudentLedgerRecipt = ({
                   </td>
                   <td>
                     <h6>
-                      In words:{" "}
-                      <strong>
-                        {inWords(
-                          word?.reduce((acc) => {
-                            return acc + amountPaid;
-                          }, 0)
-                        )}
-                      </strong>
+                      In words: <strong>{inWords(amountPaid)}</strong>
                     </h6>
                   </td>
                 </tr>
@@ -136,8 +128,8 @@ const StudentLedgerRecipt = ({
               </tbody>
             </table>
           </div>
-          <div className="fee-collection-bottom-container">
-            <div className="fee-collection-bottom-container-signature">
+          <div>
+            <div>
               {" "}
               <Grid container>
                 <Grid item xs={4}></Grid>

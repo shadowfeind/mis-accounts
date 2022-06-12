@@ -107,20 +107,19 @@ const initialFormValues = {
 };
 
 const tableHeader = [
+  { id: "actions", label: "Actions", disableSorting: true },
   { id: "idDrCr", label: "idDrCr" },
   { id: "Voucher/BillNo", label: "Voucher/BillNo" },
   { id: "Class", label: "Class" },
   { id: "AccountForm", label: "Account Form" },
   { id: "BillMonth", label: "Month" },
   { id: "AccountName", label: "Account Name" },
-  { id: "IDAccountType", label: "IDAccountType" },
   { id: "TransactionDate", label: "Transaction Date" },
   { id: "TransactionType", label: "Transaction Type" },
   { id: "Narration", label: "Narration" },
   { id: "Dr(Rs)", label: "Dr(Rs)" },
   { id: "Cr(Rs)", label: "Cr(Rs)" },
   { id: "Balance", label: "Balance" },
-  { id: "actions", label: "Actions", disableSorting: true },
 ];
 
 const StudentLedger = ({ searchFilterModel }) => {
@@ -135,9 +134,9 @@ const StudentLedger = ({ searchFilterModel }) => {
   const [endDate, setEndDate] = useState();
   const [month, setMonth] = useState();
   const [fiscalYear, setFiscalYear] = useState("");
-  const [amountPaid, setAmountPaid] = useState("");
-  const [discount, setDiscount] = useState("");
-  const [advanced, setAdvanced] = useState("");
+  const [amountPaid, setAmountPaid] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [advanced, setAdvanced] = useState(0);
   const [naration, setNaration] = useState("");
   const [regKey, setRegKey] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
@@ -242,11 +241,6 @@ const StudentLedger = ({ searchFilterModel }) => {
   }
 
   if (postStudentLedgerSuccess) {
-    setNotify({
-      isOpen: true,
-      message: "Successfully Submitted",
-      type: "success",
-    });
     dispatch({ type: POST_STUDENT_LEDGER_RESET });
     dispatch(
       getListStudentLedgerAction(fiscalYear, student, startDate, endDate)
@@ -338,12 +332,6 @@ const StudentLedger = ({ searchFilterModel }) => {
   useEffect(() => {
     if (listStudentLedger) {
       setTableData(listStudentLedger?.studentLedgerModelLstsForStudent);
-      setAmountPaid(listStudentLedger?.studentLedgerModel?.AmountPaid);
-      setDiscount(listStudentLedger?.studentLedgerModel?.DiscountInTotal);
-      setAdvanced(listStudentLedger?.studentLedgerModel?.Advance);
-      setNaration(
-        listStudentLedger?.studentLedgerModel?.NarrationForAmountPaid
-      );
     }
   }, [listStudentLedger]);
 
@@ -785,10 +773,6 @@ const StudentLedger = ({ searchFilterModel }) => {
                     1
                 ]?.RegistrationKey
               }
-              word={
-                listStudentLedger &&
-                listStudentLedger?.studentLedgerModelLstsForStudent
-              }
               printReceipt={
                 listStudentLedger && listStudentLedger?.studentLedgerModel
               }
@@ -800,23 +784,20 @@ const StudentLedger = ({ searchFilterModel }) => {
               }
               ddlAcademicYear={studentLedger?.ddlAcademicYear}
               idYear={
-                listStudentLedger?.studentLedgerModelLstsForStudent
-                  ?.idAcademicYear
+                listStudentLedger?.studentLedgerModelLstsForStudent[
+                  listStudentLedger?.studentLedgerModelLstsForStudent?.length +
+                    1
+                ]?.IDAcademicYear
               }
               idClass={studentLedger?.idClass}
               setOpenPopup={setOpenPopup}
               prevBal={
                 listStudentLedger?.studentLedgerModelLstsForStudent[
                   listStudentLedger?.studentLedgerModelLstsForStudent?.length -
-                    1
+                    2
                 ]?.Balance
               }
-              amountPaid={
-                listStudentLedger?.studentLedgerModelLstsForStudent[
-                  listStudentLedger?.studentLedgerModelLstsForStudent?.length -
-                    1
-                ]?.Dr
-              }
+              amountPaid={amountPaid}
               balDue={
                 (listStudentLedger?.studentLedgerModelLstsForStudent[
                   listStudentLedger?.studentLedgerModelLstsForStudent?.length -
