@@ -119,8 +119,10 @@ import {
   getAllStudentLedgerReducer,
   getListStudentLedgerReducer,
   getReceiptPrintReducer,
+  getReverseEntryReducer,
   getSingleBillPrintReducer,
   getUniversityFacultyReducer,
+  postReverseEntryReducer,
   postStudentLedgerReducer,
 } from "./revenue/studentLedger/StudentLedgerReducers";
 import {
@@ -272,6 +274,8 @@ export const reducers = combineReducers({
   getAccountName: getAccountNameReducer,
   getReceiptPrint: getReceiptPrintReducer,
   getSingleBillPrint: getSingleBillPrintReducer,
+  getReverseEntry: getReverseEntryReducer,
+  postReverseEntry: postReverseEntryReducer,
 
   //LEDGER ACCOUNT WISE:
   getAllLedgerAccountWise: getAllLedgerAccountWiseReducer,

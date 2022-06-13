@@ -31,6 +31,14 @@ import {
   GET_RECEIPT_PRINT_SUCCESS,
   GET_RECEIPT_PRINT_FAIL,
   GET_RECEIPT_PRINT_RESET,
+  GET_REVERSE_ENTRY_REQUEST,
+  GET_REVERSE_ENTRY_SUCCESS,
+  GET_REVERSE_ENTRY_FAIL,
+  GET_REVERSE_ENTRY_RESET,
+  POST_REVERSE_ENTRY_REQUEST,
+  POST_REVERSE_ENTRY_SUCCESS,
+  POST_REVERSE_ENTRY_FAIL,
+  POST_REVERSE_ENTRY_RESET,
 } from "./StudentLedgerConstants";
 
 export const getAllStudentLedgerReducer = (state = {}, action) => {
@@ -147,6 +155,36 @@ export const getSingleBillPrintReducer = (state = {}, action) => {
     case GET_SINGLE_BILL_PRINT_FAIL:
       return { loading: false, error: action.payload };
     case GET_SINGLE_BILL_PRINT_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const getReverseEntryReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GET_REVERSE_ENTRY_REQUEST:
+      return { loading: true };
+    case GET_REVERSE_ENTRY_SUCCESS:
+      return { loading: false, reverseEntryPrint: action.payload };
+    case GET_REVERSE_ENTRY_FAIL:
+      return { loading: false, error: action.payload };
+    case GET_REVERSE_ENTRY_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const postReverseEntryReducer = (state = {}, action) => {
+  switch (action.type) {
+    case POST_REVERSE_ENTRY_REQUEST:
+      return { loading: true };
+    case POST_REVERSE_ENTRY_SUCCESS:
+      return { loading: false, success: true };
+    case POST_REVERSE_ENTRY_FAIL:
+      return { loading: false, error: action.payload };
+    case POST_REVERSE_ENTRY_RESET:
       return {};
     default:
       return state;

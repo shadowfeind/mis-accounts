@@ -16,12 +16,18 @@ import {
   GET_RECEIPT_PRINT_FAIL,
   GET_RECEIPT_PRINT_REQUEST,
   GET_RECEIPT_PRINT_SUCCESS,
+  GET_REVERSE_ENTRY_FAIL,
+  GET_REVERSE_ENTRY_REQUEST,
+  GET_REVERSE_ENTRY_SUCCESS,
   GET_SINGLE_BILL_PRINT_FAIL,
   GET_SINGLE_BILL_PRINT_REQUEST,
   GET_SINGLE_BILL_PRINT_SUCCESS,
   GET_UNIVERSITY_FACULTY_FAIL,
   GET_UNIVERSITY_FACULTY_REQUEST,
   GET_UNIVERSITY_FACULTY_SUCCESS,
+  POST_REVERSE_ENTRY_FAIL,
+  POST_REVERSE_ENTRY_REQUEST,
+  POST_REVERSE_ENTRY_SUCCESS,
   POST_STUDENT_LEDGER_FAIL,
   POST_STUDENT_LEDGER_REQUEST,
   POST_STUDENT_LEDGER_SUCCESS,
@@ -207,12 +213,12 @@ export const getSingleBillPrintAction =
   };
 
 export const getReceiptPrintAction =
-  (code, regKey, startDate, endDate, dateTime) => async (dispatch) => {
+  (code, regKey, startDate, endDate, ipValue, dateTime) => async (dispatch) => {
     try {
       dispatch({ type: GET_RECEIPT_PRINT_REQUEST });
 
       const { data } = await axiosInstance.get(
-        `/api/StudentLedger/GetReceiptPrint?idSubmitCode=${code}&registrationKey=${regKey}&startDate=${startDate}&endDate=${endDate}&ipvalue=4&lessThanReceiptDateAndTime=${dateTime}&searchKey=1`,
+        `/api/StudentLedger/GetReceiptPrint?idSubmitCode=${code}&registrationKey=${regKey}&startDate=${startDate}&endDate=${endDate}&ipvalue=${ipValue}&lessThanReceiptDateAndTime=${dateTime}&searchKey=1`,
         tokenConfig()
       );
 
@@ -226,3 +232,50 @@ export const getReceiptPrintAction =
       });
     }
   };
+
+export const getReverseEntryAction =
+  (DrCr, code, classId, year, regKey, fiscalYear, startDate, endDate, month) =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: GET_REVERSE_ENTRY_REQUEST });
+
+      const { data } = await axiosInstance.get(
+        `/api/StudentLedger/GetReverseEntry?idTransactionDrCr=${DrCr}&accountSubmitCode=${code}&idClass=${classId}&idAcademicYear=${year}&registrationKey=${regKey}&idFiscalYear=${fiscalYear}&startDate=${startDate}&endDate=${endDate}&idMonth=${month}&company=2`,
+        tokenConfig()
+      );
+
+      dispatch({ type: GET_REVERSE_ENTRY_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: GET_REVERSE_ENTRY_FAIL,
+        payload: error?.response?.data?.Message
+          ? error?.response?.data?.Message
+          : error?.message,
+      });
+    }
+  };
+
+export const postReverseEntryAction = (account) => async (dispatch) => {
+  try {
+    dispatch({ type: POST_REVERSE_ENTRY_REQUEST });
+
+    const jsonData = JSON.stringify({
+      ledgerAccountWiseModelLst: account,
+    });
+
+    const { data } = await axiosInstance.post(
+      `/api/StudentLedger/PostReverseEntry`,
+      jsonData,
+      tokenConfig()
+    );
+
+    dispatch({ type: POST_REVERSE_ENTRY_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: POST_REVERSE_ENTRY_FAIL,
+      payload: error?.response?.data?.Message
+        ? error?.response?.data?.Message
+        : error?.message,
+    });
+  }
+};

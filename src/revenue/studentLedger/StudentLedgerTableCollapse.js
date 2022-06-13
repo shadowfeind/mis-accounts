@@ -30,6 +30,7 @@ const StudentLedgerTableCollapse = ({
   accountName,
   handlePrint,
   handleRecipt,
+  updateHandler,
 }) => {
   const classes = useStyles();
 
@@ -42,7 +43,7 @@ const StudentLedgerTableCollapse = ({
   return (
     <>
       <TableRow key={item.$id}>
-        <TableCell>
+        <TableCell style={{ width: "15%" }}>
           {item.Cr !== 0 ? (
             <Button
               variant="outlined"
@@ -72,6 +73,7 @@ const StudentLedgerTableCollapse = ({
                 handleRecipt(
                   item.AccountSubmitCode,
                   item.RegistrationKey,
+
                   item.TransactionDate?.slice(0, 10)
                 )
               }
@@ -81,6 +83,24 @@ const StudentLedgerTableCollapse = ({
           ) : (
             " "
           )}
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={() =>
+              updateHandler(
+                item.IDTransactionDrCr,
+                item.AccountSubmitCode,
+                item.RegistrationKey,
+                item.LevelClass,
+                item.IDAcademicYear,
+                item.RegistrationKey,
+                item.IDMonth
+              )
+            }
+          >
+            <EditIcon style={{ fontSize: 12 }} />
+          </Button>
         </TableCell>
         <TableCell>{item.IDTransactionDrCr}</TableCell>
         <TableCell>{item.VoucherBillNo}</TableCell>

@@ -29,8 +29,10 @@ import {
   GET_ALL_STUDENT_LEDGER_RESET,
   GET_LIST_STUDENT_LEDGER_RESET,
   GET_RECEIPT_PRINT_RESET,
+  GET_REVERSE_ENTRY_RESET,
   GET_SINGLE_BILL_PRINT_RESET,
   GET_UNIVERSITY_FACULTY_RESET,
+  POST_REVERSE_ENTRY_RESET,
   POST_STUDENT_LEDGER_RESET,
 } from "./StudentLedgerConstants";
 import {
@@ -39,6 +41,7 @@ import {
   getAllStudentLedgerAction,
   getListStudentLedgerAction,
   getReceiptPrintAction,
+  getReverseEntryAction,
   getSingleBillPrintAction,
   postStudentLedgerAction,
 } from "./StudentLedgerActions";
@@ -50,6 +53,7 @@ import StudentLedgerTableCollapse from "./StudentLedgerTableCollapse";
 import StudentLedgerBillPrint from "./StudentLedgerBillPrint";
 import StudentLedgerRecipt from "./StudentLedgerRecipt";
 import StudentLedgerSideRecipt from "./StudentLedgerSideRecipt";
+import StudentLedgerReverseEntryForm from "./StudentLedgerReverseEntryForm";
 
 const useStyles = makeStyles((theme) => ({
   searchInput: {
@@ -139,7 +143,7 @@ const StudentLedger = () => {
   const [discount, setDiscount] = useState(0);
   const [advanced, setAdvanced] = useState(0);
   const [naration, setNaration] = useState("");
-
+  const [openReversePopup, setOpenReversePopup] = useState(false);
   const [openPopup, setOpenPopup] = useState(false);
   const [openPrintPopup, setOpenPrintPopup] = useState(false);
   const [openReciptPopup, setOpenReciptPopup] = useState(false);
@@ -198,6 +202,13 @@ const StudentLedger = () => {
     (state) => state.getReceiptPrint
   );
 
+  const { reverseEntryPrint, error: reverseEntryPrintError } = useSelector(
+    (state) => state.getReverseEntry
+  );
+
+  const { success: postReverseEntrySuccess, error: postReverseEntryError } =
+    useSelector((state) => state.postReverseEntry);
+
   const {
     listStudentLedger,
     loading,
@@ -225,6 +236,24 @@ const StudentLedger = () => {
     dispatch({ type: GET_LIST_STUDENT_LEDGER_RESET });
   }
 
+  if (reverseEntryPrintError) {
+    setNotify({
+      isOpen: true,
+      message: reverseEntryPrintError,
+      type: "error",
+    });
+    dispatch({ type: GET_REVERSE_ENTRY_RESET });
+  }
+
+  if (postReverseEntryError) {
+    setNotify({
+      isOpen: true,
+      message: postReverseEntryError,
+      type: "error",
+    });
+    dispatch({ type: POST_REVERSE_ENTRY_RESET });
+  }
+
   if (singleBillPrintError) {
     setNotify({
       isOpen: true,
@@ -245,6 +274,18 @@ const StudentLedger = () => {
 
   if (postStudentLedgerSuccess) {
     dispatch({ type: POST_STUDENT_LEDGER_RESET });
+    dispatch(
+      getListStudentLedgerAction(fiscalYear, student, startDate, endDate)
+    );
+  }
+
+  if (postReverseEntrySuccess) {
+    setNotify({
+      isOpen: true,
+      message: "Reverse Entry Succesful",
+      type: "success",
+    });
+    dispatch({ type: POST_REVERSE_ENTRY_RESET });
     dispatch(
       getListStudentLedgerAction(fiscalYear, student, startDate, endDate)
     );
@@ -389,7 +430,16 @@ const StudentLedger = () => {
 
   const handleRecipt = (submitCode, regKey, dateTime) => {
     dispatch(
-      getReceiptPrintAction(submitCode, regKey, startDate, endDate, dateTime)
+      getReceiptPrintAction(
+        submitCode,
+        regKey,
+        startDate,
+        endDate,
+        listStudentLedger?.studentLedgerModelLstsForStudent[
+          listStudentLedger?.studentLedgerModelLstsForStudent?.length - 1
+        ]?.Balance,
+        dateTime
+      )
     );
     setOpenReciptPopup(true);
   };
@@ -427,20 +477,22 @@ const StudentLedger = () => {
     setOpenPrintPopup(true);
   };
 
-  // useEffect(() => {
-  //   if (singleBillPrint) {
-  //     setSubmitCode(
-  //       listStudentLedger?.studentLedgerModelLstsForStudent[
-  //         listStudentLedger?.studentLedgerModelLstsForStudent?.length + 1
-  //       ]?.AccountSubmitCode
-  //     );
-  //   }
-  //   setRegKey(
-  //     singleBillPrint?.dbModelLstForAdmissionRegistrationForOneTime
-  //       ?.RegistrationKey
-  //   );
-  //   setMonth(singleBillPrint?.dbModelLstForOneTimeBill?.IDMonth);
-  // }, [singleBillPrint]);
+  const updateHandler = (DrCr, submitCode, classId, acaYear, regKey, month) => {
+    dispatch(
+      getReverseEntryAction(
+        DrCr,
+        submitCode,
+        classId,
+        acaYear,
+        regKey,
+        fiscalYear,
+        startDate,
+        endDate,
+        month
+      )
+    );
+    setOpenReversePopup(true);
+  };
 
   return (
     <>
@@ -591,6 +643,8 @@ const StudentLedger = () => {
                         setOpenPrintPopup={setOpenPrintPopup}
                         handlePrint={handlePrint}
                         handleRecipt={handleRecipt}
+                        setOpenReversePopup={setOpenReversePopup}
+                        updateHandler={updateHandler}
                       />
                     )
                   )}
@@ -932,6 +986,18 @@ const StudentLedger = () => {
             }
           />
         </>
+      </Popup>
+      <Popup
+        openPopup={openReversePopup}
+        setOpenPopup={setOpenReversePopup}
+        title="Reverse Entry Form"
+      >
+        <StudentLedgerReverseEntryForm
+          reverseEntry={reverseEntryPrint?.ledgerAccountWiseModelLst}
+          setOpenReversePopup={setOpenReversePopup}
+          naration={naration}
+          setNaration={setNaration}
+        />
       </Popup>
       <Notification notify={notify} setNotify={setNotify} />
     </>
