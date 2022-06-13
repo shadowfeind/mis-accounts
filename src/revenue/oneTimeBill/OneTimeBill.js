@@ -369,7 +369,7 @@ const OneTimeBill = () => {
       <Popup
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
-        title="Print Student Bill"
+        title="Print Ont Time Bill"
       >
         <OneTimeBillPrint
           date={transactionDate}

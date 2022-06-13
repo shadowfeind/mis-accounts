@@ -117,27 +117,14 @@ const OneTimeBillPrintDesign = ({
             <tr>
               <td></td>
               <td>Total</td>
-              <td>
-                {currentStudentBill
-                  ?.reduce((acc, item) => {
-                    return acc + item.Total;
-                  }, 0)
-                  .toFixed(2)}
-              </td>
+              <td>{prevBlc}</td>
             </tr>
           </tbody>
         </table>
       </div>
       <div className="student-admit-bottom-container">
         <h6>
-          In words:{" "}
-          <strong>
-            {inWords(
-              currentStudentBill?.reduce((acc, item) => {
-                return acc + item.Total;
-              }, 0)
-            )}
-          </strong>
+          In words: <strong>{inWords(prevBlc)}</strong>
         </h6>
         <div className="student-admit-bottom-container-signature">
           <Grid container>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Notification from "../../components/Notification";
-import { API_URL } from "../../constants";
+import { API_URL, axiosInstance, tokenConfig } from "../../constants";
 import { getHeaderBannerAction } from "../../dashboard/DashboardActions";
 import { GET_HEADER_BANNER_RESET } from "../../dashboard/DashboardConstants";
 import { Button, Grid } from "@material-ui/core";
@@ -23,16 +23,44 @@ const BillgeneratePrint = ({
   extraFee,
   setOpenPopup,
 }) => {
+  const [prevBlc, setPrevBlc] = useState(0);
+
   const [notify, setNotify] = useState({
     isOpen: false,
     message: "",
     type: "",
   });
-
+  let tdToRender = [];
   const dispatch = useDispatch();
   const { headerBanners, error: headerBannersError } = useSelector(
     (state) => state.getHeaderBanner
   );
+
+  let counter =
+    monthlyFee?.filter((x) => x.active === true)?.length +
+    extraFee?.filter((x) => x.active === true)?.length;
+
+  for (let i = counter; i <= 5; i++) {
+    tdToRender.push(i);
+  }
+
+  useEffect(() => {
+    const fetchData = async (id) => {
+      try {
+        const { data } = await axiosInstance.get(
+          `/api/OneTimeBillPrint/GetPreviousBalance?idAdmissionRegistration=${id}`,
+          tokenConfig()
+        );
+
+        setPrevBlc(data.Balance);
+      } catch (error) {
+        console.log(error);
+        setPrevBlc(0);
+      }
+    };
+
+    fetchData(dbModel?.RegistrationKey);
+  }, [dbModel?.RegistrationKey]);
 
   if (headerBannersError) {
     dispatch({ type: GET_HEADER_BANNER_RESET });
@@ -128,16 +156,39 @@ const BillgeneratePrint = ({
                     <td>{Number(s.Cr)?.toFixed(2)}</td>
                   </tr>
                 ))}
+              {tdToRender &&
+                tdToRender.map((x) => (
+                  <tr key={x}>
+                    <td height={30}></td>
+                    <td height={30}> </td>
+                    <td height={30}> </td>
+                  </tr>
+                ))}
               <tr>
                 <td></td>
                 <td>Previous Balance</td>
-                <td>0.00</td>
+                <td>
+                  {prevBlc &&
+                    prevBlc -
+                      (
+                        monthlyFee
+                          ?.filter((x) => x.active === true)
+                          ?.reduce((acc, item) => {
+                            return acc + Number(item.Cr);
+                          }, 0) +
+                        extraFee
+                          ?.filter((x) => x.active === true)
+                          ?.reduce((acc, item) => {
+                            return acc + Number(item.Cr);
+                          }, 0)
+                      ).toFixed(2)}
+                </td>
               </tr>
               <tr>
                 <td></td>
                 <td>Total</td>
                 <td>
-                  {(
+                  {/* {(
                     monthlyFee
                       ?.filter((x) => x.active === true)
                       ?.reduce((acc, item) => {
@@ -148,7 +199,8 @@ const BillgeneratePrint = ({
                       ?.reduce((acc, item) => {
                         return acc + Number(item.Cr);
                       }, 0)
-                  ).toFixed(2)}
+                  ).toFixed(2)} */}
+                  {prevBlc}
                 </td>
               </tr>
             </tbody>
@@ -156,21 +208,7 @@ const BillgeneratePrint = ({
         </div>
         <div className="student-admit-bottom-container">
           <h6>
-            In words:{" "}
-            <strong>
-              {inWords(
-                monthlyFee
-                  ?.filter((x) => x.active === true)
-                  ?.reduce((acc, item) => {
-                    return acc + Number(item.Cr);
-                  }, 0) +
-                  extraFee
-                    ?.filter((x) => x.active === true)
-                    ?.reduce((acc, item) => {
-                      return acc + Number(item.Cr);
-                    }, 0)
-              )}
-            </strong>
+            In words: <strong>{inWords(prevBlc)}</strong>
           </h6>
           <div className="student-admit-bottom-container-signature">
             <Grid container>
