@@ -116,15 +116,33 @@ const Billgenerate = () => {
   }
   const handleYearChange = (value) => {
     dispatch(
-      getActiveStudentForLedgeronlyAction(value, faculty, classId, shift)
+      getActiveStudentForBillGenerateAction(value, faculty, classId, shift)
     );
     setAcaYear(value);
+    if (blukEditBillGenerate) {
+      dispatch({ type: GET_BULK_EDIT_BILL_GENERATE_RESET });
+    }
   };
   const handleClassChange = (value) => {
     dispatch(
       getActiveStudentForBillGenerateAction(acaYear, faculty, value, shift)
     );
     setClassId(value);
+    if (blukEditBillGenerate) {
+      dispatch({ type: GET_BULK_EDIT_BILL_GENERATE_RESET });
+    }
+  };
+  const handleStudentChange = (value) => {
+    setStudentId(value);
+    if (blukEditBillGenerate) {
+      dispatch({ type: GET_BULK_EDIT_BILL_GENERATE_RESET });
+    }
+  };
+  const handleMonthChange = (value) => {
+    setMonthId(value);
+    if (blukEditBillGenerate) {
+      dispatch({ type: GET_BULK_EDIT_BILL_GENERATE_RESET });
+    }
   };
   useEffect(() => {
     if (billGenerate) {
@@ -258,7 +276,7 @@ const Billgenerate = () => {
                 name="Student"
                 label="Student"
                 value={studentId}
-                onChange={(e) => setStudentId(e.target.value)}
+                onChange={(e) => handleStudentChange(e.target.value)}
                 options={studentDdl}
                 errors={errors.studentId}
               />
@@ -270,7 +288,7 @@ const Billgenerate = () => {
                 name="NepaliMonth"
                 label="Nepali Month"
                 value={monthId}
-                onChange={(e) => setMonthId(e.target.value)}
+                onChange={(e) => handleMonthChange(e.target.value)}
                 options={monthDdl}
                 errors={errors.monthId}
               />

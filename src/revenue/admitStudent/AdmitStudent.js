@@ -118,12 +118,30 @@ const AdmitStudent = () => {
       getActiveStudentForLedgeronlyAction(value, faculty, classId, shift)
     );
     setAcaYear(value);
+    if (blukEditAdmitStudent) {
+      dispatch({ type: GET_BULK_EDIT_ADMIT_STUDENT_RESET });
+    }
   };
   const handleClassChange = (value) => {
     dispatch(
       getActiveStudentForLedgeronlyAction(acaYear, faculty, value, shift)
     );
     setClassId(value);
+    if (blukEditAdmitStudent) {
+      dispatch({ type: GET_BULK_EDIT_ADMIT_STUDENT_RESET });
+    }
+  };
+  const handleStudentChange = (value) => {
+    setStudentId(value);
+    if (blukEditAdmitStudent) {
+      dispatch({ type: GET_BULK_EDIT_ADMIT_STUDENT_RESET });
+    }
+  };
+  const handleMonthChange = (value) => {
+    setMonthId(value);
+    if (blukEditAdmitStudent) {
+      dispatch({ type: GET_BULK_EDIT_ADMIT_STUDENT_RESET });
+    }
   };
   useEffect(() => {
     if (admitStudent) {
@@ -258,7 +276,7 @@ const AdmitStudent = () => {
                 name="Student"
                 label="Student"
                 value={studentId}
-                onChange={(e) => setStudentId(e.target.value)}
+                onChange={(e) => handleStudentChange(e.target.value)}
                 options={studentDdl}
                 errors={errors.studentId}
               />
@@ -270,7 +288,7 @@ const AdmitStudent = () => {
                 name="NepaliMonth"
                 label="Nepali Month"
                 value={monthId}
-                onChange={(e) => setMonthId(e.target.value)}
+                onChange={(e) => handleMonthChange(e.target.value)}
                 options={monthDdl}
                 errors={errors.monthId}
               />

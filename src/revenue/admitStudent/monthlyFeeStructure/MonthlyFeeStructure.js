@@ -55,6 +55,7 @@ const MonthlyFeeStructure = ({
   const dispatch = useDispatch();
 
   const handleChange = (index, fee, value, name, amount) => {
+    debugger;
     if (name === "Discount") {
       if (value <= amount) {
         let newObject;
@@ -200,7 +201,7 @@ const MonthlyFeeStructure = ({
                     <StyledTableCell>
                       {" "}
                       <TextField
-                        value={s.Discount}
+                        defaultValue={s.Discount}
                         disabled={s.active ? false : true}
                         variant="outlined"
                         name="Discount"

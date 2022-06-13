@@ -32,6 +32,7 @@ import {
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import OneTimeBillPrintModal from "./OneTimeBillPrintModal";
+import { getActiveStudentForBillGenerateAction } from "../billGenerate/BillgenerateActions";
 
 const useStyles = makeStyles((theme) => ({
   searchInput: {
@@ -49,6 +50,7 @@ const OneTimeBillPrint = () => {
   const [academicYearDdl, setAcademicYearDdl] = useState([]);
   const [classId, setClassId] = useState("");
   const [acaYear, setAcaYear] = useState("");
+  const [shift, setShift] = useState(0);
   const [ddlFiscalYear, setDdlFiscalYear] = useState([]);
   const [ddlStudent, setDdlStudent] = useState([]);
   const [student, setStudent] = useState("");
@@ -56,6 +58,7 @@ const OneTimeBillPrint = () => {
   const [npMonth, setNpMonth] = useState("");
   const [fiscalYear, setFiscalYear] = useState("");
   const [transactionDate, setTransactionDate] = useState();
+  const [faculty, setFaculty] = useState("");
   const [idFeeStructure, setIdFeeStructure] = useState("");
   const [errors, setErrors] = useState({});
   const [filterFn, setFilterFn] = useState({
@@ -99,6 +102,19 @@ const OneTimeBillPrint = () => {
     dispatch({ type: GET_PRINT_ONE_TIME_BILL_PRINT_RESET });
   }
 
+  const handleYearChange = (value) => {
+    dispatch(
+      getActiveStudentForBillGenerateAction(value, faculty, classId, shift)
+    );
+    setAcaYear(value);
+  };
+  const handleClassChange = (value) => {
+    dispatch(
+      getActiveStudentForBillGenerateAction(acaYear, faculty, value, shift)
+    );
+    setClassId(value);
+  };
+
   useEffect(() => {
     dispatch(getAllOneTimeBillPrintAction());
   }, []);
@@ -123,6 +139,9 @@ const OneTimeBillPrint = () => {
       setStudent(oneTimeBillPrint?.searchFilterModel.ddlStudent[0]?.Key);
       setNpMonthDdl(oneTimeBillPrint?.searchFilterModel?.ddlnpMonth);
       setNpMonth(oneTimeBillPrint?.searchFilterModel.npMonth);
+      setFaculty(
+        oneTimeBillPrint?.searchFilterModel?.ddlFacultyProgramLink[0]?.Key
+      );
       setIdFeeStructure(
         oneTimeBillPrint?.searchFilterModel.idAdmissionFeeStructure
       );
@@ -178,7 +197,7 @@ const OneTimeBillPrint = () => {
                 name="AcademicYear"
                 label="Academic Year"
                 value={acaYear}
-                onChange={(e) => setAcaYear(e.target.value)}
+                onChange={(e) => handleYearChange(e.target.value)}
                 options={academicYearDdl}
                 errors={errors.acaYear}
               />
@@ -188,7 +207,7 @@ const OneTimeBillPrint = () => {
                 name="Classes"
                 label="Classes"
                 value={classId}
-                onChange={(e) => setClassId(e.target.value)}
+                onChange={(e) => handleClassChange(e.target.value)}
                 options={ddlClass}
                 errors={errors.classId}
               />

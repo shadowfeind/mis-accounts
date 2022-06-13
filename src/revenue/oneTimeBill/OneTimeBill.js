@@ -40,6 +40,7 @@ const OneTimeBill = () => {
   const [faculty, setFaculty] = useState("");
   const [shift, setShift] = useState(0);
   const [errors, setErrors] = useState({});
+  const [postErrors, setPostErrors] = useState({});
   const [transactionDate, setTransactionDate] = useState();
   const [voucher, setVoucher] = useState("");
   const [monthlyFee, setMonthlyFee] = useState([]);
@@ -158,7 +159,35 @@ const OneTimeBill = () => {
     return Object.values(temp).every((x) => x === "");
   };
 
+  const postValidate = () => {
+    let temp = {};
+    temp.student =
+      studentDdl.length < 1 ? "Can not submit without students" : "";
+    setPostErrors({ ...temp });
+    return Object.values(temp).every((x) => x === "");
+  };
+
+  const handleYearChange = (value) => {
+    setAcaYear(value);
+    if (blukEditOneTimeBill) {
+      dispatch({ type: GET_BULK_EDIT_ONE_TIME_BILL_RESET });
+    }
+  };
+  const handleClassChange = (value) => {
+    setClassId(value);
+    if (blukEditOneTimeBill) {
+      dispatch({ type: GET_BULK_EDIT_ONE_TIME_BILL_RESET });
+    }
+  };
+  const handleMonthChange = (value) => {
+    setMonthId(value);
+    if (blukEditOneTimeBill) {
+      dispatch({ type: GET_BULK_EDIT_ONE_TIME_BILL_RESET });
+    }
+  };
+
   const handleListSearch = () => {
+    setPostErrors({});
     if (validate()) {
       dispatch(
         getBulkEditOneTimeBillAction(fiscalYear, acaYear, classId, monthId)
@@ -167,16 +196,18 @@ const OneTimeBill = () => {
   };
 
   const handleSubmit = () => {
-    dispatch(
-      postOneTimeBillAction(
-        monthlyFee,
-        extraFee,
-        studentDdl,
-        blukEditOneTimeBill.dbModel,
-        blukEditOneTimeBill.searchFilterModel,
-        narration
-      )
-    );
+    if (postValidate()) {
+      dispatch(
+        postOneTimeBillAction(
+          monthlyFee,
+          extraFee,
+          studentDdl,
+          blukEditOneTimeBill.dbModel,
+          blukEditOneTimeBill.searchFilterModel,
+          narration
+        )
+      );
+    }
   };
 
   return (
@@ -220,7 +251,7 @@ const OneTimeBill = () => {
                 name="NepaliMonth"
                 label="Nepali Month"
                 value={monthId}
-                onChange={(e) => setMonthId(e.target.value)}
+                onChange={(e) => handleMonthChange(e.target.value)}
                 options={monthDdl}
                 errors={errors.monthId}
               />
@@ -284,7 +315,12 @@ const OneTimeBill = () => {
                 </Grid>
               </Toolbar>
               <div style={{ height: "15px" }}></div>
-              <h3>Admission Fee</h3>
+              <h3>Student List</h3>
+              {postErrors?.student && (
+                <h5 style={{ color: "red", textAlign: "center" }}>
+                  {postErrors?.student}
+                </h5>
+              )}
               <StudentList
                 student={studentDdl}
                 studentSelected={studentSelected}
