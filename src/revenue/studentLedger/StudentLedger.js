@@ -782,7 +782,9 @@ const StudentLedger = ({ searchFilterModel }) => {
               fiscalYearDdl={
                 listStudentLedger?.searchFilterModel?.ddlAccountFiscalYear
               }
-              ddlAcademicYear={studentLedger?.ddlAcademicYear}
+              ddlAcademicYear={
+                listStudentLedger?.searchFilterModel?.ddlAcademicYear
+              }
               idYear={
                 listStudentLedger?.studentLedgerModelLstsForStudent[
                   listStudentLedger?.studentLedgerModelLstsForStudent?.length +

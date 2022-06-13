@@ -50,9 +50,8 @@ const StudentLedgerRecipt = ({
     (state) => state.getHeaderBanner
   );
 
-  const year = ddlAcademicYear?.filter((x) => x.Key == idYear);
+  const year = ddlAcademicYear?.filter((x) => x.Key === idYear);
   const classID = ddlClass?.filter((x) => x.Key == idClass);
-  const fiscalYear = fiscalYearDdl?.filter((x) => x.Key == iDFiscalYear);
 
   if (headerBannersError) {
     dispatch({ type: GET_HEADER_BANNER_RESET });
@@ -84,9 +83,10 @@ const StudentLedgerRecipt = ({
               fontSize: "14px",
             }}
           >
-            <Grid item xs={3}>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={2}>
               <h4>
-                BillDate: &nbsp;
+                BillDate: <br />
                 {date?.StartDate?.slice(0, 10)}
               </h4>
             </Grid>
@@ -94,56 +94,10 @@ const StudentLedgerRecipt = ({
               <img src={`${API_URL}${headerBanners}`} width="100%" />
             </Grid>
             <Grid item xs={3}>
-              <h4>Student Ledger Reciept</h4>
-
-              <h4>
-                Fiscal Year: &nbsp;
-                {fiscalYear?.length > 0 && fiscalYear[0]?.Value}
-              </h4>
+              <h3>Reciept</h3>
             </Grid>
           </Grid>
-          {/* <div>
-            <table>
-              <thead>
-                <tr>
-                  <th style={{ width: "5%", textAlign: "left" }}>RollNo.</th>
-                  <th style={{ width: "30%", textAlign: "left" }}>
-                    Student Name
-                  </th>
-                  <th style={{ width: "15%", textAlign: "left" }}>Class</th>
-                  <th style={{ width: "10%", textAlign: "left" }}>Reg No.</th>
-                  <th style={{ width: "15%", textAlign: "left" }}></th>
-                  <th style={{ width: "15%", textAlign: "left" }}></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{printReceipt?.RollNo}</td>
-                  <td>{printReceipt?.StudentName}</td>
-                  <td>{classID?.length > 0 && classID[0]?.Value}</td>
-                  <td>{regKey}</td>
-                  <td>
-                    <h4>a sum of Rs.&nbsp;{amountPaid} </h4>
-                  </td>
-                  <td>
-                    <h6>
-                      In words: <strong>{inWords(amountPaid)}</strong>
-                    </h6>
-                  </td>
-                </tr>
 
-                <tr>
-                  <td></td>
-                  <td>Previous Balance: &nbsp;{prevBal}</td>
-                  <td>Amount Paid:</td>
-                  <td>{amountPaid}</td>
-
-                  <td>Balance Due:</td>
-                  <td>{balDue}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div> */}
           <Grid
             container
             style={{
@@ -203,11 +157,11 @@ const StudentLedgerRecipt = ({
           >
             <Grid item xs={2}></Grid>
             <Grid item xs={5}>
-              <h4>School Stamp</h4>
+              <h5>School Stamp</h5>
             </Grid>
 
             <Grid item xs={5}>
-              <h4>Accountant</h4>
+              <h5>Accountant</h5>
             </Grid>
           </Grid>
           <hr
@@ -221,9 +175,11 @@ const StudentLedgerRecipt = ({
               fontSize: "14px",
             }}
           >
-            <Grid item xs={3}>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={2}>
               <h4>
-                BillDate: &nbsp;
+                BillDate:
+                <br />
                 {date?.StartDate?.slice(0, 10)}
               </h4>
             </Grid>
@@ -231,56 +187,10 @@ const StudentLedgerRecipt = ({
               <img src={`${API_URL}${headerBanners}`} width="100%" />
             </Grid>
             <Grid item xs={3}>
-              <h4>Student Ledger Reciept</h4>
-
-              <h4>
-                Fiscal Year: &nbsp;
-                {fiscalYear?.length > 0 && fiscalYear[0]?.Value}
-              </h4>
+              <h3>Reciept</h3>
             </Grid>
           </Grid>
-          {/* <div>
-            <table>
-              <thead>
-                <tr>
-                  <th style={{ width: "5%", textAlign: "left" }}>RollNo.</th>
-                  <th style={{ width: "30%", textAlign: "left" }}>
-                    Student Name
-                  </th>
-                  <th style={{ width: "15%", textAlign: "left" }}>Class</th>
-                  <th style={{ width: "10%", textAlign: "left" }}>Reg No.</th>
-                  <th style={{ width: "15%", textAlign: "left" }}></th>
-                  <th style={{ width: "15%", textAlign: "left" }}></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{printReceipt?.RollNo}</td>
-                  <td>{printReceipt?.StudentName}</td>
-                  <td>{classID?.length > 0 && classID[0]?.Value}</td>
-                  <td>{regKey}</td>
-                  <td>
-                    <h4>a sum of Rs.&nbsp;{amountPaid} </h4>
-                  </td>
-                  <td>
-                    <h6>
-                      In words: <strong>{inWords(amountPaid)}</strong>
-                    </h6>
-                  </td>
-                </tr>
 
-                <tr>
-                  <td></td>
-                  <td>Previous Balance: &nbsp;{prevBal}</td>
-                  <td>Amount Paid:</td>
-                  <td>{amountPaid}</td>
-
-                  <td>Balance Due:</td>
-                  <td>{balDue}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div> */}
           <Grid
             container
             style={{
@@ -340,11 +250,11 @@ const StudentLedgerRecipt = ({
           >
             <Grid item xs={2}></Grid>
             <Grid item xs={5}>
-              <h4>School Stamp</h4>
+              <h5>School Stamp</h5>
             </Grid>
 
             <Grid item xs={5}>
-              <h4>Accountant</h4>
+              <h5>Accountant</h5>
             </Grid>
           </Grid>
           <div
