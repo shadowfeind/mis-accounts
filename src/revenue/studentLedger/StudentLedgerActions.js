@@ -207,12 +207,12 @@ export const getSingleBillPrintAction =
   };
 
 export const getReceiptPrintAction =
-  (code, regKey, startDate, endDate, ipValue, dateTime) => async (dispatch) => {
+  (code, regKey, startDate, endDate, dateTime) => async (dispatch) => {
     try {
       dispatch({ type: GET_RECEIPT_PRINT_REQUEST });
 
       const { data } = await axiosInstance.get(
-        `/api/StudentLedger/GetReceiptPrint?idSubmitCode=${code}&registrationKey=${regKey}&startDate=${startDate}&endDate=${endDate}&ipvalue=${ipValue}&lessThanReceiptDateAndTime=${dateTime}&searchKey=1`,
+        `/api/StudentLedger/GetReceiptPrint?idSubmitCode=${code}&registrationKey=${regKey}&startDate=${startDate}&endDate=${endDate}&ipvalue=4&lessThanReceiptDateAndTime=${dateTime}&searchKey=1`,
         tokenConfig()
       );
 

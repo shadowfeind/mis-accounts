@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StudentLedgerRecipt = ({
+const StudentLedgerSideRecipt = ({
   printReceipt,
   date,
   ddlClass,
@@ -293,4 +293,4 @@ const StudentLedgerRecipt = ({
   );
 };
 
-export default StudentLedgerRecipt;
+export default StudentLedgerSideRecipt;

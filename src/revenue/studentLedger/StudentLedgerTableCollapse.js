@@ -10,7 +10,9 @@ import {
   List,
   ListItem,
 } from "@material-ui/core";
+import VisibilityRoundedIcon from "@material-ui/icons/VisibilityRounded";
 import EditIcon from "@material-ui/icons/Edit";
+import ReceiptRoundedIcon from "@material-ui/icons/ReceiptRounded";
 
 const useStyles = makeStyles({
   button: {
@@ -27,6 +29,7 @@ const StudentLedgerTableCollapse = ({
   ddlNpMonth,
   accountName,
   handlePrint,
+  handleRecipt,
 }) => {
   const classes = useStyles();
 
@@ -40,14 +43,44 @@ const StudentLedgerTableCollapse = ({
     <>
       <TableRow key={item.$id}>
         <TableCell>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            onClick={() => handlePrint(item.IDAdmissionRegistration)}
-          >
-            <EditIcon style={{ fontSize: 12 }} />
-          </Button>
+          {item.Cr !== 0 ? (
+            <Button
+              variant="outlined"
+              color="primary"
+              className={classes.button}
+              onClick={() =>
+                handlePrint(
+                  item.AccountSubmitCode,
+                  item.LevelClass,
+                  item.IDAcademicYear,
+                  item.RegistrationKey,
+                  item.IDMonth
+                )
+              }
+            >
+              <VisibilityRoundedIcon style={{ fontSize: 12 }} />
+            </Button>
+          ) : (
+            " "
+          )}{" "}
+          {item.Dr !== 0 ? (
+            <Button
+              variant="contained"
+              color="default"
+              className={classes.button}
+              onClick={() =>
+                handleRecipt(
+                  item.AccountSubmitCode,
+                  item.RegistrationKey,
+                  item.TransactionDate?.slice(0, 10)
+                )
+              }
+            >
+              <ReceiptRoundedIcon style={{ fontSize: 12 }} />
+            </Button>
+          ) : (
+            " "
+          )}
         </TableCell>
         <TableCell>{item.IDTransactionDrCr}</TableCell>
         <TableCell>{item.VoucherBillNo}</TableCell>
