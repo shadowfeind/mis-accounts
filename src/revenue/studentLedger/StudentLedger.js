@@ -139,7 +139,9 @@ const StudentLedger = ({ searchFilterModel }) => {
   const [advanced, setAdvanced] = useState(0);
   const [naration, setNaration] = useState("");
   const [regKey, setRegKey] = useState("");
+  const [submitCode, setSubmitCode] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
+  const [openPrintPopup, setOpenPrintPopup] = useState(false);
   const [errors, setErrors] = useState({});
   const [tableData, setTableData] = useState([]);
   const [filterFn, setFilterFn] = useState({
@@ -400,24 +402,35 @@ const StudentLedger = ({ searchFilterModel }) => {
     setOpenPopup(true);
   };
 
-  // useEffect(
-  //   (code, id) => {
-  //     if (singleBillPrint) {
-  //       dispatch(
-  //         getSingleBillPrintAction(
-  //           code,
-  //           classId,
-  //           acaYear,
-  //           student,
-  //           fiscalYear,
-  //           month,
-  //           id
-  //         )
-  //       );
-  //     }
-  //   },
-  //   [singleBillPrint]
-  // );
+  const handlePrint = () => {
+    dispatch({ type: GET_RECEIPT_PRINT_RESET });
+    dispatch(
+      getSingleBillPrintAction(
+        submitCode,
+        classId,
+        acaYear,
+        regKey,
+        fiscalYear,
+        month
+      )
+    );
+    setOpenPrintPopup(true);
+  };
+
+  useEffect(() => {
+    if (singleBillPrint) {
+      setSubmitCode(
+        listStudentLedger?.studentLedgerModelLstsForStudent[
+          listStudentLedger?.studentLedgerModelLstsForStudent?.length + 1
+        ]?.AccountSubmitCode
+      );
+    }
+    setRegKey(
+      singleBillPrint?.dbModelLstForAdmissionRegistrationForOneTime
+        ?.RegistrationKey
+    );
+    setMonth(singleBillPrint?.dbModelLstForOneTimeBill?.IDMonth);
+  }, [singleBillPrint]);
 
   return (
     <>
@@ -555,7 +568,8 @@ const StudentLedger = ({ searchFilterModel }) => {
                           listStudentLedger?.searchFilterModel?.ddlnpMonth
                         }
                         accountName={accountName}
-                        setOpenPopup={setOpenPopup}
+                        setOpenPrintPopup={setOpenPrintPopup}
+                        handlePrint={handlePrint}
                       />
                     )
                   )}
@@ -737,13 +751,13 @@ const StudentLedger = ({ searchFilterModel }) => {
           </>
         )}
       </CustomContainer>
-      {/* <Popup
-        openPopup={openPopup}
-        setOpenPopup={setOpenPopup}
+      <Popup
+        openPopup={openPrintPopup}
+        setOpenPopup={setOpenPrintPopup}
         title="Print Student Ledger Bill"
       >
         <StudentLedgerBillPrint
-          date={singleBillPrint}
+          date={listStudentLedger && listStudentLedger?.studentLedgerModel}
           dbModel={singleBillPrint}
           classDdl={ddlClass}
           classId={classId}
@@ -754,9 +768,9 @@ const StudentLedger = ({ searchFilterModel }) => {
           // //   feeStructure={feeStructure}
           // monthlyFee={singleBillPrint}
           // extraFee={extraFee}
-          setOpenPopup={setOpenPopup}
+          setOpenPrintPopup={setOpenPrintPopup}
         />
-      </Popup> */}
+      </Popup>
       <Popup
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}

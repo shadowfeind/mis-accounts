@@ -76,7 +76,7 @@ const StudentLedgerRecipt = ({
   return (
     <>
       <div ref={componentRef}>
-        <div className="fee-collection">
+        <div>
           <Grid
             container
             style={{

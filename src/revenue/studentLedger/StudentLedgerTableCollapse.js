@@ -26,7 +26,7 @@ const StudentLedgerTableCollapse = ({
   ddlClass,
   ddlNpMonth,
   accountName,
-  setOpenPopup,
+  handlePrint,
 }) => {
   const classes = useStyles();
 
@@ -44,9 +44,7 @@ const StudentLedgerTableCollapse = ({
             variant="contained"
             color="primary"
             className={classes.button}
-            // onClick={() =>
-            //   updateCollegeHandler(item.IDAdmissionFacultyFeeStructure)
-            // }
+            onClick={() => handlePrint(item.IDAdmissionRegistration)}
           >
             <EditIcon style={{ fontSize: 12 }} />
           </Button>
