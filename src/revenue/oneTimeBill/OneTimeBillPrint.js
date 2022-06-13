@@ -30,6 +30,16 @@ const OneTimeBillPrint = ({
     type: "",
   });
 
+  let tdToRender = [];
+
+  let counter =
+    monthlyFee?.filter((x) => x.active === true)?.length +
+    extraFee?.filter((x) => x.active === true)?.length;
+
+  for (let i = counter; i <= 5; i++) {
+    tdToRender.push(i);
+  }
+
   const dispatch = useDispatch();
   const { headerBanners, error: headerBannersError } = useSelector(
     (state) => state.getHeaderBanner
@@ -131,6 +141,14 @@ const OneTimeBillPrint = ({
                       {s.AccountName} * {studentDdl?.length}
                     </td>
                     <td>{Number(s.Cr)?.toFixed(2) * studentDdl?.length}</td>
+                  </tr>
+                ))}
+              {tdToRender &&
+                tdToRender.map((x) => (
+                  <tr key={x}>
+                    <td height={30}></td>
+                    <td height={30}> </td>
+                    <td height={30}> </td>
                   </tr>
                 ))}
               <tr>
