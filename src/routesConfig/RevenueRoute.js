@@ -1,13 +1,17 @@
 import DescriptionIcon from "@material-ui/icons/Description";
-import MenuBookIcon from "@material-ui/icons/MenuBook";
-import SchoolIcon from "@material-ui/icons/School";
-import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
-import CastForEducationRoundedIcon from "@material-ui/icons/CastForEducationRounded";
-import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
+import BurstModeRoundedIcon from "@material-ui/icons/BurstModeRounded";
+import ReceiptRoundedIcon from "@material-ui/icons/ReceiptRounded";
+import LibraryBooksRoundedIcon from "@material-ui/icons/LibraryBooksRounded";
+import DescriptionRoundedIcon from "@material-ui/icons/DescriptionRounded";
 import HomeWorkRoundedIcon from "@material-ui/icons/HomeWorkRounded";
-import EventNoteIcon from "@material-ui/icons/EventNote";
-import SettingsRemoteIcon from "@material-ui/icons/SettingsRemote";
-import PermContactCalendarIcon from "@material-ui/icons/PermContactCalendar";
+import PrintRoundedIcon from "@material-ui/icons/PrintRounded";
+import GroupAddRoundedIcon from "@material-ui/icons/GroupAddRounded";
+import LocalAtmRoundedIcon from "@material-ui/icons/LocalAtmRounded";
+import PersonAddRoundedIcon from "@material-ui/icons/PersonAddRounded";
+import SportsKabaddiRoundedIcon from "@material-ui/icons/SportsKabaddiRounded";
+import ImportContactsRoundedIcon from "@material-ui/icons/ImportContactsRounded";
+import TodayRoundedIcon from "@material-ui/icons/TodayRounded";
+
 export const RevenueRoute = [
   {
     name: "Admission Fee Structure",
@@ -18,69 +22,69 @@ export const RevenueRoute = [
   {
     name: "Admission Faculty Fee Structure Link",
     route: "/admission-faculty-fee",
-    icon: PeopleAltIcon,
+    icon: PersonAddRoundedIcon,
     exact: false,
   },
   {
     name: "Extra Fee Structure",
     route: "/extra-fee-structure",
-    icon: SchoolIcon,
+    icon: SportsKabaddiRoundedIcon,
     exact: false,
   },
   {
     name: "Monthly Fee Link",
     route: "/monthly-fee",
-    icon: SettingsRemoteIcon,
+    icon: TodayRoundedIcon,
     exact: false,
   },
   {
     name: "Admit Student",
     route: "/admit-student",
-    icon: PermContactCalendarIcon,
+    icon: GroupAddRoundedIcon,
     exact: false,
   },
   {
     name: "Bill Generate",
     route: "/bill-generate",
-    icon: PermContactCalendarIcon,
+    icon: DescriptionRoundedIcon,
     exact: false,
   },
   {
     name: "One Time Bill",
     route: "/one-time-bill",
-    icon: PermContactCalendarIcon,
+    icon: ReceiptRoundedIcon,
     exact: false,
   },
   {
     name: "Student Due",
     route: "/student-due",
-    icon: LibraryBooksIcon,
+    icon: LocalAtmRoundedIcon,
     exact: false,
   },
 
   {
     name: "Fee Collection",
     route: "/fee-collection",
-    icon: EventNoteIcon,
+    icon: LibraryBooksRoundedIcon,
     exact: false,
   },
   {
     name: "One Time Bill Print",
     route: "/one-time-bill-print",
-    icon: MenuBookIcon,
+    icon: PrintRoundedIcon,
     exact: false,
   },
 
   {
     name: "Student Ledger",
     route: "/student-ledger",
-    icon: MenuBookIcon,
+    icon: ImportContactsRoundedIcon,
     exact: false,
   },
   {
     name: "Ledger Account Wise",
     route: "/ledger-account-wise",
-    icon: DescriptionIcon,
+    icon: BurstModeRoundedIcon,
     exact: false,
   },
 ];

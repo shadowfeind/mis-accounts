@@ -26,7 +26,7 @@ const StudentLedgerTableCollapse = ({
   ddlClass,
   ddlNpMonth,
   accountName,
-  setOpenPopup,
+  handlePrint,
 }) => {
   const classes = useStyles();
 
@@ -39,6 +39,16 @@ const StudentLedgerTableCollapse = ({
   return (
     <>
       <TableRow key={item.$id}>
+        <TableCell>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={() => handlePrint(item.IDAdmissionRegistration)}
+          >
+            <EditIcon style={{ fontSize: 12 }} />
+          </Button>
+        </TableCell>
         <TableCell>{item.IDTransactionDrCr}</TableCell>
         <TableCell>{item.VoucherBillNo}</TableCell>
         <TableCell>
@@ -51,25 +61,13 @@ const StudentLedgerTableCollapse = ({
         <TableCell>
           {accountNameShow?.length > 0 && accountNameShow[0]?.label}
         </TableCell>
-        <TableCell>{item.IDAccountType}</TableCell>
+
         <TableCell width="30%">{item.TransactionDate?.slice(0, 10)}</TableCell>
         <TableCell>{item.TransactionDate?.slice(0, 10)}</TableCell>
         <TableCell>{item.Narration}</TableCell>
         <TableCell>{item.Dr}</TableCell>
         <TableCell>{item.Cr}</TableCell>
         <TableCell>{item.Balance}</TableCell>
-        <TableCell>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            // onClick={() =>
-            //   updateCollegeHandler(item.IDAdmissionFacultyFeeStructure)
-            // }
-          >
-            <EditIcon style={{ fontSize: 12 }} />
-          </Button>
-        </TableCell>
       </TableRow>
     </>
   );

@@ -107,20 +107,19 @@ const initialFormValues = {
 };
 
 const tableHeader = [
+  { id: "actions", label: "Actions", disableSorting: true },
   { id: "idDrCr", label: "idDrCr" },
   { id: "Voucher/BillNo", label: "Voucher/BillNo" },
   { id: "Class", label: "Class" },
   { id: "AccountForm", label: "Account Form" },
   { id: "BillMonth", label: "Month" },
   { id: "AccountName", label: "Account Name" },
-  { id: "IDAccountType", label: "IDAccountType" },
   { id: "TransactionDate", label: "Transaction Date" },
   { id: "TransactionType", label: "Transaction Type" },
   { id: "Narration", label: "Narration" },
   { id: "Dr(Rs)", label: "Dr(Rs)" },
   { id: "Cr(Rs)", label: "Cr(Rs)" },
   { id: "Balance", label: "Balance" },
-  { id: "actions", label: "Actions", disableSorting: true },
 ];
 
 const StudentLedger = ({ searchFilterModel }) => {
@@ -135,12 +134,14 @@ const StudentLedger = ({ searchFilterModel }) => {
   const [endDate, setEndDate] = useState();
   const [month, setMonth] = useState();
   const [fiscalYear, setFiscalYear] = useState("");
-  const [amountPaid, setAmountPaid] = useState("");
-  const [discount, setDiscount] = useState("");
-  const [advanced, setAdvanced] = useState("");
+  const [amountPaid, setAmountPaid] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [advanced, setAdvanced] = useState(0);
   const [naration, setNaration] = useState("");
   const [regKey, setRegKey] = useState("");
+  const [submitCode, setSubmitCode] = useState("");
   const [openPopup, setOpenPopup] = useState(false);
+  const [openPrintPopup, setOpenPrintPopup] = useState(false);
   const [errors, setErrors] = useState({});
   const [tableData, setTableData] = useState([]);
   const [filterFn, setFilterFn] = useState({
@@ -242,11 +243,6 @@ const StudentLedger = ({ searchFilterModel }) => {
   }
 
   if (postStudentLedgerSuccess) {
-    setNotify({
-      isOpen: true,
-      message: "Successfully Submitted",
-      type: "success",
-    });
     dispatch({ type: POST_STUDENT_LEDGER_RESET });
     dispatch(
       getListStudentLedgerAction(fiscalYear, student, startDate, endDate)
@@ -287,9 +283,10 @@ const StudentLedger = ({ searchFilterModel }) => {
     dispatch({ type: "GET_LINK", payload: "/revenue" });
   }, []);
 
-  // useEffect(() => {
-  //   dispatch(getAccountNameAction());
-  // }, []);
+  useEffect(() => {
+    dispatch({ type: GET_LIST_STUDENT_LEDGER_RESET });
+    dispatch(getAccountNameAction());
+  }, []);
 
   useEffect(() => {
     if (studentLedger) {
@@ -309,6 +306,12 @@ const StudentLedger = ({ searchFilterModel }) => {
         studentLedger?.searchFilterModel?.studentLedgerModel?.EndDate?.slice(
           0,
           10
+        )
+      );
+      dispatch(
+        getActiveStudentOnlyAction(
+          studentLedger?.ddlAcademicYear[0]?.Key,
+          studentLedger?.ddlClass[0]?.Key
         )
       );
     }
@@ -331,12 +334,6 @@ const StudentLedger = ({ searchFilterModel }) => {
   useEffect(() => {
     if (listStudentLedger) {
       setTableData(listStudentLedger?.studentLedgerModelLstsForStudent);
-      setAmountPaid(listStudentLedger?.studentLedgerModel?.AmountPaid);
-      setDiscount(listStudentLedger?.studentLedgerModel?.DiscountInTotal);
-      setAdvanced(listStudentLedger?.studentLedgerModel?.Advance);
-      setNaration(
-        listStudentLedger?.studentLedgerModel?.NarrationForAmountPaid
-      );
     }
   }, [listStudentLedger]);
 
@@ -348,6 +345,26 @@ const StudentLedger = ({ searchFilterModel }) => {
     setStudent("");
     setDdlStudent([]);
   };
+
+  const handleYearChange = (value) => {
+    setAcaYear(value);
+    if ((value, classId)) {
+      dispatch(getActiveStudentOnlyAction(value, classId));
+    }
+    setStudent("");
+    setDdlStudent([]);
+  };
+
+  const handleStudent = (value) => {
+    setStudent(value);
+  };
+
+  useEffect(() => {
+    if (activeStudentOnly) {
+      setDdlStudent(activeStudentOnly);
+      setStudent(activeStudentOnly[0]?.Key);
+    }
+  }, [activeStudentOnly]);
 
   const validate = () => {
     let temp = {};
@@ -385,24 +402,35 @@ const StudentLedger = ({ searchFilterModel }) => {
     setOpenPopup(true);
   };
 
-  useEffect(
-    (code, id) => {
-      if (singleBillPrint) {
-        dispatch(
-          getSingleBillPrintAction(
-            code,
-            classId,
-            acaYear,
-            student,
-            fiscalYear,
-            month,
-            id
-          )
-        );
-      }
-    },
-    [singleBillPrint]
-  );
+  const handlePrint = () => {
+    dispatch({ type: GET_RECEIPT_PRINT_RESET });
+    dispatch(
+      getSingleBillPrintAction(
+        submitCode,
+        classId,
+        acaYear,
+        regKey,
+        fiscalYear,
+        month
+      )
+    );
+    setOpenPrintPopup(true);
+  };
+
+  useEffect(() => {
+    if (singleBillPrint) {
+      setSubmitCode(
+        listStudentLedger?.studentLedgerModelLstsForStudent[
+          listStudentLedger?.studentLedgerModelLstsForStudent?.length + 1
+        ]?.AccountSubmitCode
+      );
+    }
+    setRegKey(
+      singleBillPrint?.dbModelLstForAdmissionRegistrationForOneTime
+        ?.RegistrationKey
+    );
+    setMonth(singleBillPrint?.dbModelLstForOneTimeBill?.IDMonth);
+  }, [singleBillPrint]);
 
   return (
     <>
@@ -424,7 +452,7 @@ const StudentLedger = ({ searchFilterModel }) => {
                 name="AcademicYear"
                 label="Academic Year"
                 value={acaYear}
-                onChange={(e) => setAcaYear(e.target.value)}
+                onChange={(e) => handleYearChange(e.target.value)}
                 options={academicYearDdl}
                 errors={errors.acaYear}
               />
@@ -445,7 +473,7 @@ const StudentLedger = ({ searchFilterModel }) => {
                 name="student"
                 label="Student"
                 value={student}
-                onChange={(e) => setStudent(e.target.value)}
+                onChange={(e) => handleStudent(e.target.value)}
                 options={ddlStudent}
                 // errors={errors.student}
               />
@@ -540,7 +568,8 @@ const StudentLedger = ({ searchFilterModel }) => {
                           listStudentLedger?.searchFilterModel?.ddlnpMonth
                         }
                         accountName={accountName}
-                        setOpenPopup={setOpenPopup}
+                        setOpenPrintPopup={setOpenPrintPopup}
+                        handlePrint={handlePrint}
                       />
                     )
                   )}
@@ -552,15 +581,15 @@ const StudentLedger = ({ searchFilterModel }) => {
                 <Grid item xs={3}>
                   <InputControl
                     disabled
-                    label="Amount Paid"
+                    label="Previous Balance"
                     value={
                       listStudentLedger?.studentLedgerModelLstsForStudent[
                         listStudentLedger?.studentLedgerModelLstsForStudent
-                          ?.length - 1
+                          ?.length - 2
                       ]?.Balance > 0
                         ? listStudentLedger?.studentLedgerModelLstsForStudent[
                             listStudentLedger?.studentLedgerModelLstsForStudent
-                              ?.length - 1
+                              ?.length - 2
                           ]?.Balance?.toFixed(2)
                         : "0"
                     }
@@ -722,13 +751,13 @@ const StudentLedger = ({ searchFilterModel }) => {
           </>
         )}
       </CustomContainer>
-      {/* <Popup
-        openPopup={openPopup}
-        setOpenPopup={setOpenPopup}
+      <Popup
+        openPopup={openPrintPopup}
+        setOpenPopup={setOpenPrintPopup}
         title="Print Student Ledger Bill"
       >
         <StudentLedgerBillPrint
-          date={singleBillPrint}
+          date={listStudentLedger && listStudentLedger?.studentLedgerModel}
           dbModel={singleBillPrint}
           classDdl={ddlClass}
           classId={classId}
@@ -739,9 +768,9 @@ const StudentLedger = ({ searchFilterModel }) => {
           // //   feeStructure={feeStructure}
           // monthlyFee={singleBillPrint}
           // extraFee={extraFee}
-          setOpenPopup={setOpenPopup}
+          setOpenPrintPopup={setOpenPrintPopup}
         />
-      </Popup> */}
+      </Popup>
       <Popup
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
@@ -753,9 +782,10 @@ const StudentLedger = ({ searchFilterModel }) => {
           <>
             <StudentLedgerRecipt
               regKey={
-                listStudentLedger &&
-                listStudentLedger?.studentLedgerModelLstsForStudent
-                  ?.RegistrationKey
+                listStudentLedger?.studentLedgerModelLstsForStudent[
+                  listStudentLedger?.studentLedgerModelLstsForStudent?.length -
+                    1
+                ]?.RegistrationKey
               }
               printReceipt={
                 listStudentLedger && listStudentLedger?.studentLedgerModel
@@ -766,17 +796,21 @@ const StudentLedger = ({ searchFilterModel }) => {
               fiscalYearDdl={
                 listStudentLedger?.searchFilterModel?.ddlAccountFiscalYear
               }
-              ddlAcademicYear={studentLedger?.ddlAcademicYear}
+              ddlAcademicYear={
+                listStudentLedger?.searchFilterModel?.ddlAcademicYear
+              }
               idYear={
-                listStudentLedger?.studentLedgerModelLstsForStudent
-                  ?.idAcademicYear
+                listStudentLedger?.studentLedgerModelLstsForStudent[
+                  listStudentLedger?.studentLedgerModelLstsForStudent?.length +
+                    1
+                ]?.IDAcademicYear
               }
               idClass={studentLedger?.idClass}
               setOpenPopup={setOpenPopup}
               prevBal={
                 listStudentLedger?.studentLedgerModelLstsForStudent[
                   listStudentLedger?.studentLedgerModelLstsForStudent?.length -
-                    1
+                    2
                 ]?.Balance
               }
               amountPaid={amountPaid}

@@ -9,7 +9,7 @@ import { useReactToPrint } from "react-to-print";
 import "../admitStudent/AdmitStudentPrint.css";
 import inWords from "../../helpers/numToWords";
 
-const StudentLedgerBillPrint = ({ setOpenPopup }) => {
+const StudentLedgerBillPrint = ({ setOpenPrintPopup }) => {
   const [notify, setNotify] = useState({
     isOpen: false,
     message: "",
@@ -179,7 +179,7 @@ const StudentLedgerBillPrint = ({ setOpenPopup }) => {
         }}
       >
         <Button
-          onClick={() => setOpenPopup(false)}
+          onClick={() => setOpenPrintPopup(false)}
           className="print-button-hide"
           variant="contained"
           color="primary"
