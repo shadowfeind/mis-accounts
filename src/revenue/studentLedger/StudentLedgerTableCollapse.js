@@ -10,7 +10,9 @@ import {
   List,
   ListItem,
 } from "@material-ui/core";
+import VisibilityRoundedIcon from "@material-ui/icons/VisibilityRounded";
 import EditIcon from "@material-ui/icons/Edit";
+import ReceiptRoundedIcon from "@material-ui/icons/ReceiptRounded";
 
 const useStyles = makeStyles({
   button: {
@@ -27,6 +29,8 @@ const StudentLedgerTableCollapse = ({
   ddlNpMonth,
   accountName,
   handlePrint,
+  handleRecipt,
+  updateHandler,
 }) => {
   const classes = useStyles();
 
@@ -39,12 +43,61 @@ const StudentLedgerTableCollapse = ({
   return (
     <>
       <TableRow key={item.$id}>
-        <TableCell>
+        <TableCell style={{ width: "15%" }}>
+          {item.Cr !== 0 ? (
+            <Button
+              variant="outlined"
+              color="primary"
+              className={classes.button}
+              onClick={() =>
+                handlePrint(
+                  item.AccountSubmitCode,
+                  item.LevelClass,
+                  item.IDAcademicYear,
+                  item.RegistrationKey,
+                  item.IDMonth
+                )
+              }
+            >
+              <VisibilityRoundedIcon style={{ fontSize: 12 }} />
+            </Button>
+          ) : (
+            " "
+          )}{" "}
+          {item.Dr !== 0 ? (
+            <Button
+              variant="contained"
+              color="default"
+              className={classes.button}
+              onClick={() =>
+                handleRecipt(
+                  item.AccountSubmitCode,
+                  item.RegistrationKey,
+
+                  item.TransactionDate?.slice(0, 10)
+                )
+              }
+            >
+              <ReceiptRoundedIcon style={{ fontSize: 12 }} />
+            </Button>
+          ) : (
+            " "
+          )}
           <Button
             variant="contained"
             color="primary"
             className={classes.button}
-            onClick={() => handlePrint(item.IDAdmissionRegistration)}
+            onClick={() =>
+              updateHandler(
+                item.IDTransactionDrCr,
+                item.AccountSubmitCode,
+                item.RegistrationKey,
+                item.LevelClass,
+                item.IDAcademicYear,
+                item.RegistrationKey,
+                item.IDMonth
+              )
+            }
           >
             <EditIcon style={{ fontSize: 12 }} />
           </Button>

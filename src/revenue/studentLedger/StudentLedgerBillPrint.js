@@ -9,7 +9,20 @@ import { useReactToPrint } from "react-to-print";
 import "../admitStudent/AdmitStudentPrint.css";
 import inWords from "../../helpers/numToWords";
 
-const StudentLedgerBillPrint = ({ setOpenPrintPopup }) => {
+const StudentLedgerBillPrint = ({
+  ddlNpMonth,
+  ddlAcaYear,
+  acaYear,
+  classId,
+  classDdl,
+  date,
+  dbModel,
+  monthId,
+  monthlyFee,
+  prevBal,
+  regKey,
+  setOpenPrintPopup,
+}) => {
   const [notify, setNotify] = useState({
     isOpen: false,
     message: "",
@@ -29,6 +42,10 @@ const StudentLedgerBillPrint = ({ setOpenPrintPopup }) => {
       type: "error",
     });
   }
+
+  const year = ddlAcaYear?.filter((x) => x.Key === acaYear);
+  const level = classDdl?.filter((x) => x.Key === classId);
+  const month = ddlNpMonth?.filter((x) => x.Key === monthId);
 
   const componentRef = useRef();
   const printPdf = useReactToPrint({
@@ -50,7 +67,7 @@ const StudentLedgerBillPrint = ({ setOpenPrintPopup }) => {
               BillDate: <br />
               {date?.slice(0, 10)}
             </h6>
-            <h6>Bill No: {voucher}</h6>
+            <h6>Bill No: </h6>
           </Grid>
           <Grid item xs={6}>
             <img src={`${API_URL}${headerBanners}`} width="100%" />
@@ -90,38 +107,24 @@ const StudentLedgerBillPrint = ({ setOpenPrintPopup }) => {
               </tr>
             </thead>
             <tbody>
-              {monthlyFee
-                ?.filter((x) => x.active === true)
-                ?.map((s, i) => (
-                  <tr key={s.IDAccountType}>
-                    <td>{i + 1}</td>
-                    <td>{s.AccountName}</td>
-                    <td>{Number(s.Cr)?.toFixed(2)}</td>
-                  </tr>
-                ))}
-              {extraFee
-                ?.filter((x) => x.active === true)
-                ?.map((s, i) => (
-                  <tr key={s.IDAccountType}>
-                    <td>
-                      {monthlyFee?.filter((x) => x.active === true)?.length +
-                        i +
-                        1}
-                    </td>
-                    <td>{s.AccountName}</td>
-                    <td>{Number(s.Cr)?.toFixed(2)}</td>
-                  </tr>
-                ))}
+              {monthlyFee?.map((s, i) => (
+                <tr key={s.AccountSubmitCode}>
+                  <td>{i + 1}</td>
+                  <td>{s.AccountName}</td>
+                  <td>{Number(s.Total)?.toFixed(2)}</td>
+                </tr>
+              ))}
+
               <tr>
                 <td></td>
                 <td>Previous Balance</td>
-                <td>0.00</td>
+                <td>{prevBal}</td>
               </tr>
               <tr>
                 <td></td>
                 <td>Total</td>
                 <td>
-                  {(
+                  {/* {(
                     monthlyFee
                       ?.filter((x) => x.active === true)
                       ?.reduce((acc, item) => {
@@ -132,7 +135,7 @@ const StudentLedgerBillPrint = ({ setOpenPrintPopup }) => {
                       ?.reduce((acc, item) => {
                         return acc + Number(item.Cr);
                       }, 0)
-                  ).toFixed(2)}
+                  ).toFixed(2)} */}
                 </td>
               </tr>
             </tbody>
@@ -142,7 +145,7 @@ const StudentLedgerBillPrint = ({ setOpenPrintPopup }) => {
           <h6>
             In words:{" "}
             <strong>
-              {inWords(
+              {/* {inWords(
                 monthlyFee
                   ?.filter((x) => x.active === true)
                   ?.reduce((acc, item) => {
@@ -153,7 +156,7 @@ const StudentLedgerBillPrint = ({ setOpenPrintPopup }) => {
                     ?.reduce((acc, item) => {
                       return acc + Number(item.Cr);
                     }, 0)
-              )}
+              )} */}
             </strong>
           </h6>
           <div className="student-admit-bottom-container-signature">
