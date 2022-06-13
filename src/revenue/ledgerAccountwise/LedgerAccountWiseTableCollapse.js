@@ -5,6 +5,7 @@ import { axiosInstance, tokenConfig } from "../../constants";
 const LedgerAccountWiseTableCollapse = ({ item, i, accountType }) => {
   const [studentName, setStudentName] = useState("");
   const [account, setAccount] = useState("");
+
   useEffect(() => {
     if (i !== 0) {
       const fetchData = async () => {

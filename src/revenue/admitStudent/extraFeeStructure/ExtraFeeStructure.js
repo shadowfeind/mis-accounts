@@ -119,7 +119,7 @@ const ExtraFeeStructure = ({
 
   const test = [];
   const handleExtraChange = (e, i) => {
-    if (e.length > 2) {
+    if (e.length > 1) {
       dispatch(getExtraFeeAdmitStudentAction(e, i));
     }
   };
@@ -236,7 +236,7 @@ const ExtraFeeStructure = ({
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label="Eg: extra fee"
+                            label="Eg: extra fee (type minimum two Characters)"
                             onChange={(e) =>
                               handleExtraChange(e.target.value, i)
                             }

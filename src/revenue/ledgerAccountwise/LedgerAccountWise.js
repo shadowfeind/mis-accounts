@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Button,
   InputAdornment,
@@ -39,6 +39,7 @@ import {
 } from "@material-ui/pickers";
 import LedgerAccountWiseTableCollapse from "./LedgerAccountWiseTableCollapse";
 import { axiosInstance, tokenConfig } from "../../constants";
+import { useReactToPrint } from "react-to-print";
 
 const useStyles = makeStyles((theme) => ({
   searchInput: {
@@ -83,6 +84,11 @@ const LedgerAccountWise = () => {
     fn: (item) => {
       return item;
     },
+  });
+
+  const componentRef = useRef();
+  const printPdf = useReactToPrint({
+    content: () => componentRef.current,
   });
 
   const [notify, setNotify] = useState({
@@ -345,7 +351,7 @@ const LedgerAccountWise = () => {
         {loading ? (
           <LoadingComp />
         ) : (
-          <>
+          <div ref={componentRef}>
             {listLedgerAccountWise && (
               <TableContainer className={classes.table}>
                 <TblHead />
@@ -362,7 +368,17 @@ const LedgerAccountWise = () => {
                 </TableBody>
               </TableContainer>
             )}
-          </>
+          </div>
+        )}
+        {listLedgerAccountWise && (
+          <Button
+            onClick={printPdf}
+            className="print-button-hide"
+            variant="contained"
+            color="primary"
+          >
+            PRINT
+          </Button>
         )}
       </CustomContainer>
       <Notification notify={notify} setNotify={setNotify} />

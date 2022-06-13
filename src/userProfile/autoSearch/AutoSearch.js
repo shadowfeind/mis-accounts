@@ -64,7 +64,7 @@ const AutoSearch = () => {
   }
 
   const handleChange = (e) => {
-    if (e.length > 2) {
+    if (e.length > 1) {
       setCurrentSearchQuery(e);
       dispatch(getEmployeeListAction(e));
     }
