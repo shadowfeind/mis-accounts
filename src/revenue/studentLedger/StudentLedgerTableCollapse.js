@@ -92,7 +92,8 @@ const StudentLedgerTableCollapse = ({
                 item.IDTransactionDrCr,
                 item.AccountSubmitCode,
                 item.LevelClass,
-                item.IDAcademicYear
+                item.IDAcademicYear,
+                item.IDMonth
               )
             }
           >
