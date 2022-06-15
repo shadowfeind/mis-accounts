@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
   withthanks: {
     paddingTop: " 55px",
     width: "100%",
-
     lineHeight: "0.3",
   },
   BottomContainer: {
