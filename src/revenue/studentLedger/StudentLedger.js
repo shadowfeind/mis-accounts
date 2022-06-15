@@ -137,16 +137,21 @@ const StudentLedger = () => {
   const [student, setStudent] = useState("");
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
-
+  const [currentClass, setCurrentClass] = useState("");
   const [fiscalYear, setFiscalYear] = useState("");
   const [amountPaid, setAmountPaid] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [advanced, setAdvanced] = useState(0);
   const [naration, setNaration] = useState("");
+  const [currentMonth, setCurrentMonth] = useState("");
   const [openReversePopup, setOpenReversePopup] = useState(false);
   const [openPopup, setOpenPopup] = useState(false);
   const [openPrintPopup, setOpenPrintPopup] = useState(false);
   const [openReciptPopup, setOpenReciptPopup] = useState(false);
+  const [amountPaidPrint, setAmountPaidPrint] = useState("");
+  const [discountPrint, setDiscountPrint] = useState("");
+  const [advancePaidPrint, setAdvancePaidPrint] = useState("");
+  const [narrationPrint, setNarrationPrint] = useState("");
   const [errors, setErrors] = useState({});
   const [tableData, setTableData] = useState([]);
   const [filterFn, setFilterFn] = useState({
@@ -243,6 +248,7 @@ const StudentLedger = () => {
       type: "error",
     });
     dispatch({ type: GET_REVERSE_ENTRY_RESET });
+    setOpenReversePopup(false);
   }
 
   if (postReverseEntryError) {
@@ -261,6 +267,7 @@ const StudentLedger = () => {
       type: "error",
     });
     dispatch({ type: GET_SINGLE_BILL_PRINT_RESET });
+    setOpenPrintPopup(false);
   }
 
   if (receiptPrintError) {
@@ -270,6 +277,7 @@ const StudentLedger = () => {
       type: "error",
     });
     dispatch({ type: GET_RECEIPT_PRINT_RESET });
+    setOpenReciptPopup(false);
   }
 
   if (postStudentLedgerSuccess) {
@@ -289,6 +297,7 @@ const StudentLedger = () => {
     dispatch(
       getListStudentLedgerAction(fiscalYear, student, startDate, endDate)
     );
+    setOpenReversePopup(false);
   }
   if (postStudentLedgerError) {
     setNotify({
@@ -474,21 +483,26 @@ const StudentLedger = () => {
         month
       )
     );
+    setCurrentMonth(month);
     setOpenPrintPopup(true);
   };
 
-  const updateHandler = (DrCr, submitCode, classId, acaYear, regKey, month) => {
+  const updateHandler = (DrCr, submitCode, classId, acaYear, month) => {
     dispatch(
       getReverseEntryAction(
         DrCr,
         submitCode,
         classId,
         acaYear,
-        regKey,
+        listStudentLedger?.studentLedgerModelLstsForStudent[
+          listStudentLedger?.studentLedgerModelLstsForStudent?.length - 1
+        ]?.RegistrationKey,
         fiscalYear,
         startDate,
         endDate,
-        month
+        listStudentLedger?.studentLedgerModelLstsForStudent[
+          listStudentLedger?.studentLedgerModelLstsForStudent?.length - 1
+        ]?.IDMonth
       )
     );
     setOpenReversePopup(true);
@@ -836,7 +850,7 @@ const StudentLedger = () => {
             listStudentLedger &&
             listStudentLedger?.studentLedgerModel?.TransactionDate
           }
-          dbModel={singleBillPrint?.dbModelLstForOneTimeBill?.StudentFullName}
+          dbModel={listStudentLedger && listStudentLedger?.studentLedgerModel}
           classDdl={ddlClass}
           monthlyFee={singleBillPrint?.dbModelLstForOneTimeBill}
           classId={classId}
@@ -855,6 +869,7 @@ const StudentLedger = () => {
           }
           monthId={singleBillPrint?.dbModelLstForOneTimeBill?.IDMonth}
           setOpenPrintPopup={setOpenPrintPopup}
+          currentMonth={currentMonth}
         />
       </Popup>
       <Popup
@@ -997,6 +1012,7 @@ const StudentLedger = () => {
           setOpenReversePopup={setOpenReversePopup}
           naration={naration}
           setNaration={setNaration}
+          searchFilterModel={reverseEntryPrint?.searchFilterModel}
         />
       </Popup>
       <Notification notify={notify} setNotify={setNotify} />

@@ -41,76 +41,69 @@ const useStyles = makeStyles({
   },
 });
 
-const initialFormValues = {
-  IDTransactionDrCr: 0,
-  AccountType: "",
-  AccountName: "",
-  TransactionType: "",
-  AccountSubmitCode: 0,
-  MatCenter: 0,
-  VoucherBillNo: "",
-  TransactionDate: "2022-06-13T10:29:16.680Z",
-  Dr: 0,
-  Cr: 0,
-  Narration: "",
-  CreateDate: "2022-06-13T10:29:16.680Z",
-  UpdateDate: "2022-06-13T10:29:16.680Z",
-  UpdateMachineCode: "",
-  IDVoucherType: 0,
-  IDAccountType: 0,
-  StartDate: "2022-06-13T10:29:16.680Z",
-  EndDate: "2022-06-13T10:29:16.680Z",
-  IDFiscalYear: 0,
-  VendorName: "",
-  IDVendor: 0,
-  Fee: 0,
-  Discount: 0,
-  PercentageDiscount: 0,
-  DiscountAmount: 0,
-  IsAccountReceivable: true,
-  RegistrationKey: "",
-  IDYearFacultyLink: 0,
-  IDAcademicYear: 0,
-  Level: 0,
-  IDMonth: 0,
-  IsActive: true,
-  Created_On: "2022-06-13T10:29:16.680Z",
-  Updated_On: "2022-06-13T10:29:16.680Z",
-};
+const initialFormValues = [
+  {
+    IDTransactionDrCr: 0,
+    AccountType: "",
+    AccountName: "",
+    TransactionType: "",
+    AccountSubmitCode: 0,
+    MatCenter: 0,
+    VoucherBillNo: "",
+    TransactionDate: "2022-06-13T10:29:16.680Z",
+    Dr: 0,
+    Cr: 0,
+    Narration: "",
+    CreateDate: "2022-06-13T10:29:16.680Z",
+    UpdateDate: "2022-06-13T10:29:16.680Z",
+    UpdateMachineCode: "",
+    IDVoucherType: 0,
+    IDAccountType: 0,
+    StartDate: "2022-06-13T10:29:16.680Z",
+    EndDate: "2022-06-13T10:29:16.680Z",
+    IDFiscalYear: 0,
+    VendorName: "",
+    IDVendor: 0,
+    Fee: 0,
+    Discount: 0,
+    PercentageDiscount: 0,
+    DiscountAmount: 0,
+    IsAccountReceivable: true,
+    RegistrationKey: "",
+    IDYearFacultyLink: 0,
+    IDAcademicYear: 0,
+    Level: 0,
+    IDMonth: 0,
+    IsActive: true,
+    Created_On: "2022-06-13T10:29:16.680Z",
+    Updated_On: "2022-06-13T10:29:16.680Z",
+  },
+];
 
 const StudentLedgerReverseEntryForm = ({
   reverseEntry,
-  naration,
+  searchFilterModel,
   setOpenReversePopup,
 }) => {
   const [active, setActive] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const { values, setValues, handleInputChange, errors, setErrors } =
-    useForm(initialFormValues);
-
-  const validate = () => {
-    let temp = { ...errors };
-
-    temp.Narration = !fieldValues.Narration ? "This Field is Required" : "";
-
-    setErrors({ ...temp });
-    return Object.values(temp).every((x) => x === "");
-  };
+  const { values, setValues } = useForm(initialFormValues);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validate()) {
-      setActive(true);
-      dispatch(postReverseEntryAction(reverseEntry));
-      // console.log(reverseEntry);
-    }
+
+    setActive(true);
+    dispatch(postReverseEntryAction(values, searchFilterModel));
   };
 
   useEffect(() => {
     if (reverseEntry) {
-      setValues(...reverseEntry);
+      setValues({
+        ...reverseEntry[0],
+        Narration: `Reverse Entry of ${reverseEntry[0]?.IDTransactionDrCr}`,
+      });
     }
   }, [reverseEntry]);
 
@@ -157,6 +150,37 @@ const StudentLedgerReverseEntryForm = ({
                         value={values.Narration}
                       />
                     </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+          </TableBody>
+          <TableBody>
+            {reverseEntry &&
+              reverseEntry
+                ?.sort((a, b) => a.RollNo - b.RollNo)
+                ?.map((s, i) => (
+                  <StyledTableRow
+                    key={s.AccountName}
+                    style={{ backgroundColor: "lightgrey" }}
+                  >
+                    <StyledTableCell
+                      component="th"
+                      scope="row"
+                    ></StyledTableCell>
+                    <StyledTableCell
+                      component="th"
+                      scope="row"
+                    ></StyledTableCell>
+                    <StyledTableCell
+                      component="th"
+                      scope="row"
+                    ></StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {s.Dr}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {s.Cr}
+                    </StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
                   </StyledTableRow>
                 ))}
           </TableBody>
