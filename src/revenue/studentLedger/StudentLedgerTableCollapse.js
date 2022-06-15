@@ -91,7 +91,6 @@ const StudentLedgerTableCollapse = ({
               updateHandler(
                 item.IDTransactionDrCr,
                 item.AccountSubmitCode,
-                item.RegistrationKey,
                 item.LevelClass,
                 item.IDAcademicYear
               )

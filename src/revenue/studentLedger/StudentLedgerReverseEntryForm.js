@@ -153,37 +153,6 @@ const StudentLedgerReverseEntryForm = ({
                   </StyledTableRow>
                 ))}
           </TableBody>
-          <TableBody>
-            {reverseEntry &&
-              reverseEntry
-                ?.sort((a, b) => a.RollNo - b.RollNo)
-                ?.map((s, i) => (
-                  <StyledTableRow
-                    key={s.AccountName}
-                    style={{ backgroundColor: "lightgrey" }}
-                  >
-                    <StyledTableCell
-                      component="th"
-                      scope="row"
-                    ></StyledTableCell>
-                    <StyledTableCell
-                      component="th"
-                      scope="row"
-                    ></StyledTableCell>
-                    <StyledTableCell
-                      component="th"
-                      scope="row"
-                    ></StyledTableCell>
-                    <StyledTableCell component="th" scope="row">
-                      {s.Dr}
-                    </StyledTableCell>
-                    <StyledTableCell component="th" scope="row">
-                      {s.Cr}
-                    </StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
-                  </StyledTableRow>
-                ))}
-          </TableBody>
         </Table>
       </TableContainer>
       <div

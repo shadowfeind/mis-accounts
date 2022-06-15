@@ -487,7 +487,7 @@ const StudentLedger = () => {
     setOpenPrintPopup(true);
   };
 
-  const updateHandler = (DrCr, submitCode, classId, acaYear, month) => {
+  const updateHandler = (DrCr, submitCode, classId, acaYear) => {
     dispatch(
       getReverseEntryAction(
         DrCr,
