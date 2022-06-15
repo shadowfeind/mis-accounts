@@ -21,6 +21,7 @@ const StudentLedgerBillPrint = ({
   monthlyFee,
   prevBal,
   regKey,
+  currentMonth,
   setOpenPrintPopup,
 }) => {
   const [notify, setNotify] = useState({
@@ -67,7 +68,7 @@ const StudentLedgerBillPrint = ({
               BillDate: <br />
               {date?.slice(0, 10)}
             </h6>
-            <h6>Bill No: </h6>
+            {/* <h6>Bill No: </h6> */}
           </Grid>
           <Grid item xs={6}>
             <img src={`${API_URL}${headerBanners}`} width="100%" />
@@ -87,7 +88,7 @@ const StudentLedgerBillPrint = ({
               <h6>Class: {level && level[0]?.Value} </h6>
             </Grid>
             <Grid item xs={3}>
-              <h6>Reg No: {dbModel?.RegistrationKey}</h6>
+              <h6>Reg No: {regKey}</h6>
             </Grid>
             <Grid item xs={3}>
               <h6> Roll No: {dbModel?.RollNo}</h6>
@@ -107,13 +108,15 @@ const StudentLedgerBillPrint = ({
               </tr>
             </thead>
             <tbody>
-              {monthlyFee?.map((s, i) => (
-                <tr key={s.AccountSubmitCode}>
-                  <td>{i + 1}</td>
-                  <td>{s.AccountName}</td>
-                  <td>{Number(s.Total)?.toFixed(2)}</td>
-                </tr>
-              ))}
+              {monthlyFee
+                ?.filter((x) => x.IDMonth == currentMonth)
+                ?.map((s, i) => (
+                  <tr key={s.AccountSubmitCode}>
+                    <td>{i + 1}</td>
+                    <td>{s.AccountName}</td>
+                    <td>{Number(s.Total)?.toFixed(2)}</td>
+                  </tr>
+                ))}
 
               <tr>
                 <td></td>

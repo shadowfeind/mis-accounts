@@ -255,27 +255,34 @@ export const getReverseEntryAction =
     }
   };
 
-export const postReverseEntryAction = (account) => async (dispatch) => {
-  try {
-    dispatch({ type: POST_REVERSE_ENTRY_REQUEST });
+export const postReverseEntryAction =
+  (ledgerAccountWiseModelLsts, searchFilterModel) => async (dispatch) => {
+    try {
+      dispatch({ type: POST_REVERSE_ENTRY_REQUEST });
 
-    const jsonData = JSON.stringify({
-      ledgerAccountWiseModelLst: account,
-    });
+      let ledgerAccountWiseModelLst = [];
+      ledgerAccountWiseModelLst.push(ledgerAccountWiseModelLsts);
 
-    const { data } = await axiosInstance.post(
-      `/api/StudentLedger/PostReverseEntry`,
-      jsonData,
-      tokenConfig()
-    );
+      const jsonData = JSON.stringify({
+        ledgerAccountWiseModelLst,
+        searchFilterModel,
+      });
 
-    dispatch({ type: POST_REVERSE_ENTRY_SUCCESS, payload: data });
-  } catch (error) {
-    dispatch({
-      type: POST_REVERSE_ENTRY_FAIL,
-      payload: error?.response?.data?.Message
-        ? error?.response?.data?.Message
-        : error?.message,
-    });
-  }
-};
+      console.log(jsonData);
+
+      const { data } = await axiosInstance.post(
+        `/api/StudentLedger/PostReverseEntry`,
+        jsonData,
+        tokenConfig()
+      );
+
+      dispatch({ type: POST_REVERSE_ENTRY_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: POST_REVERSE_ENTRY_FAIL,
+        payload: error?.response?.data?.Message
+          ? error?.response?.data?.Message
+          : error?.message,
+      });
+    }
+  };
