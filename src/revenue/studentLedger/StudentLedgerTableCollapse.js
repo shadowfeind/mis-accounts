@@ -43,7 +43,27 @@ const StudentLedgerTableCollapse = ({
   return (
     <>
       <TableRow key={item.$id}>
-        <TableCell style={{ width: "15%" }}>
+        <TableCell>
+          {item.Dr !== 0 ? (
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={() =>
+                handleRecipt(
+                  item.AccountSubmitCode,
+                  item.RegistrationKey,
+                  item.TransactionDate
+                )
+              }
+            >
+              <ReceiptRoundedIcon style={{ fontSize: 12 }} />
+            </Button>
+          ) : (
+            " "
+          )}
+        </TableCell>
+        <TableCell>
           {item.Cr !== 0 ? (
             <Button
               variant="outlined"
@@ -63,26 +83,10 @@ const StudentLedgerTableCollapse = ({
             </Button>
           ) : (
             " "
-          )}{" "}
-          {item.Dr !== 0 ? (
-            <Button
-              variant="contained"
-              color="default"
-              className={classes.button}
-              onClick={() =>
-                handleRecipt(
-                  item.AccountSubmitCode,
-                  item.RegistrationKey,
-
-                  item.TransactionDate?.slice(0, 10)
-                )
-              }
-            >
-              <ReceiptRoundedIcon style={{ fontSize: 12 }} />
-            </Button>
-          ) : (
-            " "
           )}
+        </TableCell>
+
+        <TableCell>
           <Button
             variant="contained"
             color="primary"

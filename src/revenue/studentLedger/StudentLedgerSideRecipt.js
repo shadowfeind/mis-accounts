@@ -29,9 +29,7 @@ const StudentLedgerSideRecipt = ({
   date,
   ddlClass,
   idClass,
-  fiscalYearDdl,
-  iDFiscalYear,
-  setOpenPopup,
+  setOpenReciptPopup,
   ddlAcademicYear,
   idYear,
   regKey,
@@ -39,6 +37,8 @@ const StudentLedgerSideRecipt = ({
   amountPaid,
   recieptNo,
   balDue,
+  discount,
+  advancedPaid,
 }) => {
   const [notify, setNotify] = useState({
     isOpen: false,
@@ -84,7 +84,6 @@ const StudentLedgerSideRecipt = ({
               fontSize: "14px",
             }}
           >
-            <Grid item xs={1}></Grid>
             <Grid item xs={2}>
               <h4>
                 BillDate: <br />
@@ -126,22 +125,38 @@ const StudentLedgerSideRecipt = ({
             <Grid item xs={2}>
               <b>Roll No:</b> {printReceipt?.RollNo}
             </Grid>
-
             <Grid item xs={1}></Grid>
             <Grid item xs={3}>
-              <b>a sum of Rs.</b> {amountPaid}
+              <b>a sum of Rs.</b>{" "}
+              {Number(amountPaid) + Number(discount) + Number(advancedPaid)}
             </Grid>
             <Grid item xs={8}>
               <b>In words Rs. </b>
-              {inWords(amountPaid)}
+              {inWords(
+                Number(amountPaid) + Number(discount) + Number(advancedPaid)
+              )}
             </Grid>
             <Grid item xs={1}></Grid>
+
             <Grid item xs={4}>
               <b>Previous Balance :</b> {prevBal}
             </Grid>
-            <Grid item xs={3}>
-              <b>Amount Paid :</b> {amountPaid}
-            </Grid>
+            {amountPaid > 0 && (
+              <Grid item xs={3}>
+                <b>Amount Paid :</b> {amountPaid}
+              </Grid>
+            )}
+            {discount > 0 && (
+              <Grid item xs={3}>
+                <b>Discount:</b> {discount}
+              </Grid>
+            )}
+            {advancedPaid > 0 && (
+              <Grid item xs={3}>
+                <b>Advanced Paid:</b> {advancedPaid}
+              </Grid>
+            )}
+
             <Grid item xs={3}>
               <b>Balance Due: </b>
               {balDue}
@@ -176,11 +191,9 @@ const StudentLedgerSideRecipt = ({
               fontSize: "14px",
             }}
           >
-            <Grid item xs={1}></Grid>
             <Grid item xs={2}>
               <h4>
-                BillDate:
-                <br />
+                BillDate: <br />
                 {date?.StartDate?.slice(0, 10)}
               </h4>
             </Grid>
@@ -219,23 +232,38 @@ const StudentLedgerSideRecipt = ({
             <Grid item xs={2}>
               <b>Roll No:</b> {printReceipt?.RollNo}
             </Grid>
-
             <Grid item xs={1}></Grid>
             <Grid item xs={3}>
-              <b>a sum of Rs.</b> {amountPaid}
+              <b>a sum of Rs.</b>{" "}
+              {Number(amountPaid) + Number(discount) + Number(advancedPaid)}
             </Grid>
             <Grid item xs={8}>
               <b>In words Rs. </b>
-              {inWords(amountPaid)}
+              {inWords(
+                Number(amountPaid) + Number(discount) + Number(advancedPaid)
+              )}
             </Grid>
-
             <Grid item xs={1}></Grid>
+
             <Grid item xs={4}>
               <b>Previous Balance :</b> {prevBal}
             </Grid>
-            <Grid item xs={3}>
-              <b>Amount Paid :</b> {amountPaid}
-            </Grid>
+            {amountPaid > 0 && (
+              <Grid item xs={3}>
+                <b>Amount Paid :</b> {amountPaid}
+              </Grid>
+            )}
+            {discount > 0 && (
+              <Grid item xs={3}>
+                <b>Discount:</b> {discount}
+              </Grid>
+            )}
+            {advancedPaid > 0 && (
+              <Grid item xs={3}>
+                <b>Advanced Paid:</b> {advancedPaid}
+              </Grid>
+            )}
+
             <Grid item xs={3}>
               <b>Balance Due: </b>
               {balDue}
@@ -269,7 +297,7 @@ const StudentLedgerSideRecipt = ({
             }}
           >
             <Button
-              onClick={() => setOpenPopup(false)}
+              onClick={() => setOpenReciptPopup(false)}
               className="print-button-hide"
               variant="contained"
               color="primary"

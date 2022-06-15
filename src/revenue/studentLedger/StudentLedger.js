@@ -112,7 +112,9 @@ const initialFormValues = {
 };
 
 const tableHeader = [
-  { id: "actions", label: "Actions", disableSorting: true },
+  { id: "actions", label: "Recipt", disableSorting: true },
+  { id: "actions", label: "Bill Print", disableSorting: true },
+  { id: "actions", label: "Reverse Entry", disableSorting: true },
   { id: "idDrCr", label: "idDrCr" },
   { id: "Voucher/BillNo", label: "Voucher/BillNo" },
   { id: "Class", label: "Class" },
@@ -950,24 +952,22 @@ const StudentLedger = () => {
         setOpenPopup={setOpenPopup}
         title="Print Student Ledger Reciept"
       >
-        {listContainer && (
-          <StudentLedgerRecipt
-            regKey={regKeyContainer}
-            recieptNo={regKeyNo}
-            printReceipt={printReceipts}
-            date={dates}
-            ddlClass={studentLedger?.ddlClass}
-            ddlAcademicYear={years}
-            idYear={idYears}
-            idClass={studentLedger?.idClass}
-            setOpenPopup={setOpenPopup}
-            prevBal={prevBals}
-            amountPaid={amountPaidPrint}
-            discount={discountPrint}
-            advancedPaid={advancePaidPrint}
-            balDue={balDues}
-          />
-        )}
+        <StudentLedgerRecipt
+          regKey={regKeyContainer}
+          recieptNo={regKeyNo}
+          printReceipt={printReceipts}
+          date={dates}
+          ddlClass={studentLedger?.ddlClass}
+          ddlAcademicYear={years}
+          idYear={idYears}
+          idClass={studentLedger?.idClass}
+          setOpenPopup={setOpenPopup}
+          prevBal={prevBals}
+          amountPaid={amountPaidPrint}
+          discount={discountPrint}
+          advancedPaid={advancePaidPrint}
+          balDue={balDues}
+        />
       </Popup>
       <Popup
         openPopup={openReciptPopup}
@@ -995,6 +995,9 @@ const StudentLedger = () => {
             fiscalYearDdl={
               listStudentLedger?.searchFilterModel?.ddlAccountFiscalYear
             }
+            amountPaid={receiptPrint?.amountPaid}
+            discount={receiptPrint?.discount}
+            advancedPaid={receiptPrint?.advancedPaid}
             ddlAcademicYear={
               listStudentLedger?.searchFilterModel?.ddlAcademicYear
             }
@@ -1005,28 +1008,8 @@ const StudentLedger = () => {
             }
             idClass={studentLedger?.idClass}
             setOpenReciptPopup={setOpenReciptPopup}
-            prevBal={
-              amountPaid?.length > 0
-                ? listStudentLedger?.studentLedgerModelLstsForStudent[
-                    listStudentLedger?.studentLedgerModelLstsForStudent
-                      ?.length - 2
-                  ]?.Balance
-                : listStudentLedger?.studentLedgerModelLstsForStudent[
-                    listStudentLedger?.studentLedgerModelLstsForStudent
-                      ?.length - 1
-                  ]?.Balance
-            }
-            amountPaid={amountPaid}
-            balDue={
-              listStudentLedger?.studentLedgerModelLstsForStudent[
-                listStudentLedger?.studentLedgerModelLstsForStudent?.length - 1
-              ]?.Balance > 0
-                ? listStudentLedger?.studentLedgerModelLstsForStudent[
-                    listStudentLedger?.studentLedgerModelLstsForStudent
-                      ?.length - 1
-                  ]?.Balance?.toFixed(2)
-                : "0"
-            }
+            prevBal={receiptPrint?.previousBalanced}
+            balDue={receiptPrint?.balanceDue}
           />
         </>
       </Popup>
