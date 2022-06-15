@@ -33,6 +33,8 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import OneTimeBillPrintModal from "./OneTimeBillPrintModal";
 import { getActiveStudentForBillGenerateAction } from "../billGenerate/BillgenerateActions";
+import { GET_ACTIVE_STUDENT_ONLY_RESET } from "../studentLedger/StudentLedgerConstants";
+import { getActiveStudentOnlyAction } from "../studentLedger/StudentLedgerActions";
 
 const useStyles = makeStyles((theme) => ({
   searchInput: {
@@ -80,6 +82,10 @@ const OneTimeBillPrint = () => {
     (state) => state.getAllOneTimeBillPrint
   );
 
+  const { activeStudentOnly, error: activeStudentOnlyError } = useSelector(
+    (state) => state.getActiveStudentOnly
+  );
+
   const { printOneTimeBill, error: printOneTimeBillError } = useSelector(
     (state) => state.getPrintOneTimeBillPrint
   );
@@ -102,18 +108,27 @@ const OneTimeBillPrint = () => {
     dispatch({ type: GET_PRINT_ONE_TIME_BILL_PRINT_RESET });
   }
 
-  const handleYearChange = (value) => {
-    dispatch(
-      getActiveStudentForBillGenerateAction(value, faculty, classId, shift)
-    );
-    setAcaYear(value);
-  };
-  const handleClassChange = (value) => {
-    dispatch(
-      getActiveStudentForBillGenerateAction(acaYear, faculty, value, shift)
-    );
-    setClassId(value);
-  };
+  if (activeStudentOnlyError) {
+    setNotify({
+      isOpen: true,
+      message: activeStudentOnlyError,
+      type: "error",
+    });
+    dispatch({ type: GET_ACTIVE_STUDENT_ONLY_RESET });
+  }
+
+  // const handleYearChange = (value) => {
+  //   dispatch(
+  //     getActiveStudentForBillGenerateAction(value, faculty, classId, shift)
+  //   );
+  //   setAcaYear(value);
+  // };
+  // const handleClassChange = (value) => {
+  //   dispatch(
+  //     getActiveStudentForBillGenerateAction(acaYear, faculty, value, shift)
+  //   );
+  //   setClassId(value);
+  // };
 
   useEffect(() => {
     dispatch(getAllOneTimeBillPrintAction());
@@ -135,8 +150,7 @@ const OneTimeBillPrint = () => {
       setAcaYear(oneTimeBillPrint?.searchFilterModel.ddlAcademicYear[0]?.Key);
       setDdlClass(oneTimeBillPrint?.searchFilterModel?.ddlClass);
       setClassId(oneTimeBillPrint?.searchFilterModel.ddlClass[0]?.Key);
-      setDdlStudent(oneTimeBillPrint?.searchFilterModel?.ddlStudent);
-      setStudent(oneTimeBillPrint?.searchFilterModel.ddlStudent[0]?.Key);
+
       setNpMonthDdl(oneTimeBillPrint?.searchFilterModel?.ddlnpMonth);
       setNpMonth(oneTimeBillPrint?.searchFilterModel.npMonth);
       setFaculty(
@@ -146,6 +160,13 @@ const OneTimeBillPrint = () => {
         oneTimeBillPrint?.searchFilterModel.idAdmissionFeeStructure
       );
       setTransactionDate(oneTimeBillPrint?.Datetime?.slice(0, 10));
+
+      dispatch(
+        getActiveStudentOnlyAction(
+          oneTimeBillPrint?.searchFilterModel.ddlAcademicYear[0]?.Key,
+          oneTimeBillPrint?.searchFilterModel.ddlClass[0]?.Key
+        )
+      );
     }
   }, [oneTimeBillPrint]);
 
@@ -177,6 +198,30 @@ const OneTimeBillPrint = () => {
     }
   };
 
+  const handleYearChange = (value) => {
+    setAcaYear(value);
+    if ((value, classId)) {
+      dispatch(getActiveStudentOnlyAction(value, classId));
+    }
+    setStudent("");
+    setDdlStudent([]);
+  };
+
+  const handleClassChange = (value) => {
+    setClassId(value);
+    if ((acaYear, value)) {
+      dispatch(getActiveStudentOnlyAction(acaYear, value));
+    }
+    setStudent("");
+    setDdlStudent([]);
+  };
+
+  useEffect(() => {
+    if (activeStudentOnly) {
+      setDdlStudent(activeStudentOnly);
+      setStudent(activeStudentOnly[activeStudentOnly?.length - 1]?.Key);
+    }
+  }, [activeStudentOnly]);
   return (
     <>
       <CustomContainer>
