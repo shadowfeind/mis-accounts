@@ -179,16 +179,18 @@ const OneTimeBillPrint = ({
             In words:{" "}
             <strong>
               {inWords(
-                monthlyFee
-                  ?.filter((x) => x.active === true)
-                  ?.reduce((acc, item) => {
-                    return acc + Number(item.Cr);
-                  }, 0) +
+                (
+                  monthlyFee
+                    ?.filter((x) => x.active === true)
+                    ?.reduce((acc, item) => {
+                      return acc + Number(item.Cr);
+                    }, 0) +
                   extraFee
                     ?.filter((x) => x.active === true)
                     ?.reduce((acc, item) => {
                       return acc + Number(item.Cr);
                     }, 0)
+                )?.toFixed(0)
               )}
             </strong>
           </h6>

@@ -224,7 +224,7 @@ const AdmitStudentPrint = ({
           <h6>
             In words:{" "}
             <strong>
-              {inWords(
+              {/* {inWords(
                 feeStructure?.reduce((acc, item) => {
                   return acc + Number(item.Cr);
                 }, 0) +
@@ -238,8 +238,8 @@ const AdmitStudentPrint = ({
                     ?.reduce((acc, item) => {
                       return acc + Number(item.Cr);
                     }, 0)
-              )}
-              {/* {inWords(prevBlc)} */}
+              )} */}
+              {inWords(prevBlc?.toFixed(0))}
             </strong>
           </h6>
           <div className="student-admit-bottom-container-signature">

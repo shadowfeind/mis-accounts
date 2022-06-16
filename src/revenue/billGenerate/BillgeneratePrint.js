@@ -208,7 +208,7 @@ const BillgeneratePrint = ({
         </div>
         <div className="student-admit-bottom-container">
           <h6>
-            In words: <strong>{inWords(prevBlc)}</strong>
+            In words: <strong>{inWords(prevBlc?.toFixed(0))}</strong>
           </h6>
           <div className="student-admit-bottom-container-signature">
             <Grid container>

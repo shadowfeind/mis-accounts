@@ -90,7 +90,7 @@ const OneTimeBillPrintDesign = ({
                 <tr key={s.IDAccountType}>
                   <td>{i + 1}</td>
                   <td>{s.AccountName}</td>
-                  <td>{s.Total}</td>
+                  <td>{Number(s.Total)?.toFixed(2)}</td>
                 </tr>
               ))}
             {tdToRender &&
@@ -117,14 +117,14 @@ const OneTimeBillPrintDesign = ({
             <tr>
               <td></td>
               <td>Total</td>
-              <td>{prevBlc}</td>
+              <td>{prevBlc?.toFixed(2)}</td>
             </tr>
           </tbody>
         </table>
       </div>
       <div className="student-admit-bottom-container">
         <h6>
-          In words: <strong>{inWords(prevBlc)}</strong>
+          In words: <strong>{inWords(prevBlc?.toFixed(0))}</strong>
         </h6>
         <div className="student-admit-bottom-container-signature">
           <Grid container>
