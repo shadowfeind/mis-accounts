@@ -9,6 +9,13 @@ import { useReactToPrint } from "react-to-print";
 import { getHeaderBannerAction } from "../../dashboard/DashboardActions";
 
 const useStyles = makeStyles((theme) => ({
+  studentLedgerPrint: {
+    margin: "10px",
+    border: "1px solid #000",
+    padding: "10px 10px 10px 30px",
+    borderRadius: "6px",
+    fontSize: "12px",
+  },
   withthanks: {
     paddingTop: " 55px",
     width: "100%",
@@ -77,14 +84,9 @@ const StudentLedgerRecipt = ({
   return (
     <>
       <div ref={componentRef}>
-        <div>
-          <Grid
-            container
-            style={{
-              fontSize: "14px",
-            }}
-          >
-            <Grid item xs={2}>
+        <div className={classes.studentLedgerPrint}>
+          <Grid container style={{}}>
+            <Grid item xs={3}>
               <h4>
                 BillDate: <br />
                 {date?.StartDate?.slice(0, 10)}
@@ -105,13 +107,10 @@ const StudentLedgerRecipt = ({
               fontSize: "20px",
             }}
           >
-            <Grid item xs={1}></Grid>
             <Grid item xs={10}>
               <b>Received with thanks from: </b> {printReceipt?.StudentName}
             </Grid>
-            <Grid item xs={1}></Grid>
 
-            <Grid item xs={1}></Grid>
             <Grid item xs={4}>
               <b>Academic Batch</b> {year?.length > 0 && year[0]?.Value}
             </Grid>
@@ -125,7 +124,7 @@ const StudentLedgerRecipt = ({
             <Grid item xs={2}>
               <b>Roll No:</b> {printReceipt?.RollNo}
             </Grid>
-            <Grid item xs={1}></Grid>
+
             <Grid item xs={3}>
               <b>a sum of Rs.</b>{" "}
               {Number(amountPaid) + Number(discount) + Number(advancedPaid)}
@@ -136,7 +135,6 @@ const StudentLedgerRecipt = ({
                 Number(amountPaid) + Number(discount) + Number(advancedPaid)
               )}
             </Grid>
-            <Grid item xs={1}></Grid>
 
             <Grid item xs={4}>
               <b>Previous Balance :</b> {prevBal}
@@ -161,7 +159,6 @@ const StudentLedgerRecipt = ({
               <b>Balance Due: </b>
               {balDue - amountPaid - discount - advancedPaid}
             </Grid>
-            <Grid item xs={1}></Grid>
           </Grid>
 
           <Grid
@@ -180,18 +177,10 @@ const StudentLedgerRecipt = ({
               <h5>Accountant</h5>
             </Grid>
           </Grid>
-          <hr
-            style={{
-              margin: "40px 0",
-            }}
-          ></hr>
-          <Grid
-            container
-            style={{
-              fontSize: "14px",
-            }}
-          >
-            <Grid item xs={2}>
+        </div>
+        <div className={classes.studentLedgerPrint}>
+          <Grid container>
+            <Grid item xs={3}>
               <h4>
                 BillDate: <br />
                 {date?.StartDate?.slice(0, 10)}
@@ -212,13 +201,10 @@ const StudentLedgerRecipt = ({
               fontSize: "20px",
             }}
           >
-            <Grid item xs={1}></Grid>
             <Grid item xs={10}>
               <b>Received with thanks from: </b> {printReceipt?.StudentName}
             </Grid>
-            <Grid item xs={1}></Grid>
 
-            <Grid item xs={1}></Grid>
             <Grid item xs={4}>
               <b>Academic Batch</b> {year?.length > 0 && year[0]?.Value}
             </Grid>
@@ -232,7 +218,7 @@ const StudentLedgerRecipt = ({
             <Grid item xs={2}>
               <b>Roll No:</b> {printReceipt?.RollNo}
             </Grid>
-            <Grid item xs={1}></Grid>
+
             <Grid item xs={3}>
               <b>a sum of Rs.</b>{" "}
               {Number(amountPaid) + Number(discount) + Number(advancedPaid)}
@@ -243,7 +229,6 @@ const StudentLedgerRecipt = ({
                 Number(amountPaid) + Number(discount) + Number(advancedPaid)
               )}
             </Grid>
-            <Grid item xs={1}></Grid>
 
             <Grid item xs={4}>
               <b>Previous Balance :</b> {prevBal}
@@ -268,7 +253,6 @@ const StudentLedgerRecipt = ({
               <b>Balance Due: </b>
               {balDue - amountPaid - discount - advancedPaid}
             </Grid>
-            <Grid item xs={1}></Grid>
           </Grid>
 
           <Grid
@@ -287,36 +271,36 @@ const StudentLedgerRecipt = ({
               <h5>Accountant</h5>
             </Grid>
           </Grid>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "end",
-              paddingTop: "10px",
-              marginTop: "10px",
-              borderTop: "1px solid #f3f3f3",
-            }}
-          >
-            <Button
-              onClick={() => setOpenPopup(false)}
-              className="print-button-hide"
-              variant="contained"
-              color="primary"
-              style={{ marginRight: "16px" }}
-            >
-              CANCEL
-            </Button>
-            <Button
-              onClick={printPdf}
-              className="print-button-hide"
-              variant="contained"
-              color="primary"
-            >
-              PRINT
-            </Button>
-          </div>
-          <Notification notify={notify} setNotify={setNotify} />
         </div>
       </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "end",
+          paddingTop: "10px",
+          marginTop: "10px",
+          borderTop: "1px solid #f3f3f3",
+        }}
+      >
+        <Button
+          onClick={() => setOpenPopup(false)}
+          className="print-button-hide"
+          variant="contained"
+          color="primary"
+          style={{ marginRight: "16px" }}
+        >
+          CANCEL
+        </Button>
+        <Button
+          onClick={printPdf}
+          className="print-button-hide"
+          variant="contained"
+          color="primary"
+        >
+          PRINT
+        </Button>
+      </div>
+      <Notification notify={notify} setNotify={setNotify} />
     </>
   );
 };

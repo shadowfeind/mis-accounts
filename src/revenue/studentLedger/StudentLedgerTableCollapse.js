@@ -53,7 +53,7 @@ const StudentLedgerTableCollapse = ({
                 handleRecipt(
                   item.AccountSubmitCode,
                   item.RegistrationKey,
-                  item.TransactionDate
+                  item.TransactionDate?.slice(0, 19)
                 )
               }
             >
