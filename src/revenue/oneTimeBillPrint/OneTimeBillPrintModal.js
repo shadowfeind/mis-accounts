@@ -59,7 +59,9 @@ const OneTimeBillPrintModal = ({
             (student, i) => {
               let currentStudentBill =
                 printOneTimeBill?.dbModelLstForOneTimeBill?.filter(
-                  (x) => x.RegistrationKey == student.RegistrationKey
+                  (x) =>
+                    x.RegistrationKey == student.RegistrationKey &&
+                    x.IDMonth == printOneTimeBill.IDMonth
                 );
 
               return (

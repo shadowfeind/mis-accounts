@@ -335,6 +335,7 @@ const OneTimeBillPrint = () => {
           setOpenPopup={setOpenPopup}
         />
       </Popup>
+      <Notification notify={notify} setNotify={setNotify} />
     </>
   );
 };
