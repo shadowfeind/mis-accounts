@@ -954,11 +954,7 @@ const StudentLedger = () => {
                 listStudentLedger?.studentLedgerModelLstsForStudent?.length - 1
               ]?.RegistrationKey
             }
-            recieptNo={
-              listStudentLedger?.studentLedgerModelLstsForStudent[
-                listStudentLedger?.studentLedgerModelLstsForStudent?.length - 1
-              ]?.VoucherBillNo
-            }
+            recieptNo={receiptPrint?.studentLedgerBill?.VoucherBillNo}
             printReceipt={
               listStudentLedger && listStudentLedger?.studentLedgerModel
             }

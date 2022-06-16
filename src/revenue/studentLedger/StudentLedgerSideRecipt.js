@@ -129,31 +129,35 @@ const StudentLedgerSideRecipt = ({
             <Grid item xs={8}>
               <b>In words Rs. </b>
               {inWords(
-                Number(amountPaid) + Number(discount) + Number(advancedPaid)
-              )}
+                (
+                  Number(amountPaid) +
+                  Number(discount) +
+                  Number(advancedPaid)
+                )?.toFixed(0)
+              )}{" "}
             </Grid>
 
             <Grid item xs={4}>
-              <b>Previous Balance :</b> {prevBal}
+              <b>Previous Balance :Rs.</b> {prevBal}
             </Grid>
             {amountPaid > 0 && (
               <Grid item xs={3}>
-                <b>Amount Paid :</b> {amountPaid}
+                <b>Amount Paid :Rs.</b> {amountPaid}
               </Grid>
             )}
             {discount > 0 && (
               <Grid item xs={3}>
-                <b>Discount:</b> {discount}
+                <b>Discount:Rs.</b> {discount}
               </Grid>
             )}
             {advancedPaid > 0 && (
               <Grid item xs={3}>
-                <b>Advanced Paid:</b> {advancedPaid}
+                <b>Advanced Paid:Rs.</b> {advancedPaid}
               </Grid>
             )}
 
             <Grid item xs={3}>
-              <b>Balance Due: </b>
+              <b>Balance Due:Rs. </b>
               {prevBal - amountPaid - discount - advancedPaid}
             </Grid>
           </Grid>
@@ -223,31 +227,35 @@ const StudentLedgerSideRecipt = ({
             <Grid item xs={8}>
               <b>In words Rs. </b>
               {inWords(
-                Number(amountPaid) + Number(discount) + Number(advancedPaid)
+                (
+                  Number(amountPaid) +
+                  Number(discount) +
+                  Number(advancedPaid)
+                )?.toFixed(0)
               )}
             </Grid>
 
             <Grid item xs={4}>
-              <b>Previous Balance :</b> {prevBal}
+              <b>Previous Balance :Rs.</b> {prevBal}
             </Grid>
             {amountPaid > 0 && (
               <Grid item xs={3}>
-                <b>Amount Paid :</b> {amountPaid}
+                <b>Amount Paid :Rs.</b> {amountPaid}
               </Grid>
             )}
             {discount > 0 && (
               <Grid item xs={3}>
-                <b>Discount:</b> {discount}
+                <b>Discount:Rs.</b> {discount}
               </Grid>
             )}
             {advancedPaid > 0 && (
               <Grid item xs={3}>
-                <b>Advanced Paid:</b> {advancedPaid}
+                <b>Advanced Paid:Rs.</b> {advancedPaid}
               </Grid>
             )}
 
             <Grid item xs={3}>
-              <b>Balance Due: </b>
+              <b>Balance Due:Rs. </b>
               {balDue}
             </Grid>
           </Grid>
