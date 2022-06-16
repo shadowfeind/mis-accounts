@@ -35,12 +35,13 @@ const LedgerAccountWiseTableCollapse = ({ item, i, accountType }) => {
     <>
       <TableRow key={item.$id}>
         <TableCell>{i + 1}</TableCell>
-        <TableCell>{item.TransactionDate?.slice(0, 10)}</TableCell>
         <TableCell>{studentName}</TableCell>
+        <TableCell>{item.AccountType}</TableCell>
         <TableCell>{account}</TableCell>
         <TableCell>{item.VoucherBillNo}</TableCell>
-        <TableCell>{item.AccountType}</TableCell>
         <TableCell>{item.TransactionType}</TableCell>
+        <TableCell>{item.TransactionDate?.slice(0, 10)}</TableCell>
+        <TableCell>{item.Narration}</TableCell>
         <TableCell>{item.Dr?.toFixed(2)}</TableCell>
         <TableCell>{item.Cr?.toFixed(2)}</TableCell>
         <TableCell>

@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import VisibilityRoundedIcon from "@material-ui/icons/VisibilityRounded";
 import EditIcon from "@material-ui/icons/Edit";
+import RestoreIcon from "@material-ui/icons/Restore";
 import ReceiptRoundedIcon from "@material-ui/icons/ReceiptRounded";
 
 const useStyles = makeStyles({
@@ -46,7 +47,7 @@ const StudentLedgerTableCollapse = ({
         <TableCell>
           {item.Dr !== 0 ? (
             <Button
-              variant="contained"
+              variant="outlined"
               color="primary"
               className={classes.button}
               onClick={() =>
@@ -57,13 +58,13 @@ const StudentLedgerTableCollapse = ({
                 )
               }
             >
-              <ReceiptRoundedIcon style={{ fontSize: 12 }} />
+              <VisibilityRoundedIcon style={{ fontSize: 16 }} />
             </Button>
           ) : (
             " "
           )}
         </TableCell>
-        <TableCell>
+        {/* <TableCell>
           {item.Cr !== 0 ? (
             <Button
               variant="outlined"
@@ -79,12 +80,12 @@ const StudentLedgerTableCollapse = ({
                 )
               }
             >
-              <VisibilityRoundedIcon style={{ fontSize: 12 }} />
+              <ReceiptRoundedIcon style={{ fontSize: 12 }} />
             </Button>
           ) : (
             " "
           )}
-        </TableCell>
+        </TableCell> */}
 
         <TableCell>
           <Button
@@ -101,7 +102,7 @@ const StudentLedgerTableCollapse = ({
               )
             }
           >
-            <EditIcon style={{ fontSize: 12 }} />
+            <RestoreIcon style={{ fontSize: 16 }} />
           </Button>
         </TableCell>
         <TableCell>{item.IDTransactionDrCr}</TableCell>

@@ -54,12 +54,13 @@ const useStyles = makeStyles((theme) => ({
 
 const tableHeader = [
   { id: "S.No.", label: "S.No." },
-  { id: "TransactionDate", label: "TransactionDate" },
   { id: "RegistrationKey", label: "Student Name" },
+  { id: "AccountType", label: "Account Form" },
   { id: "IDAccountType", label: "Account Name" },
   { id: "VoucherBillNo", label: "Bill No." },
-  { id: "AccountType", label: "A/C Type" },
   { id: "TransactionType", label: "Dr/Cr" },
+  { id: "TransactionDate", label: "TransactionDate" },
+  { id: "Narration", label: "Narration" },
   { id: "Dr", label: "Dr(Rs)" },
   { id: "Cr", label: "Cr(Rs)" },
   { id: "Balance", label: "Balance" },

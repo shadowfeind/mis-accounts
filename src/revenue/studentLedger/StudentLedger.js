@@ -113,7 +113,6 @@ const initialFormValues = {
 
 const tableHeader = [
   { id: "actions", label: "Recipt", disableSorting: true },
-  { id: "actions", label: "Bill Print", disableSorting: true },
   { id: "actions", label: "Reverse Entry", disableSorting: true },
   { id: "idDrCr", label: "idDrCr" },
   { id: "Voucher/BillNo", label: "Voucher/BillNo" },
@@ -960,6 +959,7 @@ const StudentLedger = () => {
           ddlClass={studentLedger?.ddlClass}
           ddlAcademicYear={years}
           idYear={idYears}
+          years={receiptPrint?.studentLedgerBill?.AcademicYear}
           idClass={studentLedger?.idClass}
           setOpenPopup={setOpenPopup}
           prevBal={prevBals}
@@ -998,14 +998,7 @@ const StudentLedger = () => {
             amountPaid={receiptPrint?.amountPaid}
             discount={receiptPrint?.discount}
             advancedPaid={receiptPrint?.advancedPaid}
-            ddlAcademicYear={
-              listStudentLedger?.searchFilterModel?.ddlAcademicYear
-            }
-            idYear={
-              listStudentLedger?.studentLedgerModelLstsForStudent[
-                listStudentLedger?.studentLedgerModelLstsForStudent?.length + 1
-              ]?.IDAcademicYear
-            }
+            acaYears={receiptPrint?.studentLedgerBill?.AcademicYear}
             idClass={studentLedger?.idClass}
             setOpenReciptPopup={setOpenReciptPopup}
             prevBal={receiptPrint?.previousBalanced}

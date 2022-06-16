@@ -36,8 +36,6 @@ const StudentLedgerSideRecipt = ({
   ddlClass,
   idClass,
   setOpenReciptPopup,
-  ddlAcademicYear,
-  idYear,
   regKey,
   prevBal,
   amountPaid,
@@ -45,6 +43,7 @@ const StudentLedgerSideRecipt = ({
   balDue,
   discount,
   advancedPaid,
+  acaYears,
 }) => {
   const [notify, setNotify] = useState({
     isOpen: false,
@@ -57,7 +56,6 @@ const StudentLedgerSideRecipt = ({
     (state) => state.getHeaderBanner
   );
 
-  const year = ddlAcademicYear?.filter((x) => x.Key === idYear);
   const classID = ddlClass?.filter((x) => x.Key == idClass);
 
   if (headerBannersError) {
@@ -111,7 +109,7 @@ const StudentLedgerSideRecipt = ({
             </Grid>
 
             <Grid item xs={4}>
-              <b>Academic Batch</b> {year?.length > 0 && year[0]?.Value}
+              <b>Academic Batch</b> {acaYears}
             </Grid>
             <Grid item xs={3}>
               <b>Class</b> {classID?.length > 0 && classID[0]?.Value}
@@ -156,7 +154,7 @@ const StudentLedgerSideRecipt = ({
 
             <Grid item xs={3}>
               <b>Balance Due: </b>
-              {balDue}
+              {prevBal - amountPaid - discount - advancedPaid}
             </Grid>
           </Grid>
 
@@ -205,7 +203,7 @@ const StudentLedgerSideRecipt = ({
             </Grid>
 
             <Grid item xs={4}>
-              <b>Academic Batch</b> {year?.length > 0 && year[0]?.Value}
+              <b>Academic Batch</b> {acaYears}
             </Grid>
             <Grid item xs={3}>
               <b>Class</b> {classID?.length > 0 && classID[0]?.Value}
