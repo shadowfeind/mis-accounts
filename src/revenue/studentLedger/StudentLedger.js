@@ -155,7 +155,7 @@ const StudentLedger = () => {
   const [narrationPrint, setNarrationPrint] = useState("");
   const [errors, setErrors] = useState({});
   const [tableData, setTableData] = useState([]);
-  const [listContainer, setListContainer] = useState({});
+
   const [filterFn, setFilterFn] = useState({
     fn: (item) => {
       return item;

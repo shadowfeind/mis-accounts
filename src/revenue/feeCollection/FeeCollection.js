@@ -277,7 +277,7 @@ const FeeCollection = () => {
                 <TblHead />
 
                 <TableBody>
-                  {tableDataAfterPagingAndSorting()?.map((item) => (
+                  {listFeeCollection?.feeCollectionLst?.map((item) => (
                     <FeeCollectionTableCollapse item={item} key={item.$id} />
                   ))}
 
@@ -293,7 +293,7 @@ const FeeCollection = () => {
                       </TableCell>
                       <TableCell>
                         {" "}
-                        {tableDataAfterPagingAndSorting()
+                        {listFeeCollection?.feeCollectionLst
                           ?.reduce((acc, curr) => {
                             return acc + curr.Dr;
                           }, 0)
@@ -327,7 +327,6 @@ const FeeCollection = () => {
                 >
                   PRINT
                 </Button>{" "}
-                <TblPagination />{" "}
               </>
             )}
           </>

@@ -280,7 +280,7 @@ const StudentDue = () => {
                 <TblHead />
 
                 <TableBody>
-                  {tableDataAfterPagingAndSorting()?.map((item, index) => (
+                  {listStudentDue?.studentDueModelLsts?.map((item, index) => (
                     <StudentDueTableCollapse
                       item={item}
                       key={item.$id}
@@ -304,7 +304,7 @@ const StudentDue = () => {
                         <strong>Total:</strong>
                       </TableCell>
                       <TableCell style={{ backgroundColor: "lightgrey" }}>
-                        {tableDataAfterPagingAndSorting()
+                        {listStudentDue?.studentDueModelLsts
                           ?.reduce((acc, curr) => {
                             return acc + curr.RemainingDue;
                           }, 0)
@@ -336,7 +336,6 @@ const StudentDue = () => {
                 >
                   PRINT
                 </Button>{" "}
-                <TblPagination />{" "}
               </>
             )}
           </>

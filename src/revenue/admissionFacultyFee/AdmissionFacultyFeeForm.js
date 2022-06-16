@@ -95,7 +95,7 @@ const AdmissionFacultyFeeForm = ({
     }
   };
 
-  const inputHandler = (subject, value) => {
+  const inputHandler = (subject, value, index) => {
     setFormCheck((prev) => {
       const exists = prev.find(
         (u) => u.IDAccountType === subject.IDAccountType
