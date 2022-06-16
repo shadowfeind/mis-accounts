@@ -408,7 +408,7 @@ const AdmitStudent = () => {
               <div style={{ height: "10px" }}></div>
               <div>
                 <TextField
-                  value={
+                  value={(
                     feeStructure?.reduce((acc, item) => {
                       return acc + Number(item.Cr);
                     }, 0) +
@@ -422,7 +422,7 @@ const AdmitStudent = () => {
                       ?.reduce((acc, item) => {
                         return acc + Number(item.Cr);
                       }, 0)
-                  }
+                  )?.toFixed(2)}
                   disabled
                   variant="outlined"
                   name="Total"

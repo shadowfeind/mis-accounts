@@ -73,7 +73,7 @@ const StudentList = ({ student, studentSelected, setStudentSelected }) => {
             <TableRow>
               <StyledTableCell width="8%">Roll No.</StyledTableCell>
               <StyledTableCell width="2%">Reg.</StyledTableCell>
-              <StyledTableCell width="30%">Student Name.</StyledTableCell>
+              <StyledTableCell width="30%">Student Name</StyledTableCell>
               <StyledTableCell width="25%">Email</StyledTableCell>
               <StyledTableCell width="20%">Contact No.</StyledTableCell>
               <StyledTableCell width="15%">status</StyledTableCell>

@@ -63,15 +63,35 @@ const ExtraFeeStructure = ({
   const handleChange = (index, fee, value, name, amount) => {
     if (name === "Discount") {
       if (value <= amount) {
-        let newObject;
+        if (fee.checked) {
+          if (value > 100) {
+            alert("Discount cannot be more than 100%");
+          } else {
+            let newObject = {
+              ...fee,
+              DiscountAmount: fee.FeeAmount * (value / 100),
+              PercentageDiscount: value,
+              Cr: fee.FeeAmount - fee.FeeAmount * (value / 100),
+              [name]: value,
+            };
 
-        newObject = { ...fee, [name]: value, Cr: fee.FeeAmount - value };
+            setCurrentFee((prev) => {
+              const newArr = [...prev];
+              newArr[index] = newObject;
+              return newArr;
+            });
+          }
+        } else {
+          let newObject;
 
-        setCurrentFee((prev) => {
-          const newArr = [...prev];
-          newArr[index] = newObject;
-          return newArr;
-        });
+          newObject = { ...fee, [name]: value, Cr: fee.FeeAmount - value };
+
+          setCurrentFee((prev) => {
+            const newArr = [...prev];
+            newArr[index] = newObject;
+            return newArr;
+          });
+        }
       } else {
         alert(`discount must be equal to or less than ${amount}`);
       }
@@ -93,13 +113,18 @@ const ExtraFeeStructure = ({
         alert("Please enter discount");
         return;
       } else {
-        newObject = {
-          ...fee,
-          DiscountAmount: fee.FeeAmount * (fee.Discount / 100),
-          PercentageDiscount: fee.Discount,
-          Cr: fee.FeeAmount - fee.FeeAmount * (fee.Discount / 100),
-          checked: true,
-        };
+        if (fee.Discount > 100) {
+          alert("Discount cannot be more than 100%");
+          return;
+        } else {
+          newObject = {
+            ...fee,
+            DiscountAmount: fee.FeeAmount * (fee.Discount / 100),
+            PercentageDiscount: fee.Discount,
+            Cr: fee.FeeAmount - fee.FeeAmount * (fee.Discount / 100),
+            checked: true,
+          };
+        }
       }
     } else {
       newObject = {
@@ -209,11 +234,13 @@ const ExtraFeeStructure = ({
               <TableRow>
                 <StyledTableCell width="3%">SN.</StyledTableCell>
                 <StyledTableCell width="22%">Fee Heading</StyledTableCell>
-                <StyledTableCell width="10%">Fee</StyledTableCell>
+                <StyledTableCell width="10%">Fee(Rs)</StyledTableCell>
                 <StyledTableCell width="10%">Discount</StyledTableCell>
                 <StyledTableCell width="10%">%</StyledTableCell>
-                <StyledTableCell width="10%">Discount Amount</StyledTableCell>
-                <StyledTableCell width="10%">Amount</StyledTableCell>
+                <StyledTableCell width="10%">
+                  Discount Amount(Rs)
+                </StyledTableCell>
+                <StyledTableCell width="10%">Amount(Rs)</StyledTableCell>
                 <StyledTableCell width="25%">Narration</StyledTableCell>
                 <StyledTableCell width="3%"></StyledTableCell>
               </TableRow>
@@ -287,7 +314,9 @@ const ExtraFeeStructure = ({
                         name="DiscountAmount"
                       />
                     </StyledTableCell>
-                    <StyledTableCell>{s.Cr}</StyledTableCell>
+                    <StyledTableCell>
+                      {Number(s.Cr)?.toFixed(2)}
+                    </StyledTableCell>
                     <StyledTableCell>
                       {" "}
                       <TextField
@@ -308,27 +337,34 @@ const ExtraFeeStructure = ({
                   <strong>Total</strong>
                 </StyledTableCell>
                 <StyledTableCell>
-                  {currentFee?.reduce((acc, item) => {
-                    return acc + Number(item.FeeAmount);
-                  }, 0)}
+                  {currentFee
+                    ?.reduce((acc, item) => {
+                      return acc + Number(item.FeeAmount);
+                    }, 0)
+                    ?.toFixed(2)}
                 </StyledTableCell>
                 <StyledTableCell>
-                  {currentFee?.reduce((acc, item) => {
-                    return acc + Number(item.Discount);
-                  }, 0)}
+                  {currentFee
+                    ?.reduce((acc, item) => {
+                      return acc + Number(item.Discount);
+                    }, 0)
+                    ?.toFixed(2)}
                 </StyledTableCell>
                 <StyledTableCell></StyledTableCell>
                 <StyledTableCell>
-                  {currentFee?.reduce((acc, item) => {
-                    return acc + Number(item.DiscountAmount);
-                  }, 0)}
+                  {currentFee
+                    ?.reduce((acc, item) => {
+                      return acc + Number(item.DiscountAmount);
+                    }, 0)
+                    ?.toFixed(2)}
                 </StyledTableCell>
                 <StyledTableCell>
                   {currentFee
                     ?.filter((x) => x.active === true)
                     ?.reduce((acc, item) => {
                       return acc + Number(item.Cr);
-                    }, 0)}
+                    }, 0)
+                    ?.toFixed(2)}
                 </StyledTableCell>
                 <StyledTableCell></StyledTableCell>
                 <StyledTableCell></StyledTableCell>
