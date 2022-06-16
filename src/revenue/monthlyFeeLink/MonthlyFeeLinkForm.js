@@ -68,6 +68,7 @@ const MonthlyFeeLinkForm = ({
   searchFilterModel,
 }) => {
   const [formCheck, setFormCheck] = useState([]);
+  const [allChecked, setAllChecked] = useState(false);
   // const [month, setMonths] = useState([]);
   const [activeButton, setActiveButton] = useState(false);
   const classes = useStyles();
@@ -89,16 +90,19 @@ const MonthlyFeeLinkForm = ({
   const handleAllChecked = (checked) => {
     if (checked) {
       setFormCheck([...feeStructure]);
+      setAllChecked(checked);
     } else {
       setFormCheck([]);
+      setAllChecked(checked);
     }
   };
 
-  // useEffect(() => {
-  //   if (feeStructure) {
-  //     setFormCheck([...feeStructure]);
-  //   }
-  // }, [feeStructure]);
+  useEffect(() => {
+    if (feeStructure) {
+      setFormCheck([...feeStructure]);
+      setAllChecked(true);
+    }
+  }, [feeStructure]);
 
   const inputHandler = (subject, value, index) => {
     setFormCheck((prev) => {
@@ -140,7 +144,7 @@ const MonthlyFeeLinkForm = ({
     if (validate()) {
       setActiveButton(true);
       dispatch(postMonthlyFeeLinkAction(formCheck, searchFilterModel));
-      // console.log(formCheck);
+      console.log(formCheck);
     }
   };
 
@@ -159,6 +163,7 @@ const MonthlyFeeLinkForm = ({
                   name="checkedB"
                   onChange={(e) => handleAllChecked(e.target.checked)}
                   color="primary"
+                  checked={allChecked}
                 />
               </StyledTableCell>
             </TableRow>
