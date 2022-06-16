@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import VisibilityRoundedIcon from "@material-ui/icons/VisibilityRounded";
 import EditIcon from "@material-ui/icons/Edit";
+import RestoreIcon from "@material-ui/icons/Restore";
 import ReceiptRoundedIcon from "@material-ui/icons/ReceiptRounded";
 
 const useStyles = makeStyles({
@@ -44,9 +45,9 @@ const StudentLedgerTableCollapse = ({
     <>
       <TableRow key={item.$id}>
         <TableCell>
-          {item.Dr !== 0 ? (
+          {item.Dr !== 0 && item.Narration !== "OPENING BALANCE" ? (
             <Button
-              variant="contained"
+              variant="outlined"
               color="primary"
               className={classes.button}
               onClick={() =>
@@ -57,13 +58,13 @@ const StudentLedgerTableCollapse = ({
                 )
               }
             >
-              <ReceiptRoundedIcon style={{ fontSize: 12 }} />
+              <VisibilityRoundedIcon style={{ fontSize: 16 }} />
             </Button>
           ) : (
             " "
           )}
         </TableCell>
-        <TableCell>
+        {/* <TableCell>
           {item.Cr !== 0 ? (
             <Button
               variant="outlined"
@@ -79,30 +80,34 @@ const StudentLedgerTableCollapse = ({
                 )
               }
             >
-              <VisibilityRoundedIcon style={{ fontSize: 12 }} />
+              <ReceiptRoundedIcon style={{ fontSize: 12 }} />
             </Button>
           ) : (
             " "
           )}
-        </TableCell>
+        </TableCell> */}
 
         <TableCell>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            onClick={() =>
-              updateHandler(
-                item.IDTransactionDrCr,
-                item.AccountSubmitCode,
-                item.LevelClass,
-                item.IDAcademicYear,
-                item.IDMonth
-              )
-            }
-          >
-            <EditIcon style={{ fontSize: 12 }} />
-          </Button>
+          {item.IDTransactionDrCr !== 0 ? (
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={() =>
+                updateHandler(
+                  item.IDTransactionDrCr,
+                  item.AccountSubmitCode,
+                  item.LevelClass,
+                  item.IDAcademicYear,
+                  item.IDMonth
+                )
+              }
+            >
+              <RestoreIcon style={{ fontSize: 16 }} />
+            </Button>
+          ) : (
+            " "
+          )}
         </TableCell>
         <TableCell>{item.IDTransactionDrCr}</TableCell>
         <TableCell>{item.VoucherBillNo}</TableCell>
@@ -117,8 +122,11 @@ const StudentLedgerTableCollapse = ({
           {accountNameShow?.length > 0 && accountNameShow[0]?.label}
         </TableCell>
 
-        <TableCell width="30%">{item.TransactionDate?.slice(0, 10)}</TableCell>
-        <TableCell>{item.TransactionDate?.slice(0, 10)}</TableCell>
+        <TableCell width="30%">
+          {item.IDTransactionDrCr > 0 && item.TransactionDate?.slice(0, 10)}
+        </TableCell>
+
+        <TableCell>{item?.TransactionType}</TableCell>
         <TableCell>{item.Narration}</TableCell>
         <TableCell>{item.Dr}</TableCell>
         <TableCell>{item.Cr}</TableCell>

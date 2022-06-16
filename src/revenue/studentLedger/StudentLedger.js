@@ -113,7 +113,6 @@ const initialFormValues = {
 
 const tableHeader = [
   { id: "actions", label: "Recipt", disableSorting: true },
-  { id: "actions", label: "Bill Print", disableSorting: true },
   { id: "actions", label: "Reverse Entry", disableSorting: true },
   { id: "idDrCr", label: "idDrCr" },
   { id: "Voucher/BillNo", label: "Voucher/BillNo" },
@@ -180,20 +179,6 @@ const StudentLedger = () => {
   const dispatch = useDispatch();
 
   const { values, setValues, handleInputChange } = useForm(initialFormValues);
-
-  const handleSearch = (e) => {
-    setFilterFn({
-      fn: (item) => {
-        if (e.target.value === "") {
-          return item;
-        } else {
-          return item.filter((x) =>
-            x.FullName.toLowerCase().includes(e.target.value?.toLowerCase())
-          );
-        }
-      },
-    });
-  };
 
   const { studentLedger, error } = useSelector(
     (state) => state.getAllStudentLedger
@@ -684,20 +669,7 @@ const StudentLedger = () => {
           </Grid>
         </Toolbar>
         <div style={{ height: "15px" }}></div>
-        <Toolbar>
-          <InputControl
-            className={classes.searchInput}
-            label="Search Student Ledger by Name"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Search />
-                </InputAdornment>
-              ),
-            }}
-            onChange={handleSearch}
-          />
-        </Toolbar>
+
         {loading ? (
           <LoadingComp />
         ) : (
@@ -960,6 +932,7 @@ const StudentLedger = () => {
           ddlClass={studentLedger?.ddlClass}
           ddlAcademicYear={years}
           idYear={idYears}
+          years={receiptPrint?.studentLedgerBill?.AcademicYear}
           idClass={studentLedger?.idClass}
           setOpenPopup={setOpenPopup}
           prevBal={prevBals}
@@ -998,14 +971,7 @@ const StudentLedger = () => {
             amountPaid={receiptPrint?.amountPaid}
             discount={receiptPrint?.discount}
             advancedPaid={receiptPrint?.advancedPaid}
-            ddlAcademicYear={
-              listStudentLedger?.searchFilterModel?.ddlAcademicYear
-            }
-            idYear={
-              listStudentLedger?.studentLedgerModelLstsForStudent[
-                listStudentLedger?.studentLedgerModelLstsForStudent?.length + 1
-              ]?.IDAcademicYear
-            }
+            acaYears={receiptPrint?.studentLedgerBill?.AcademicYear}
             idClass={studentLedger?.idClass}
             setOpenReciptPopup={setOpenReciptPopup}
             prevBal={receiptPrint?.previousBalanced}
