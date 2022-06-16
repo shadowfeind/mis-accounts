@@ -60,15 +60,35 @@ const FeeStructure = ({
   const handleChange = (index, fee, value, name, amount) => {
     if (name === "Discount") {
       if (value <= amount) {
-        let newObject;
+        if (fee.checked) {
+          if (value > 100) {
+            alert("Discount cannot be more than 100%");
+          } else {
+            let newObject = {
+              ...fee,
+              DiscountAmount: fee.FeeAmount * (value / 100),
+              PercentageDiscount: value,
+              Cr: fee.FeeAmount - fee.FeeAmount * (value / 100),
+              [name]: value,
+            };
 
-        newObject = { ...fee, [name]: value, Cr: fee.FeeAmount - value };
+            setCurrentFee((prev) => {
+              const newArr = [...prev];
+              newArr[index] = newObject;
+              return newArr;
+            });
+          }
+        } else {
+          let newObject;
 
-        setCurrentFee((prev) => {
-          const newArr = [...prev];
-          newArr[index] = newObject;
-          return newArr;
-        });
+          newObject = { ...fee, [name]: value, Cr: fee.FeeAmount - value };
+
+          setCurrentFee((prev) => {
+            const newArr = [...prev];
+            newArr[index] = newObject;
+            return newArr;
+          });
+        }
       } else {
         alert(`discount must be equal to or less than ${amount}`);
       }
@@ -90,13 +110,18 @@ const FeeStructure = ({
         alert("Please enter discount");
         return;
       } else {
-        newObject = {
-          ...fee,
-          DiscountAmount: fee.FeeAmount * (fee.Discount / 100),
-          PercentageDiscount: fee.Discount,
-          Cr: fee.FeeAmount - fee.FeeAmount * (fee.Discount / 100),
-          checked: true,
-        };
+        if (fee.Discount > 100) {
+          alert("Discount cannot be more than 100%");
+          return;
+        } else {
+          newObject = {
+            ...fee,
+            DiscountAmount: fee.FeeAmount * (fee.Discount / 100),
+            PercentageDiscount: fee.Discount,
+            Cr: fee.FeeAmount - fee.FeeAmount * (fee.Discount / 100),
+            checked: true,
+          };
+        }
       }
     } else {
       newObject = {

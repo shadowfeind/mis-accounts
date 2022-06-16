@@ -391,7 +391,7 @@ const Billgenerate = () => {
               <div style={{ height: "10px" }}></div>
               <div>
                 <TextField
-                  value={
+                  value={(
                     monthlyFee
                       ?.filter((x) => x.active === true)
                       ?.reduce((acc, item) => {
@@ -402,7 +402,7 @@ const Billgenerate = () => {
                       ?.reduce((acc, item) => {
                         return acc + Number(item.Cr);
                       }, 0)
-                  }
+                  )?.toFixed(2)}
                   disabled
                   variant="outlined"
                   name="Total"
