@@ -180,20 +180,6 @@ const StudentLedger = () => {
 
   const { values, setValues, handleInputChange } = useForm(initialFormValues);
 
-  const handleSearch = (e) => {
-    setFilterFn({
-      fn: (item) => {
-        if (e.target.value === "") {
-          return item;
-        } else {
-          return item.filter((x) =>
-            x.FullName.toLowerCase().includes(e.target.value?.toLowerCase())
-          );
-        }
-      },
-    });
-  };
-
   const { studentLedger, error } = useSelector(
     (state) => state.getAllStudentLedger
   );
@@ -683,20 +669,7 @@ const StudentLedger = () => {
           </Grid>
         </Toolbar>
         <div style={{ height: "15px" }}></div>
-        <Toolbar>
-          <InputControl
-            className={classes.searchInput}
-            label="Search Student Ledger by Name"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Search />
-                </InputAdornment>
-              ),
-            }}
-            onChange={handleSearch}
-          />
-        </Toolbar>
+
         {loading ? (
           <LoadingComp />
         ) : (

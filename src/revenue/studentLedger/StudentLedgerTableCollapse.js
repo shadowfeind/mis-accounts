@@ -45,7 +45,7 @@ const StudentLedgerTableCollapse = ({
     <>
       <TableRow key={item.$id}>
         <TableCell>
-          {item.Dr !== 0 ? (
+          {item.Dr !== 0 && item.Narration !== "OPENING BALANCE" ? (
             <Button
               variant="outlined"
               color="primary"
@@ -88,22 +88,26 @@ const StudentLedgerTableCollapse = ({
         </TableCell> */}
 
         <TableCell>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            onClick={() =>
-              updateHandler(
-                item.IDTransactionDrCr,
-                item.AccountSubmitCode,
-                item.LevelClass,
-                item.IDAcademicYear,
-                item.IDMonth
-              )
-            }
-          >
-            <RestoreIcon style={{ fontSize: 16 }} />
-          </Button>
+          {item.IDTransactionDrCr !== 0 ? (
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={() =>
+                updateHandler(
+                  item.IDTransactionDrCr,
+                  item.AccountSubmitCode,
+                  item.LevelClass,
+                  item.IDAcademicYear,
+                  item.IDMonth
+                )
+              }
+            >
+              <RestoreIcon style={{ fontSize: 16 }} />
+            </Button>
+          ) : (
+            " "
+          )}
         </TableCell>
         <TableCell>{item.IDTransactionDrCr}</TableCell>
         <TableCell>{item.VoucherBillNo}</TableCell>
@@ -118,8 +122,11 @@ const StudentLedgerTableCollapse = ({
           {accountNameShow?.length > 0 && accountNameShow[0]?.label}
         </TableCell>
 
-        <TableCell width="30%">{item.TransactionDate?.slice(0, 10)}</TableCell>
-        <TableCell>{item.TransactionDate?.slice(0, 10)}</TableCell>
+        <TableCell width="30%">
+          {item.IDTransactionDrCr > 0 && item.TransactionDate?.slice(0, 10)}
+        </TableCell>
+
+        <TableCell>{item?.TransactionType}</TableCell>
         <TableCell>{item.Narration}</TableCell>
         <TableCell>{item.Dr}</TableCell>
         <TableCell>{item.Cr}</TableCell>
