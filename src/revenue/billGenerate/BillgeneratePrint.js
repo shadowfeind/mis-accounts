@@ -97,7 +97,7 @@ const BillgeneratePrint = ({
             <h6>Bill No: {voucher}</h6>
           </Grid>
           <Grid item xs={6}>
-            <img src={`${API_URL}${headerBanners}`} width="100%" />
+            <img src={`${API_URL}${headerBanners}`} width="90%" />
           </Grid>
           <Grid item xs={3}>
             <h6>Batch: {year && year[0]?.Value}</h6>

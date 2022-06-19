@@ -101,9 +101,9 @@ const StudentList = ({ student, studentSelected, setStudentSelected }) => {
                     {" "}
                     <Checkbox
                       checked={
-                        studentSelected.filter(
+                        studentSelected?.filter(
                           (x) => x.IDHREmployee === s.IDHREmployee
-                        ).length > 0
+                        )?.length > 0
                           ? true
                           : false
                       }

@@ -92,10 +92,10 @@ const StudentLedgerRecipt = ({
                 {date?.StartDate?.slice(0, 10)}
               </h3>
             </Grid>
-            <Grid item xs={5}>
-              <img src={`${API_URL}${headerBanners}`} width="100%" />
+            <Grid item xs={6}>
+              <img src={`${API_URL}${headerBanners}`} width="90%" />
             </Grid>
-            <Grid item xs={1}></Grid>
+
             <Grid item xs={3}>
               <h3>Reciept No. {recieptNo}</h3>
             </Grid>
@@ -191,10 +191,9 @@ const StudentLedgerRecipt = ({
                 {date?.StartDate?.slice(0, 10)}
               </h3>
             </Grid>
-            <Grid item xs={5}>
-              <img src={`${API_URL}${headerBanners}`} width="100%" />
+            <Grid item xs={6}>
+              <img src={`${API_URL}${headerBanners}`} width="90%" />
             </Grid>
-            <Grid item xs={1}></Grid>
             <Grid item xs={3}>
               <h3>Reciept No. {recieptNo}</h3>
             </Grid>

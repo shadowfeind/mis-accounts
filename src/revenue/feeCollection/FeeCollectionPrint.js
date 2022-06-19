@@ -59,7 +59,7 @@ const FeeCollectionPrint = ({
               </h4>
             </Grid>
             <Grid item xs={6}>
-              <img src={`${API_URL}${headerBanners}`} width="100%" />
+              <img src={`${API_URL}${headerBanners}`} width="90%" />
             </Grid>
             <Grid item xs={3}>
               <h4>Fee Collection</h4>
@@ -117,11 +117,11 @@ const FeeCollectionPrint = ({
             <div className="fee-collection-bottom-container-signature">
               {" "}
               <Grid container>
-                <Grid item xs={4}></Grid>
-                <Grid item xs={4}>
+                <Grid item xs={2}></Grid>
+                <Grid item xs={5}>
                   <h4>School Stamp</h4>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={5}>
                   <h4>Accountant</h4>
                 </Grid>
               </Grid>

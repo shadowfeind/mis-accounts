@@ -71,7 +71,7 @@ const StudentLedgerBillPrint = ({
             {/* <h6>Bill No: </h6> */}
           </Grid>
           <Grid item xs={6}>
-            <img src={`${API_URL}${headerBanners}`} width="100%" />
+            <img src={`${API_URL}${headerBanners}`} width="90%" />
           </Grid>
           <Grid item xs={3}>
             <h6>Batch: {year && year[0]?.Value}</h6>
@@ -126,41 +126,14 @@ const StudentLedgerBillPrint = ({
               <tr>
                 <td></td>
                 <td>Total</td>
-                <td>
-                  {/* {(
-                    monthlyFee
-                      ?.filter((x) => x.active === true)
-                      ?.reduce((acc, item) => {
-                        return acc + Number(item.Cr);
-                      }, 0) +
-                    extraFee
-                      ?.filter((x) => x.active === true)
-                      ?.reduce((acc, item) => {
-                        return acc + Number(item.Cr);
-                      }, 0)
-                  ).toFixed(2)} */}
-                </td>
+                <td></td>
               </tr>
             </tbody>
           </table>
         </div>
         <div className="student-admit-bottom-container">
           <h6>
-            In words:{" "}
-            <strong>
-              {/* {inWords(
-                monthlyFee
-                  ?.filter((x) => x.active === true)
-                  ?.reduce((acc, item) => {
-                    return acc + Number(item.Cr);
-                  }, 0) +
-                  extraFee
-                    ?.filter((x) => x.active === true)
-                    ?.reduce((acc, item) => {
-                      return acc + Number(item.Cr);
-                    }, 0)
-              )} */}
-            </strong>
+            In words: <strong></strong>
           </h6>
           <div className="student-admit-bottom-container-signature">
             <Grid container>
