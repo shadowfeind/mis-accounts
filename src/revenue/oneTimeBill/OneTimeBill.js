@@ -201,7 +201,7 @@ const OneTimeBill = () => {
         postOneTimeBillAction(
           monthlyFee,
           extraFee,
-          studentDdl,
+          studentSelected,
           blukEditOneTimeBill.dbModel,
           blukEditOneTimeBill.searchFilterModel,
           narration
@@ -419,7 +419,7 @@ const OneTimeBill = () => {
           voucher={voucher}
           monthlyFee={monthlyFee}
           extraFee={extraFee}
-          studentDdl={studentDdl}
+          studentDdl={studentSelected}
           setOpenPopup={setOpenPopup}
         />
       </Popup>
