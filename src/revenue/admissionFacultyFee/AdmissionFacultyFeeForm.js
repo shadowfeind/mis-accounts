@@ -70,6 +70,7 @@ const AdmissionFacultyFeeForm = ({
   setOpenCreatePopup,
 }) => {
   const [formCheck, setFormCheck] = useState([]);
+  const [allChecked, setAllChecked] = useState(false);
   const [activeButton, setActiveButton] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -90,14 +91,16 @@ const AdmissionFacultyFeeForm = ({
   const handleAllChecked = (checked) => {
     if (checked) {
       setFormCheck([...feeStructure]);
+      setAllChecked(checked);
     } else {
       setFormCheck([]);
+      setAllChecked(checked);
     }
   };
 
   const inputHandler = (subject, value, index) => {
     setFormCheck((prev) => {
-      const exists = prev.find(
+      const exists = prev?.find(
         (u) => u.IDAccountType === subject.IDAccountType
       );
       if (exists) {
@@ -113,11 +116,11 @@ const AdmissionFacultyFeeForm = ({
 
   const handleChecked = (subject) => {
     setFormCheck((prev) => {
-      const exists = prev.find(
+      const exists = prev?.find(
         (u) => u.IDAccountType === subject.IDAccountType
       );
       if (exists) {
-        let newArr = prev.filter(
+        let newArr = prev?.filter(
           (u) => u.IDAccountType !== subject.IDAccountType
         );
         return [...newArr];
@@ -140,6 +143,13 @@ const AdmissionFacultyFeeForm = ({
     }
   };
 
+  useEffect(() => {
+    if (feeStructure) {
+      setFormCheck([...feeStructure]);
+      setAllChecked(true);
+    }
+  }, [feeStructure]);
+
   return (
     <>
       <Form onSubmit={handleSubmit}>
@@ -156,60 +166,59 @@ const AdmissionFacultyFeeForm = ({
                     name="checkedB"
                     onChange={(e) => handleAllChecked(e.target.checked)}
                     color="primary"
+                    checked={allChecked}
                   />
                 </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {feeStructure &&
-                feeStructure
-                  ?.sort((a, b) => a.RollNo - b.RollNo)
-                  ?.map((s) => (
-                    <StyledTableRow key={s.AccountName}>
-                      <StyledTableCell component="th" scope="row">
-                        {s.AccountName}
-                      </StyledTableCell>
-                      <StyledTableCell component="th" scope="row">
-                        <TextField
-                          defaultValue={s.FeeAmount}
-                          type="number"
-                          onWheelCapture={(e) => {
-                            e.target.blur();
-                          }}
-                          onKeyDown={(e) =>
-                            symbolsArr.includes(e.key) && e.preventDefault()
-                          }
-                          InputProps={{
-                            inputProps: {
-                              style: { textAlign: "center" },
-                            },
-                          }}
-                          id={`subject_${s?.IDAccountType}`}
-                          variant="outlined"
-                          onChange={(e) => inputHandler(s, e.target.value)}
-                          inputProps={{ tabIndex: "1" }}
-                        />
-                      </StyledTableCell>
-                      <StyledTableCell
-                        component="th"
-                        scope="row"
-                        style={{ textAlign: "right" }}
-                      >
-                        <Checkbox
-                          checked={
-                            formCheck?.filter(
-                              (x) => x.IDAccountType === s.IDAccountType
-                            ).length > 0
-                              ? true
-                              : false
-                          }
-                          name="checkedB"
-                          color="primary"
-                          onChange={(e) => handleChecked(s)}
-                        />
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))}
+                feeStructure?.map((s, i) => (
+                  <StyledTableRow key={s.AccountName}>
+                    <StyledTableCell component="th" scope="row">
+                      {s.AccountName}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      <TextField
+                        defaultValue={s.FeeAmount}
+                        type="number"
+                        onWheelCapture={(e) => {
+                          e.target.blur();
+                        }}
+                        onKeyDown={(e) =>
+                          symbolsArr.includes(e.key) && e.preventDefault()
+                        }
+                        InputProps={{
+                          inputProps: {
+                            style: { textAlign: "center" },
+                          },
+                        }}
+                        id={`subject_${s?.IDAccountType}`}
+                        variant="outlined"
+                        onChange={(e) => inputHandler(s, e.target.value, i)}
+                        inputProps={{ tabIndex: "1" }}
+                      />
+                    </StyledTableCell>
+                    <StyledTableCell
+                      component="th"
+                      scope="row"
+                      style={{ textAlign: "right" }}
+                    >
+                      <Checkbox
+                        checked={
+                          formCheck?.filter(
+                            (x) => x.IDAccountType === s.IDAccountType
+                          ).length > 0
+                            ? true
+                            : false
+                        }
+                        name="checkedB"
+                        color="primary"
+                        onChange={(e) => handleChecked(s)}
+                      />
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

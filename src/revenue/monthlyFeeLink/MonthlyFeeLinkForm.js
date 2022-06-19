@@ -122,11 +122,11 @@ const MonthlyFeeLinkForm = ({
 
   const handleChecked = (subject, value) => {
     setFormCheck((prev) => {
-      const exists = prev.find(
+      const exists = prev?.find(
         (u) => u.IDAccountType === subject.IDAccountType
       );
       if (exists) {
-        let newArr = prev.filter(
+        let newArr = prev?.filter(
           (u) => u.IDAccountType !== subject.IDAccountType
         );
         return [...newArr];
@@ -170,54 +170,52 @@ const MonthlyFeeLinkForm = ({
           </TableHead>
           <TableBody>
             {feeStructure &&
-              feeStructure
-                ?.sort((a, b) => a.RollNo - b.RollNo)
-                ?.map((s, i) => (
-                  <StyledTableRow key={s.AccountName}>
-                    <StyledTableCell component="th" scope="row">
-                      {s.AccountName}
-                    </StyledTableCell>
-                    <StyledTableCell component="th" scope="row">
-                      <TextField
-                        defaultValue={s.FeeAmount}
-                        type="number"
-                        onWheelCapture={(e) => {
-                          e.target.blur();
-                        }}
-                        onKeyDown={(e) =>
-                          symbolsArr.includes(e.key) && e.preventDefault()
-                        }
-                        InputProps={{
-                          inputProps: {
-                            style: { textAlign: "center" },
-                          },
-                        }}
-                        id={`subject_${s?.IDAccountType}`}
-                        variant="outlined"
-                        onChange={(e) => inputHandler(s, e.target.value, i)}
-                        inputProps={{ tabIndex: "1" }}
-                      />
-                    </StyledTableCell>
-                    <StyledTableCell
-                      component="th"
-                      scope="row"
-                      style={{ textAlign: "right" }}
-                    >
-                      <Checkbox
-                        checked={
-                          formCheck?.filter(
-                            (x) => x.IDAccountType === s.IDAccountType
-                          ).length > 0
-                            ? true
-                            : false
-                        }
-                        name="checkedB"
-                        color="primary"
-                        onChange={(e) => handleChecked(s)}
-                      />
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
+              feeStructure?.map((s, i) => (
+                <StyledTableRow key={s.AccountName}>
+                  <StyledTableCell component="th" scope="row">
+                    {s.AccountName}
+                  </StyledTableCell>
+                  <StyledTableCell component="th" scope="row">
+                    <TextField
+                      defaultValue={s.FeeAmount}
+                      type="number"
+                      onWheelCapture={(e) => {
+                        e.target.blur();
+                      }}
+                      onKeyDown={(e) =>
+                        symbolsArr.includes(e.key) && e.preventDefault()
+                      }
+                      InputProps={{
+                        inputProps: {
+                          style: { textAlign: "center" },
+                        },
+                      }}
+                      id={`subject_${s?.IDAccountType}`}
+                      variant="outlined"
+                      onChange={(e) => inputHandler(s, e.target.value, i)}
+                      inputProps={{ tabIndex: "1" }}
+                    />
+                  </StyledTableCell>
+                  <StyledTableCell
+                    component="th"
+                    scope="row"
+                    style={{ textAlign: "right" }}
+                  >
+                    <Checkbox
+                      checked={
+                        formCheck?.filter(
+                          (x) => x.IDAccountType === s.IDAccountType
+                        ).length > 0
+                          ? true
+                          : false
+                      }
+                      name="checkedB"
+                      color="primary"
+                      onChange={(e) => handleChecked(s)}
+                    />
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
