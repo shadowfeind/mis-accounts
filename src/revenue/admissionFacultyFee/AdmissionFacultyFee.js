@@ -355,7 +355,7 @@ const AdmissionFacultyFee = () => {
                 <TblHead />
 
                 <TableBody>
-                  {tableDataAfterPagingAndSorting().map((item) => (
+                  {tableDataAfterPagingAndSorting()?.map((item) => (
                     <AdmissionFacultyFeeStructureTableCollapse
                       item={item}
                       key={item.$id}
