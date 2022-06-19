@@ -256,7 +256,7 @@ const StudentLedgerSideRecipt = ({
 
             <Grid item xs={3}>
               <b>Balance Due:Rs. </b>
-              {balDue}
+              {prevBal - amountPaid - discount - advancedPaid}
             </Grid>
           </Grid>
 
