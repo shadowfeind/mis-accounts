@@ -188,7 +188,7 @@ const StudentLedger = () => {
     (state) => state.getActiveStudentOnly
   );
 
-  const { universityFaculty, error: universityFacultyError } = useSelector(
+  const { error: universityFacultyError } = useSelector(
     (state) => state.getUniversityFaculty
   );
 
@@ -212,7 +212,6 @@ const StudentLedger = () => {
   const {
     listStudentLedger,
     loading,
-    loading: printReceiptLoading,
     error: listStudentLedgerError,
   } = useSelector((state) => state.getListStudentLedger);
   const { success: postStudentLedgerSuccess, error: postStudentLedgerError } =
@@ -383,11 +382,11 @@ const StudentLedger = () => {
     }
   }, [activeStudentOnly]);
 
-  useEffect(() => {
-    if (listStudentLedger) {
-      setTableData(listStudentLedger?.studentLedgerModelLstsForStudent);
-    }
-  }, [listStudentLedger]);
+  // useEffect(() => {
+  //   if (listStudentLedger) {
+  //     setTableData(listStudentLedger?.studentLedgerModelLstsForStudent);
+  //   }
+  // }, [listStudentLedger]);
 
   const handleClassIdChange = (value) => {
     setClassId(value);

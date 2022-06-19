@@ -84,16 +84,20 @@ const StudentLedgerSideRecipt = ({
         <div className={classes.studentLedgerPrint}>
           <Grid container>
             <Grid item xs={3}>
-              <h4>
+              <h3>
                 BillDate: <br />
                 {date?.StartDate?.slice(0, 10)}
-              </h4>
+              </h3>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={5}>
               <img src={`${API_URL}${headerBanners}`} width="100%" />
             </Grid>
+            <Grid item xs={1}></Grid>
             <Grid item xs={3}>
-              <h3>Reciept No. {recieptNo}</h3>
+              <h3>
+                Reciept No.
+                {recieptNo}
+              </h3>
             </Grid>
           </Grid>
 
@@ -101,7 +105,7 @@ const StudentLedgerSideRecipt = ({
             container
             style={{
               marginTop: "40px",
-              fontSize: "20px",
+              fontSize: "14px",
             }}
           >
             <Grid item xs={10}>
@@ -166,7 +170,7 @@ const StudentLedgerSideRecipt = ({
             container
             style={{
               marginTop: "50px",
-              fontSize: "20px",
+              fontSize: "14px",
             }}
           >
             <Grid item xs={2}></Grid>
@@ -182,16 +186,20 @@ const StudentLedgerSideRecipt = ({
         <div className={classes.studentLedgerPrint}>
           <Grid container>
             <Grid item xs={3}>
-              <h4>
+              <h3>
                 BillDate: <br />
                 {date?.StartDate?.slice(0, 10)}
-              </h4>
+              </h3>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={5}>
               <img src={`${API_URL}${headerBanners}`} width="100%" />
             </Grid>
+            <Grid item xs={1}></Grid>
             <Grid item xs={3}>
-              <h3>Reciept No. {recieptNo}</h3>
+              <h3>
+                Reciept No.
+                {recieptNo}
+              </h3>
             </Grid>
           </Grid>
 
@@ -199,7 +207,7 @@ const StudentLedgerSideRecipt = ({
             container
             style={{
               marginTop: "40px",
-              fontSize: "20px",
+              fontSize: "14px",
             }}
           >
             <Grid item xs={10}>
@@ -264,7 +272,7 @@ const StudentLedgerSideRecipt = ({
             container
             style={{
               marginTop: "50px",
-              fontSize: "20px",
+              fontSize: "14px",
             }}
           >
             <Grid item xs={2}></Grid>
