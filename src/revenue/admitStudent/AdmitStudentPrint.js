@@ -34,7 +34,7 @@ const AdmitStudentPrint = ({
 
   for (
     let i = feeStructure?.length + extraFee?.length + monthlyFee?.length;
-    i <= 5;
+    i <= 8;
     i++
   ) {
     tdToRender.push(i);
@@ -89,17 +89,17 @@ const AdmitStudentPrint = ({
     <>
       <div className="student-print-container" ref={componentRef}>
         <Grid container>
-          <Grid item xs={3}>
+          <Grid item xs={2}>
             <h6>
               BillDate: <br />
               {date?.slice(0, 10)}
             </h6>
             <h6>Bill No: {voucher}</h6>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={7} style={{ padding: "10px" }}>
             <img src={`${API_URL}${headerBanners}`} width="100%" />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={3} style={{ textAlign: "right" }}>
             <h6>Batch: {year && year[0]?.Value}</h6>
             <h6>Bill Month: {month && month[0]?.Value}</h6>
           </Grid>
@@ -177,11 +177,11 @@ const AdmitStudentPrint = ({
                 <td>Previous Balance</td>
                 <td>
                   {prevBlc &&
-                    prevBlc -
-                      (
-                        feeStructure?.reduce((acc, item) => {
-                          return acc + Number(item.Cr);
-                        }, 0) +
+                    (
+                      prevBlc -
+                      (feeStructure?.reduce((acc, item) => {
+                        return acc + Number(item.Cr);
+                      }, 0) +
                         monthlyFee
                           ?.filter((x) => x.active === true)
                           ?.reduce((acc, item) => {
@@ -191,8 +191,8 @@ const AdmitStudentPrint = ({
                           ?.filter((x) => x.active === true)
                           ?.reduce((acc, item) => {
                             return acc + Number(item.Cr);
-                          }, 0)
-                      ).toFixed(2)}
+                          }, 0))
+                    ).toFixed(2)}
                 </td>
               </tr>
               <tr>
@@ -214,7 +214,7 @@ const AdmitStudentPrint = ({
                         return acc + Number(item.Cr);
                       }, 0)
                   ).toFixed(2)} */}
-                  {prevBlc}
+                  {prevBlc?.toFixed(2)}
                 </td>
               </tr>
             </tbody>

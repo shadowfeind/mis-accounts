@@ -8,9 +8,9 @@ import moment from "moment";
 import axios from "axios";
 // import moment from "moment";
 
-export const API_URL = "https://mis.vidyacube.com";
+// export const API_URL = "https://mis.vidyacube.com";
 // export const API_URL = "https://divinelight.vidyacube.com";
-// export const API_URL = "https://creation.vidyacube.com";
+export const API_URL = "https://creation.vidyacube.com";
 
 const USER_SESSION = sessionStorage.getItem("blueberrytoken")
   ? sessionStorage.getItem("blueberrytoken")

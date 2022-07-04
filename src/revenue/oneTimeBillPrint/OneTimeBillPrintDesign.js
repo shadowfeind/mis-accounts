@@ -17,7 +17,7 @@ const OneTimeBillPrintDesign = ({
   const [prevBlc, setPrevBlc] = useState(0);
   let tdToRender = [];
 
-  for (let i = currentStudentBill.length; i <= 5; i++) {
+  for (let i = currentStudentBill.length; i <= 8; i++) {
     tdToRender.push(i);
   }
 
@@ -41,14 +41,14 @@ const OneTimeBillPrintDesign = ({
   return (
     <div className="student-print-container">
       <Grid container>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <h6>
             BillDate: <br />
             {date?.slice(0, 10)}
           </h6>
           <h6>Bill No: {voucherBillNo}</h6>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={7} style={{ padding: "8px" }}>
           <img src={`${API_URL}${headerBanners}`} width="100%" />
         </Grid>
         <Grid item xs={3}>

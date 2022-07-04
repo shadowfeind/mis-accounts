@@ -191,12 +191,12 @@ const AdmissionFacultyFeeForm = ({
                         InputProps={{
                           inputProps: {
                             style: { textAlign: "center" },
+                            tabIndex: "1",
                           },
                         }}
                         id={`subject_${s?.IDAccountType}`}
                         variant="outlined"
                         onChange={(e) => inputHandler(s, e.target.value, i)}
-                        inputProps={{ tabIndex: "1" }}
                       />
                     </StyledTableCell>
                     <StyledTableCell

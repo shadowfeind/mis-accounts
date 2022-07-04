@@ -89,14 +89,14 @@ const BillgeneratePrint = ({
     <>
       <div className="student-print-container" ref={componentRef}>
         <Grid container>
-          <Grid item xs={3}>
+          <Grid item xs={2}>
             <h6>
               BillDate: <br />
               {date?.slice(0, 10)}
             </h6>
             <h6>Bill No: {voucher}</h6>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={7} style={{ padding: "8px" }}>
             <img src={`${API_URL}${headerBanners}`} width="100%" />
           </Grid>
           <Grid item xs={3}>
@@ -169,19 +169,19 @@ const BillgeneratePrint = ({
                 <td>Previous Balance</td>
                 <td>
                   {prevBlc &&
-                    prevBlc -
-                      (
-                        monthlyFee
-                          ?.filter((x) => x.active === true)
-                          ?.reduce((acc, item) => {
-                            return acc + Number(item.Cr);
-                          }, 0) +
+                    (
+                      prevBlc -
+                      (monthlyFee
+                        ?.filter((x) => x.active === true)
+                        ?.reduce((acc, item) => {
+                          return acc + Number(item.Cr);
+                        }, 0) +
                         extraFee
                           ?.filter((x) => x.active === true)
                           ?.reduce((acc, item) => {
                             return acc + Number(item.Cr);
-                          }, 0)
-                      ).toFixed(2)}
+                          }, 0))
+                    ).toFixed(2)}
                 </td>
               </tr>
               <tr>
@@ -200,7 +200,7 @@ const BillgeneratePrint = ({
                         return acc + Number(item.Cr);
                       }, 0)
                   ).toFixed(2)} */}
-                  {prevBlc}
+                  {prevBlc?.toFixed(2)}
                 </td>
               </tr>
             </tbody>
