@@ -228,7 +228,10 @@ const ExtraFeeStructure = ({
   return (
     <>
       {currentFee && (
-        <TableContainer component={Paper}>
+        <TableContainer
+          component={Paper}
+          style={{ height: "300px", scroll: "auto" }}
+        >
           <Table className={classes.table} aria-label="customized table">
             <TableHead>
               <TableRow>

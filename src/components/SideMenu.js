@@ -21,6 +21,7 @@ const useStyles = makeStyles({
     left: "0",
     height: "100%",
     width: "15%",
+    overflow: "auto",
     backgroundColor: "#253053",
     position: "fixed",
     "& h6": {

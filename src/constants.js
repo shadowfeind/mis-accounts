@@ -8,9 +8,9 @@ import moment from "moment";
 import axios from "axios";
 // import moment from "moment";
 
-export const API_URL = "https://mis.vidyacube.com/";
-// export const API_URL = "https://divinelight.vidyacube.com/";
-// export const API_URL = "http://localhost:4995";
+export const API_URL = "https://mis.vidyacube.com";
+// export const API_URL = "https://divinelight.vidyacube.com";
+// export const API_URL = "https://creation.vidyacube.com";
 
 const USER_SESSION = sessionStorage.getItem("blueberrytoken")
   ? sessionStorage.getItem("blueberrytoken")
@@ -110,7 +110,7 @@ axiosInstance.interceptors.request.use(async (req) => {
   const JSONdata = JSON.stringify(dataForRefreshToken);
   const config = { headers: { "Content-Type": "application/json" } };
 
-  console.log(JSONdata);
+  // console.log(JSONdata);
 
   try {
     const { data } = await axios.post(

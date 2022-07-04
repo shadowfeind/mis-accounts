@@ -175,126 +175,131 @@ const FeeStructure = ({
   return (
     <>
       {currentFee && (
-        <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell width="3%">SN.</StyledTableCell>
-                <StyledTableCell width="22%">Fee Heading</StyledTableCell>
-                <StyledTableCell width="10%">Fee(Rs)</StyledTableCell>
-                <StyledTableCell width="10%">Discount</StyledTableCell>
-                <StyledTableCell width="10%">%</StyledTableCell>
-                <StyledTableCell width="10%">
-                  Discount Amount(Rs)
-                </StyledTableCell>
-                <StyledTableCell width="10%">Amount(Rs)</StyledTableCell>
-                <StyledTableCell width="25%">Narration</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {currentFee?.map((s, i) => {
-                return (
-                  <StyledTableRow key={i}>
-                    <StyledTableCell>{i + 1}</StyledTableCell>
-                    <StyledTableCell>{s.AccountName}</StyledTableCell>
-                    <StyledTableCell>{s.FeeAmount}</StyledTableCell>
-                    <StyledTableCell>
-                      {" "}
-                      <TextField
-                        value={s.Discount}
-                        variant="outlined"
-                        name="Discount"
-                        type="number"
-                        onWheelCapture={(e) => {
-                          e.target.blur();
-                        }}
-                        onKeyDown={(e) =>
-                          symbolsArr.includes(e.key) && e.preventDefault()
-                        }
-                        onChange={(e) =>
-                          handleChange(
-                            i,
-                            s,
-                            e.target.value,
-                            e.target.name,
-                            s.FeeAmount
-                          )
-                        }
-                      />
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <Checkbox
-                        checked={s.checked}
-                        color="primary"
-                        onChange={(e) => handleCheck(i, s, e)}
-                      />
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      {" "}
-                      <TextField
-                        disabled
-                        value={s.DiscountAmount}
-                        variant="outlined"
-                        name="DiscountAmount"
-                      />
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      {Number(s.Cr)?.toFixed(2)}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      {" "}
-                      <TextField
-                        value={s.Narration}
-                        variant="outlined"
-                        name="Narration"
-                        onChange={(e) =>
-                          handleChange(i, s, e.target.value, e.target.name)
-                        }
-                      />
-                    </StyledTableCell>
-                  </StyledTableRow>
-                );
-              })}
-              <StyledTableRow>
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell>
-                  <strong>Total</strong>
-                </StyledTableCell>
-                <StyledTableCell>
-                  {currentFee
-                    ?.reduce((acc, item) => {
-                      return acc + Number(item.FeeAmount);
-                    }, 0)
-                    ?.toFixed(2)}
-                </StyledTableCell>
-                <StyledTableCell>
-                  {currentFee
-                    ?.reduce((acc, item) => {
-                      return acc + Number(item.Discount);
-                    }, 0)
-                    ?.toFixed(2)}
-                </StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell>
-                  {currentFee
-                    ?.reduce((acc, item) => {
-                      return acc + Number(item.DiscountAmount);
-                    }, 0)
-                    ?.toFixed(2)}
-                </StyledTableCell>
-                <StyledTableCell>
-                  {currentFee
-                    ?.reduce((acc, item) => {
-                      return acc + Number(item.Cr);
-                    }, 0)
-                    ?.toFixed(2)}
-                </StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-              </StyledTableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <div>
+          <TableContainer
+            component={Paper}
+            style={{ height: "300px", scroll: "auto" }}
+          >
+            <Table className={classes.table} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell width="3%">SN.</StyledTableCell>
+                  <StyledTableCell width="22%">Fee Heading</StyledTableCell>
+                  <StyledTableCell width="10%">Fee(Rs)</StyledTableCell>
+                  <StyledTableCell width="10%">Discount</StyledTableCell>
+                  <StyledTableCell width="10%">%</StyledTableCell>
+                  <StyledTableCell width="10%">
+                    Discount Amount(Rs)
+                  </StyledTableCell>
+                  <StyledTableCell width="10%">Amount(Rs)</StyledTableCell>
+                  <StyledTableCell width="25%">Narration</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {currentFee?.map((s, i) => {
+                  return (
+                    <StyledTableRow key={i}>
+                      <StyledTableCell>{i + 1}</StyledTableCell>
+                      <StyledTableCell>{s.AccountName}</StyledTableCell>
+                      <StyledTableCell>{s.FeeAmount}</StyledTableCell>
+                      <StyledTableCell>
+                        {" "}
+                        <TextField
+                          value={s.Discount}
+                          variant="outlined"
+                          name="Discount"
+                          type="number"
+                          onWheelCapture={(e) => {
+                            e.target.blur();
+                          }}
+                          onKeyDown={(e) =>
+                            symbolsArr.includes(e.key) && e.preventDefault()
+                          }
+                          onChange={(e) =>
+                            handleChange(
+                              i,
+                              s,
+                              e.target.value,
+                              e.target.name,
+                              s.FeeAmount
+                            )
+                          }
+                        />
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <Checkbox
+                          checked={s.checked}
+                          color="primary"
+                          onChange={(e) => handleCheck(i, s, e)}
+                        />
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        {" "}
+                        <TextField
+                          disabled
+                          value={s.DiscountAmount}
+                          variant="outlined"
+                          name="DiscountAmount"
+                        />
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        {Number(s.Cr)?.toFixed(2)}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        {" "}
+                        <TextField
+                          value={s.Narration}
+                          variant="outlined"
+                          name="Narration"
+                          onChange={(e) =>
+                            handleChange(i, s, e.target.value, e.target.name)
+                          }
+                        />
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  );
+                })}
+                <StyledTableRow>
+                  <StyledTableCell></StyledTableCell>
+                  <StyledTableCell>
+                    <strong>Total</strong>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    {currentFee
+                      ?.reduce((acc, item) => {
+                        return acc + Number(item.FeeAmount);
+                      }, 0)
+                      ?.toFixed(2)}
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    {currentFee
+                      ?.reduce((acc, item) => {
+                        return acc + Number(item.Discount);
+                      }, 0)
+                      ?.toFixed(2)}
+                  </StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                  <StyledTableCell>
+                    {currentFee
+                      ?.reduce((acc, item) => {
+                        return acc + Number(item.DiscountAmount);
+                      }, 0)
+                      ?.toFixed(2)}
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    {currentFee
+                      ?.reduce((acc, item) => {
+                        return acc + Number(item.Cr);
+                      }, 0)
+                      ?.toFixed(2)}
+                  </StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                </StyledTableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       )}
       {/* <button onClick={() => console.log(currentFee)}>Test</button> */}
     </>

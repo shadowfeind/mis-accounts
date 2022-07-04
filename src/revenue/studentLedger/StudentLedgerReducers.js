@@ -76,7 +76,7 @@ export const postStudentLedgerReducer = (state = {}, action) => {
     case POST_STUDENT_LEDGER_REQUEST:
       return { loading: true };
     case POST_STUDENT_LEDGER_SUCCESS:
-      return { loading: false, success: true };
+      return { loading: false, success: true, newId: action.payload };
     case POST_STUDENT_LEDGER_FAIL:
       return { loading: false, error: action.payload };
     case POST_STUDENT_LEDGER_RESET:

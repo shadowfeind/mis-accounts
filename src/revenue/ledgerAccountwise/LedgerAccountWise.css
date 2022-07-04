@@ -1,0 +1,9 @@
+.ledgerAccountWisePrintHeader{
+    display: none;
+}
+
+@media print {
+    .ledgerAccountWisePrintHeader{
+        display: block;
+    }
+}

@@ -154,6 +154,7 @@ const StudentLedger = () => {
   const [narrationPrint, setNarrationPrint] = useState("");
   const [errors, setErrors] = useState({});
   const [tableData, setTableData] = useState([]);
+  const [newIdForReceipt, setNewIdForReceipt] = useState("");
 
   const [filterFn, setFilterFn] = useState({
     fn: (item) => {
@@ -215,8 +216,11 @@ const StudentLedger = () => {
     loading: printReceiptLoading,
     error: listStudentLedgerError,
   } = useSelector((state) => state.getListStudentLedger);
-  const { success: postStudentLedgerSuccess, error: postStudentLedgerError } =
-    useSelector((state) => state.postStudentLedger);
+  const {
+    success: postStudentLedgerSuccess,
+    error: postStudentLedgerError,
+    newId,
+  } = useSelector((state) => state.postStudentLedger);
 
   if (error) {
     setNotify({
@@ -276,6 +280,7 @@ const StudentLedger = () => {
   }
 
   if (postStudentLedgerSuccess) {
+    setNewIdForReceipt(newId);
     dispatch({ type: POST_STUDENT_LEDGER_RESET });
     setOpenPopup(true);
     // dispatch(
@@ -383,11 +388,11 @@ const StudentLedger = () => {
     }
   }, [activeStudentOnly]);
 
-  useEffect(() => {
-    if (listStudentLedger) {
-      setTableData(listStudentLedger?.studentLedgerModelLstsForStudent);
-    }
-  }, [listStudentLedger]);
+  // useEffect(() => {
+  //   if (listStudentLedger) {
+  //     setTableData(listStudentLedger?.studentLedgerModelLstsForStudent);
+  //   }
+  // }, [listStudentLedger]);
 
   const handleClassIdChange = (value) => {
     setClassId(value);
@@ -440,6 +445,7 @@ const StudentLedger = () => {
     setDiscountPrint(0);
     setAdvancePaidPrint(0);
     setNarrationPrint("");
+    setNewIdForReceipt("");
   };
 
   const handleRecipt = (submitCode, regKey, dateTime) => {
@@ -796,6 +802,9 @@ const StudentLedger = () => {
                     onWheelCapture={(e) => {
                       e.target.blur();
                     }}
+                    onFocus={(e) => {
+                      e.target.select();
+                    }}
                     onChange={(e) =>
                       e.target.value <=
                       listStudentLedger?.studentLedgerModelLstsForStudent[
@@ -819,6 +828,9 @@ const StudentLedger = () => {
                     value={discount}
                     onWheelCapture={(e) => {
                       e.target.blur();
+                    }}
+                    onFocus={(e) => {
+                      e.target.select();
                     }}
                     onChange={(e) =>
                       e.target.value <=
@@ -845,6 +857,9 @@ const StudentLedger = () => {
                     value={advanced}
                     onWheelCapture={(e) => {
                       e.target.blur();
+                    }}
+                    onFocus={(e) => {
+                      e.target.select();
                     }}
                     onChange={(e) => advancePaidPrintHandler(e.target.value)}
                     onKeyDown={(e) =>
@@ -873,14 +888,14 @@ const StudentLedger = () => {
                     SUBMIT
                   </Button>
 
-                  <Button
+                  {/* <Button
                     variant="contained"
                     color="primary"
                     // type="submit"
                     style={{ margin: "10px 0 0 10px" }}
                   >
                     PRINT
-                  </Button>
+                  </Button> */}
                 </Grid>
               </Grid>
             )}
@@ -933,13 +948,16 @@ const StudentLedger = () => {
           ddlAcademicYear={years}
           idYear={idYears}
           years={receiptPrint?.studentLedgerBill?.AcademicYear}
-          idClass={studentLedger?.idClass}
+          idClass={classId}
           setOpenPopup={setOpenPopup}
           prevBal={prevBals}
           amountPaid={amountPaidPrint}
           discount={discountPrint}
           advancedPaid={advancePaidPrint}
           balDue={balDues}
+          newIdForReceipt={newIdForReceipt}
+          acaYear={acaYear}
+          academicYearDdl={academicYearDdl}
         />
       </Popup>
       <Popup

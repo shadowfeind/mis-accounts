@@ -50,7 +50,7 @@ export const RevenueRoute = [
     exact: false,
   },
   {
-    name: "One Time Bill",
+    name: "One Time Bill Generate",
     route: "/one-time-bill",
     icon: ReceiptRoundedIcon,
     exact: false,

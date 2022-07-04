@@ -5,16 +5,20 @@ import Notification from "../../components/Notification";
 import inWords from "../../helpers/numToWords";
 import { API_URL } from "../../constants";
 import { useReactToPrint } from "react-to-print";
-
 import { getHeaderBannerAction } from "../../dashboard/DashboardActions";
 
 const useStyles = makeStyles((theme) => ({
   studentLedgerPrint: {
-    margin: "10px",
+    margin: "10px 10px 30px 10px",
     border: "1px solid #000",
-    padding: "10px 10px 10px 30px",
+    padding: "30px",
     borderRadius: "6px",
     fontSize: "12px",
+    "& h4": {
+      margin: "0 0 8px 0",
+      fontSize: "14px",
+      fontWeight: "normal",
+    },
   },
   withthanks: {
     paddingTop: " 55px",
@@ -46,6 +50,9 @@ const StudentLedgerRecipt = ({
   balDue,
   discount,
   advancedPaid,
+  newIdForReceipt,
+  acaYear,
+  academicYearDdl,
 }) => {
   const [notify, setNotify] = useState({
     isOpen: false,
@@ -58,7 +65,7 @@ const StudentLedgerRecipt = ({
     (state) => state.getHeaderBanner
   );
 
-  const year = ddlAcademicYear?.filter((x) => x.Key === idYear);
+  const year = academicYearDdl?.filter((x) => x.Key === acaYear);
   const classID = ddlClass?.filter((x) => x.Key == idClass);
 
   if (headerBannersError) {
@@ -81,22 +88,24 @@ const StudentLedgerRecipt = ({
     }
   }, [headerBanners, dispatch]);
 
+  console.log(newIdForReceipt);
+
   return (
     <>
       <div ref={componentRef}>
         <div className={classes.studentLedgerPrint}>
-          <Grid container style={{}}>
+          <Grid container>
             <Grid item xs={3}>
-              <h4>
-                BillDate: <br />
+              <h3>
+                Receipt Date: <br />
                 {date?.StartDate?.slice(0, 10)}
-              </h4>
+              </h3>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} style={{ textAlign: "center" }}>
               <img src={`${API_URL}${headerBanners}`} width="100%" />
             </Grid>
-            <Grid item xs={3}>
-              <h3>Reciept No. {recieptNo}</h3>
+            <Grid item xs={3} style={{ textAlign: "right" }}>
+              <h3>Reciept No. {newIdForReceipt && newIdForReceipt}</h3>
             </Grid>
           </Grid>
 
@@ -104,71 +113,93 @@ const StudentLedgerRecipt = ({
             container
             style={{
               marginTop: "40px",
-              fontSize: "20px",
             }}
           >
-            <Grid item xs={10}>
-              <b>Received with thanks from: </b> {printReceipt?.StudentName}
+            <Grid item xs={12}>
+              <h4>
+                <b>Received with thanks from:</b> {printReceipt?.StudentName}
+              </h4>
             </Grid>
 
             <Grid item xs={4}>
-              <b>Academic Batch</b> {year?.length > 0 && year[0]?.Value}
+              <h4>
+                <b>Academic Batch:</b> {year?.length > 0 && year[0]?.Value}
+              </h4>
             </Grid>
-            <Grid item xs={3}>
-              <b>Class</b> {classID?.length > 0 && classID[0]?.Value}
+            <Grid item xs={4}>
+              <h4>
+                <b>Class:</b> {classID?.length > 0 && classID[0]?.Value}
+              </h4>
             </Grid>
-            <Grid item xs={2}>
-              <b>Reg No. </b>
-              {regKey}
+            <Grid item xs={4}>
+              <h4>
+                <b>Reg No:</b>
+                {regKey}
+              </h4>
             </Grid>
-            <Grid item xs={2}>
-              <b>Roll No:</b> {printReceipt?.RollNo}
-            </Grid>
-
-            <Grid item xs={3}>
-              <b>a sum of Rs.</b>{" "}
-              {Number(amountPaid) + Number(discount) + Number(advancedPaid)}
-            </Grid>
-            <Grid item xs={8}>
-              <b>In words Rs. </b>
-              {inWords(
-                (
-                  Number(amountPaid) +
-                  Number(discount) +
-                  Number(advancedPaid)
-                )?.toFixed(0)
-              )}{" "}
+            <Grid item xs={4}>
+              <h4>
+                <b>Roll No:</b> {printReceipt?.RollNo}
+              </h4>
             </Grid>
 
             <Grid item xs={4}>
-              <b>Previous Balance :Rs.</b> {prevBal}
+              <h4>
+                <b>a sum of Rs.</b> {Number(amountPaid)?.toFixed(2)}
+              </h4>
             </Grid>
-            {amountPaid > 0 && (
-              <Grid item xs={3}>
-                <b>Amount Paid :Rs.</b> {amountPaid}
-              </Grid>
-            )}
-            {discount > 0 && (
-              <Grid item xs={3}>
-                <b>Discount:Rs.</b> {discount}
-              </Grid>
-            )}
-            {advancedPaid > 0 && (
-              <Grid item xs={3}>
-                <b>Advanced Paid:Rs.</b> {advancedPaid}
-              </Grid>
-            )}
-
-            <Grid item xs={3}>
-              <b>Balance Due:Rs. </b>
-              {balDue - amountPaid - discount - advancedPaid}
+            <Grid item xs={12}>
+              <h4>
+                <b>In words Rs.</b>
+                {inWords(Number(amountPaid)?.toFixed(0))}{" "}
+              </h4>
             </Grid>
           </Grid>
 
           <Grid
             container
             style={{
-              marginTop: "50px",
+              marginTop: "16px",
+            }}
+          >
+            <Grid item xs={3}>
+              <h4>
+                <b>Previous Balance: Rs.</b> {Number(prevBal)?.toFixed(2)}
+              </h4>
+            </Grid>
+            {amountPaid > 0 && (
+              <Grid item xs={3}>
+                <h4>
+                  <b>Amount Paid :Rs.</b> {Number(amountPaid)?.toFixed(2)}
+                </h4>
+              </Grid>
+            )}
+            {discount > 0 && (
+              <Grid item xs={3}>
+                <h4>
+                  <b>Discount: Rs.</b> {Number(discount)?.toFixed(2)}
+                </h4>
+              </Grid>
+            )}
+            {advancedPaid > 0 && (
+              <Grid item xs={3}>
+                <h4>
+                  <b>Advanced Paid: Rs.</b> {Number(advancedPaid)?.toFixed(2)}
+                </h4>
+              </Grid>
+            )}
+            <Grid item xs={3}>
+              <h4>
+                <b>Balance Due: Rs.</b>
+                {(balDue - amountPaid - discount - advancedPaid)?.toFixed(2)}
+              </h4>
+            </Grid>
+          </Grid>
+
+          <Grid
+            container
+            style={{
+              marginTop: "80px",
               fontSize: "20px",
             }}
           >
@@ -185,16 +216,16 @@ const StudentLedgerRecipt = ({
         <div className={classes.studentLedgerPrint}>
           <Grid container>
             <Grid item xs={3}>
-              <h4>
-                BillDate: <br />
+              <h3>
+                Receipt Date: <br />
                 {date?.StartDate?.slice(0, 10)}
-              </h4>
+              </h3>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} style={{ textAlign: "center" }}>
               <img src={`${API_URL}${headerBanners}`} width="100%" />
             </Grid>
-            <Grid item xs={3}>
-              <h3>Reciept No. {recieptNo}</h3>
+            <Grid item xs={3} style={{ textAlign: "right" }}>
+              <h3>Reciept No. {newIdForReceipt && newIdForReceipt}</h3>
             </Grid>
           </Grid>
 
@@ -205,68 +236,87 @@ const StudentLedgerRecipt = ({
               fontSize: "20px",
             }}
           >
-            <Grid item xs={10}>
-              <b>Received with thanks from: </b> {printReceipt?.StudentName}
+            <Grid item xs={12}>
+              <h4>
+                <b>Received with thanks from:</b> {printReceipt?.StudentName}
+              </h4>
             </Grid>
 
             <Grid item xs={4}>
-              <b>Academic Batch</b> {year?.length > 0 && year[0]?.Value}
+              <h4>
+                <b>Academic Batch:</b> {year?.length > 0 && year[0]?.Value}
+              </h4>
             </Grid>
-            <Grid item xs={3}>
-              <b>Class</b> {classID?.length > 0 && classID[0]?.Value}
+            <Grid item xs={4}>
+              <h4>
+                <b>Class:</b> {classID?.length > 0 && classID[0]?.Value}
+              </h4>
             </Grid>
-            <Grid item xs={2}>
-              <b>Reg No. </b>
-              {regKey}
+            <Grid item xs={4}>
+              <h4>
+                <b>Reg No:</b>
+                {regKey}
+              </h4>
             </Grid>
-            <Grid item xs={2}>
-              <b>Roll No:</b> {printReceipt?.RollNo}
-            </Grid>
-
-            <Grid item xs={3}>
-              <b>a sum of Rs.</b>{" "}
-              {Number(amountPaid) + Number(discount) + Number(advancedPaid)}
-            </Grid>
-            <Grid item xs={8}>
-              <b>In words Rs. </b>
-              {inWords(
-                (
-                  Number(amountPaid) +
-                  Number(discount) +
-                  Number(advancedPaid)
-                )?.toFixed(0)
-              )}{" "}
+            <Grid item xs={4}>
+              <h4>
+                <b>Roll No:</b> {printReceipt?.RollNo}
+              </h4>
             </Grid>
 
             <Grid item xs={4}>
-              <b>Previous Balance :Rs.</b> {prevBal}
+              <h4>
+                <b>a sum of Rs.</b> {Number(amountPaid)?.toFixed(2)}
+              </h4>
+            </Grid>
+            <Grid item xs={12}>
+              <h4>
+                <b>In words Rs.</b>
+                {inWords(Number(amountPaid)?.toFixed(0))}
+              </h4>
+            </Grid>
+          </Grid>
+
+          <Grid container>
+            <Grid item xs={3}>
+              <h4>
+                <b>Previous Balance: Rs.</b> {Number(prevBal)?.toFixed(2)}
+              </h4>
             </Grid>
             {amountPaid > 0 && (
               <Grid item xs={3}>
-                <b>Amount Paid :Rs.</b> {amountPaid}
+                <h4>
+                  <b>Amount Paid: Rs.</b> {Number(amountPaid)?.toFixed(2)}
+                </h4>
               </Grid>
             )}
             {discount > 0 && (
               <Grid item xs={3}>
-                <b>Discount:Rs.</b> {discount}
+                <h4>
+                  <b>Discount: Rs.</b> {Number(discount)?.toFixed(2)}
+                </h4>
               </Grid>
             )}
             {advancedPaid > 0 && (
               <Grid item xs={3}>
-                <b>Advanced Paid:Rs.</b> {advancedPaid}
+                <h4>
+                  <b>Advanced Paid:Rs.</b> {Number(advancedPaid)?.toFixed(2)}
+                </h4>
               </Grid>
             )}
 
             <Grid item xs={3}>
-              <b>Balance Due:Rs. </b>
-              {balDue - amountPaid - discount - advancedPaid}
+              <h4>
+                <b>Balance Due: Rs.</b>
+                {(balDue - amountPaid - discount - advancedPaid)?.toFixed(2)}
+              </h4>
             </Grid>
           </Grid>
 
           <Grid
             container
             style={{
-              marginTop: "50px",
+              marginTop: "80px",
               fontSize: "20px",
             }}
           >

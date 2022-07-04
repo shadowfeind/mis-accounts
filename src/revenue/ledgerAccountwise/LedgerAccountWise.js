@@ -38,8 +38,10 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import LedgerAccountWiseTableCollapse from "./LedgerAccountWiseTableCollapse";
-import { axiosInstance, tokenConfig } from "../../constants";
+import { API_URL, axiosInstance, tokenConfig } from "../../constants";
 import { useReactToPrint } from "react-to-print";
+import "./LedgerAccountWise.css";
+import { getHeaderBannerAction } from "../../dashboard/DashboardActions";
 
 const useStyles = makeStyles((theme) => ({
   searchInput: {
@@ -114,6 +116,10 @@ const LedgerAccountWise = () => {
   const { activeLedgerAccountWise, error: activeLedgerAccountWiseError } =
     useSelector((state) => state.getActiveLedgerAccountWise);
 
+  const { headerBanners, error: headerBannersError } = useSelector(
+    (state) => state.getHeaderBanner
+  );
+
   if (error) {
     setNotify({
       isOpen: true,
@@ -163,7 +169,13 @@ const LedgerAccountWise = () => {
   }, []);
 
   useEffect(() => {
-    if (listLedgerAccountWise?.ledgerAccountWiseModelLstsWithoutFiscalYear) {
+    if (
+      listLedgerAccountWise?.ledgerAccountWiseModelLstsWithoutFiscalYear ===
+      null
+    ) {
+      setTableData(listLedgerAccountWise?.ledgerAccountWiseModelLsts);
+    }
+    if (listLedgerAccountWise?.ledgerAccountWiseModelLsts === null) {
       setTableData(
         listLedgerAccountWise?.ledgerAccountWiseModelLstsWithoutFiscalYear
       );
@@ -171,7 +183,8 @@ const LedgerAccountWise = () => {
     //this code will be deleted soon
     if (
       listLedgerAccountWise?.ledgerAccountWiseModelLstsWithoutFiscalYear
-        ?.length > 1
+        ?.length > 1 ||
+      listLedgerAccountWise?.ledgerAccountWiseModelLsts?.length > 1
     ) {
       const fetchData = async () => {
         try {
@@ -189,11 +202,17 @@ const LedgerAccountWise = () => {
       fetchData();
     }
     //this code will be deleted soon
-  }, [listLedgerAccountWise?.ledgerAccountWiseModelLstsWithoutFiscalYear]);
+  }, [listLedgerAccountWise]);
 
   useEffect(() => {
     dispatch({ type: "GET_LINK", payload: "/revenue" });
   }, []);
+
+  useEffect(() => {
+    if (!headerBanners) {
+      dispatch(getHeaderBannerAction());
+    }
+  }, [headerBanners, dispatch]);
 
   const validate = () => {
     let temp = {};
@@ -353,6 +372,11 @@ const LedgerAccountWise = () => {
           <LoadingComp />
         ) : (
           <div ref={componentRef}>
+            <div className="ledgerAccountWisePrintHeader">
+              <div className="ledgerAccountWisePrintHeader-imgContainer">
+                <img src={`${API_URL}${headerBanners}`} width="60%" />
+              </div>
+            </div>
             {listLedgerAccountWise && (
               <TableContainer className={classes.table}>
                 <TblHead />

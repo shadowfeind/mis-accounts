@@ -67,7 +67,10 @@ const StudentList = ({ student, studentSelected, setStudentSelected }) => {
   }, [student]);
   return (
     <>
-      <TableContainer component={Paper}>
+      <TableContainer
+        component={Paper}
+        style={{ height: "300px", scroll: "auto" }}
+      >
         <Table className={classes.table} aria-label="customized table">
           <TableHead>
             <TableRow>
