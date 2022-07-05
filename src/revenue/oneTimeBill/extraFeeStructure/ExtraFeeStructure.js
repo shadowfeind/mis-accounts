@@ -258,7 +258,7 @@ const ExtraFeeStructure = ({
             <TableHead>
               <TableRow>
                 <StyledTableCell width="3%">SN.</StyledTableCell>
-                <StyledTableCell width="22%">Fee Heading</StyledTableCell>
+                <StyledTableCell width="15%">Fee Heading</StyledTableCell>
                 <StyledTableCell width="10%">Fee(Rs)</StyledTableCell>
                 <StyledTableCell width="10%">Discount</StyledTableCell>
                 <StyledTableCell width="10%">%</StyledTableCell>
@@ -266,7 +266,7 @@ const ExtraFeeStructure = ({
                   Discount Amount(Rs)
                 </StyledTableCell>
                 <StyledTableCell width="10%">Amount(Rs)</StyledTableCell>
-                <StyledTableCell width="25%">Narration</StyledTableCell>
+                <StyledTableCell width="32%">Narration</StyledTableCell>
                 <StyledTableCell width="3%"></StyledTableCell>
               </TableRow>
             </TableHead>
@@ -288,7 +288,7 @@ const ExtraFeeStructure = ({
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label="Eg: extra fee (type minimum two Characters)"
+                            label="Minimum 2 Characters"
                             onChange={(e) =>
                               handleExtraChange(e.target.value, i)
                             }
@@ -297,7 +297,9 @@ const ExtraFeeStructure = ({
                         )}
                       />
                     </StyledTableCell>
-                    <StyledTableCell>{s.FeeAmount}</StyledTableCell>
+                    <StyledTableCell>
+                      {Number(s.FeeAmount)?.toFixed(2)}
+                    </StyledTableCell>
                     <StyledTableCell>
                       {" "}
                       <TextField
