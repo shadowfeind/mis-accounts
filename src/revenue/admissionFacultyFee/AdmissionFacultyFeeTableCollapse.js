@@ -36,7 +36,7 @@ const AdmissionFacultyFeeStructureTableCollapse = ({
     <>
       <TableRow key={item.$id}>
         <TableCell>{item.AccountName}</TableCell>
-        <TableCell>{item.FeeAmount}</TableCell>
+        <TableCell>{Number(item.FeeAmount)?.toFixed(2)}</TableCell>
         <TableCell>
           <Button
             variant="contained"

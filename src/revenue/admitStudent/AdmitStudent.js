@@ -205,6 +205,7 @@ const AdmitStudent = () => {
 
   const handleListSearch = () => {
     if (validate()) {
+      setExtraFee([]);
       dispatch(
         getBulkEditAdmitStudentAction(
           fiscalYear,

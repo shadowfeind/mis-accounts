@@ -33,7 +33,7 @@ const ExtraFeeStructureTableCollapse = ({ item, updateCollegeHandler }) => {
     <>
       <TableRow key={item.$id}>
         <TableCell>{item.AccountName}</TableCell>
-        <TableCell>{item.FeeAmount}</TableCell>
+        <TableCell>{Number(item.FeeAmount)?.toFixed(2)}</TableCell>
         <TableCell>{item.IsActive ? "Active" : "InActive"}</TableCell>
         <TableCell>
           <Button

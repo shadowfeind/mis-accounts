@@ -189,6 +189,7 @@ const OneTimeBill = () => {
   const handleListSearch = () => {
     setPostErrors({});
     if (validate()) {
+      setExtraFee([]);
       dispatch(
         getBulkEditOneTimeBillAction(fiscalYear, acaYear, classId, monthId)
       );
@@ -419,7 +420,7 @@ const OneTimeBill = () => {
           voucher={voucher}
           monthlyFee={monthlyFee}
           extraFee={extraFee}
-          studentDdl={studentDdl}
+          studentDdl={studentSelected}
           setOpenPopup={setOpenPopup}
         />
       </Popup>

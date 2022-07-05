@@ -206,6 +206,7 @@ const Billgenerate = () => {
 
   const handleListSearch = () => {
     if (validate()) {
+      setExtraFee([]);
       dispatch(
         getBulkEditBillGenerateAction(
           fiscalYear,

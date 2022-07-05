@@ -221,6 +221,28 @@ const ExtraFeeStructure = ({
     }
   };
 
+  const handleAmountChange = (index, obj, value) => {
+    // let finalValue = 0;
+
+    // if (obj.Discount !== null && obj.checked) {
+    //   finalValue = value * (obj.Discount / 100);
+    // } else if (obj.Discount !== null) {
+    //   finalValue = value - obj.Discount;
+    // } else {
+    //   finalValue = value;
+    // }
+
+    let newObject = {
+      ...obj,
+      Cr: value,
+    };
+    setCurrentFee((prev) => {
+      const newArr = [...prev];
+      newArr[index] = newObject;
+      return newArr;
+    });
+  };
+
   useEffect(() => {
     setCurrentFee(dummyData);
   }, [dummyData]);
@@ -318,7 +340,22 @@ const ExtraFeeStructure = ({
                       />
                     </StyledTableCell>
                     <StyledTableCell>
-                      {Number(s.Cr)?.toFixed(2)}
+                      <TextField
+                        disabled={s.active ? false : true}
+                        value={s.Cr}
+                        variant="outlined"
+                        name="Amount"
+                        type="number"
+                        onWheelCapture={(e) => {
+                          e.target.blur();
+                        }}
+                        onKeyDown={(e) =>
+                          symbolsArr.includes(e.key) && e.preventDefault()
+                        }
+                        onChange={(e) =>
+                          handleAmountChange(i, s, e.target.value)
+                        }
+                      />
                     </StyledTableCell>
                     <StyledTableCell>
                       {" "}

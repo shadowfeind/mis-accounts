@@ -106,12 +106,12 @@ const OneTimeBillPrintDesign = ({
               <td>Previous Balance</td>
               <td>
                 {prevBlc &&
-                  prevBlc -
-                    currentStudentBill
-                      ?.reduce((acc, item) => {
-                        return acc + item.Total;
-                      }, 0)
-                      .toFixed(2)}
+                  (
+                    prevBlc -
+                    currentStudentBill?.reduce((acc, item) => {
+                      return acc + item.Total;
+                    }, 0)
+                  ).toFixed(2)}
               </td>
             </tr>
             <tr>

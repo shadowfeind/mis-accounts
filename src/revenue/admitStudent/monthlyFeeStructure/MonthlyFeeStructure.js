@@ -226,7 +226,9 @@ const MonthlyFeeStructure = ({
                   <StyledTableRow key={i}>
                     <StyledTableCell>{i + 1}</StyledTableCell>
                     <StyledTableCell>{s.AccountName}</StyledTableCell>
-                    <StyledTableCell>{s.FeeAmount}</StyledTableCell>
+                    <StyledTableCell>
+                      {Number(s.FeeAmount)?.toFixed(2)}
+                    </StyledTableCell>
                     <StyledTableCell>
                       {" "}
                       <TextField

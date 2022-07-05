@@ -8,9 +8,9 @@ import moment from "moment";
 import axios from "axios";
 // import moment from "moment";
 
-export const API_URL = "https://mis.vidyacube.com";
+// export const API_URL = "https://mis.vidyacube.com";
 // export const API_URL = "https://divinelight.vidyacube.com";
-// export const API_URL = "https://creation.vidyacube.com";
+export const API_URL = "https://creation.vidyacube.com";
 
 const USER_SESSION = sessionStorage.getItem("blueberrytoken")
   ? sessionStorage.getItem("blueberrytoken")
@@ -95,10 +95,10 @@ axiosInstance.interceptors.request.use(async (req) => {
   const userRefreshToken = sessionStorage.getItem("blueberryrefreshtoken");
   const user = jwt_decode(userSession);
   const isExpired = user.exp - moment().unix() < 1;
-  console.log(user.exp);
-  console.log(moment.unix(user.exp));
-  console.log(moment().unix());
-  console.log("isExpired", isExpired);
+  // console.log(user.exp);
+  // console.log(moment.unix(user.exp));
+  // console.log(moment().unix());
+  // console.log("isExpired", isExpired);
 
   if (!isExpired) return req;
 
