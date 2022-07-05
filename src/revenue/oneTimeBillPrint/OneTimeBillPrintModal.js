@@ -54,33 +54,35 @@ const OneTimeBillPrintModal = ({
   return (
     <>
       <div ref={componentRef}>
-        <Grid container>
-          {printOneTimeBill?.dbModelLstForAdmissionRegistrationForOneTime?.map(
-            (student, i) => {
-              let currentStudentBill =
-                printOneTimeBill?.dbModelLstForOneTimeBill?.filter(
-                  (x) =>
-                    x.RegistrationKey == student.RegistrationKey &&
-                    x.IDMonth == printOneTimeBill.IDMonth
-                );
+        <div style={{ margin: "10px" }}>
+          <Grid container>
+            {printOneTimeBill?.dbModelLstForAdmissionRegistrationForOneTime?.map(
+              (student, i) => {
+                let currentStudentBill =
+                  printOneTimeBill?.dbModelLstForOneTimeBill?.filter(
+                    (x) =>
+                      x.RegistrationKey == student.RegistrationKey &&
+                      x.IDMonth == printOneTimeBill.IDMonth
+                  );
 
-              return (
-                <Grid item xs={6}>
-                  <OneTimeBillPrintDesign
-                    currentStudentBill={currentStudentBill}
-                    year={year}
-                    level={level}
-                    month={month}
-                    date={printOneTimeBill?.Datetime}
-                    headerBanners={headerBanners}
-                    voucherBillNo={printOneTimeBill?.voucherBillNo + i}
-                    student={student}
-                  />
-                </Grid>
-              );
-            }
-          )}
-        </Grid>
+                return (
+                  <Grid item xs={6}>
+                    <OneTimeBillPrintDesign
+                      currentStudentBill={currentStudentBill}
+                      year={year}
+                      level={level}
+                      month={month}
+                      date={printOneTimeBill?.Datetime}
+                      headerBanners={headerBanners}
+                      voucherBillNo={printOneTimeBill?.voucherBillNo + i}
+                      student={student}
+                    />
+                  </Grid>
+                );
+              }
+            )}
+          </Grid>
+        </div>
       </div>
       <div
         style={{

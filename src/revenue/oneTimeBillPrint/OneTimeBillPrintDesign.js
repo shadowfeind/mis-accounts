@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
-import "../admitStudent/AdmitStudentPrint.css";
+import "./OneTimeBillPrint.css";
 import inWords from "../../helpers/numToWords";
 import { API_URL, axiosInstance, tokenConfig } from "../../constants";
 
@@ -17,7 +17,7 @@ const OneTimeBillPrintDesign = ({
   const [prevBlc, setPrevBlc] = useState(0);
   let tdToRender = [];
 
-  for (let i = currentStudentBill.length; i <= 8; i++) {
+  for (let i = currentStudentBill.length; i <= 7; i++) {
     tdToRender.push(i);
   }
 
@@ -39,7 +39,7 @@ const OneTimeBillPrintDesign = ({
   }, [student?.RegistrationKey]);
 
   return (
-    <div className="student-print-container">
+    <div className="one-time-student-print-container">
       <Grid container>
         <Grid item xs={2}>
           <h6>
@@ -126,7 +126,7 @@ const OneTimeBillPrintDesign = ({
         <h6>
           In words: <strong>{inWords(prevBlc?.toFixed(0))}</strong>
         </h6>
-        <div className="student-admit-bottom-container-signature">
+        <div className="one-time-student-admit-bottom-container-signature">
           <Grid container>
             <Grid item xs={4}></Grid>
             <Grid item xs={4}>
